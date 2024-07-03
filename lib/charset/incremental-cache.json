@@ -1,0 +1,69 @@
+{
+  "packageInformation": {
+    "charset/charset.exception": {
+      "moduleName": "charset",
+      "fileNameHash": "-2828718071372184963",
+      "timeStamp": 1719481685,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "charset/charset.singlebyte": {
+      "moduleName": "charset",
+      "fileNameHash": "-8698021741350728980",
+      "timeStamp": 1719481685,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "charset/charset.unicode": {
+      "moduleName": "charset",
+      "fileNameHash": "5070388297471597984",
+      "timeStamp": 1719481685,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "charset/charset.korean": {
+      "moduleName": "charset",
+      "fileNameHash": "2986669945571133015",
+      "timeStamp": 1719481685,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "charset/charset": {
+      "moduleName": "charset",
+      "fileNameHash": "1286130351053001171",
+      "timeStamp": 1719481685,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "charset/charset.traditionchinese": {
+      "moduleName": "charset",
+      "fileNameHash": "6076731418599486333",
+      "timeStamp": 1719481685,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "charset/charset.encoding": {
+      "moduleName": "charset",
+      "fileNameHash": "8046828775438903191",
+      "timeStamp": 1719481685,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "charset/charset.japanese": {
+      "moduleName": "charset",
+      "fileNameHash": "8364797286011712759",
+      "timeStamp": 1719481685,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "charset/charset.simplechinese": {
+      "moduleName": "charset",
+      "fileNameHash": "-2053964724314969322",
+      "timeStamp": 1719481685,
+      "buildFlag": true,
+      "exeName": ""
+    }
+  },
+  "jsonHash": "8356608440134587521",
+  "moduleName": "charset"
+}
