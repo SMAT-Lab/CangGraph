@@ -46,38 +46,49 @@ public func executeTools(action: AgentAction, tools: ArrayList<BaseTool>): Strin
     return "Unknown tool: ${action.toolName}"
 }
 
-public func create_openai_tools_agent(llm: OpenAI, tools: ArrayList<BaseTool>, prompt: String) {
-    var openai_tools_agent_chain = LLMChain(llm, CallToolsPromptTemplate())
-    var schema_tools: ArrayList<JsonValue> = ArrayList()
-    for (tool in tools) {
-        schema_tools.append(tool.args_schema.getOrThrow())
+public class create_openai_tools_agent {
+    public var llm: OpenAI
+    public var tools: ArrayList<BaseTool>
+
+    public init(llm: OpenAI, tools: ArrayList<BaseTool>) {
+        this.llm = llm
+        this.tools = tools
     }
 
-    let input = Dict()
-    input["text"] = prompt
-    let toolNamesList  = collectArrayList(map({tool:BaseTool => tool.name})(tools))
-    var toolNames = ""
-    for (toolName in toolNamesList) {
-        toolNames += toolName + ", "
-    }
-    input["tool_names"] = toolNames
+    public func run(prompt: String) {
+ 
+        var openai_tools_agent_chain = LLMChain(llm, CallToolsPromptTemplate())
+        var schema_tools: ArrayList<JsonValue> = ArrayList()
+        for (tool in tools) {
+            schema_tools.append(tool.args_schema.getOrThrow())
+        }
 
-    let toolDescriptionsList  = collectArrayList(map({tool:BaseTool => tool.description})(tools))
-    var toolWithDescriptions = ""
-    for (i in 0..toolDescriptionsList.size) {
-        toolWithDescriptions += toolNamesList[i] + ": " + toolDescriptionsList[i] + ", "
-    }
-    input["tool_with_descriptions"] = toolWithDescriptions
+        let input = Dict()
+        input["text"] = prompt
+        let toolNamesList  = collectArrayList(map({tool:BaseTool => tool.name})(tools))
+        var toolNames = ""
+        for (toolName in toolNamesList) {
+            toolNames += toolName + ", "
+        }
+        input["tool_names"] = toolNames
 
-    var res = openai_tools_agent_chain.function_call(input, schema_tools)
-    if (callFunc(res) == false) {
-        return res["message"]
-    } else {
-        let function_name = res.get("function_name").getOrThrow().asString().getValue()
-        let function_args = res.get("function_args").getOrThrow().asString().getValue()
-        let value: JsonObject = JsonValue.fromStr(function_args).asObject()
-        let action: AgentAction = AgentAction(function_name, value)
-        let ob: String = executeTools(action, tools)
-        return ob
+        let toolDescriptionsList  = collectArrayList(map({tool:BaseTool => tool.description})(tools))
+        var toolWithDescriptions = ""
+        for (i in 0..toolDescriptionsList.size) {
+            toolWithDescriptions += toolNamesList[i] + ": " + toolDescriptionsList[i] + ", "
+        }
+        input["tool_with_descriptions"] = toolWithDescriptions
+
+        var res = openai_tools_agent_chain.function_call(input, schema_tools)
+        if (callFunc(res) == false) {
+            return res["message"]
+        } else {
+            let function_name = res.get("function_name").getOrThrow().asString().getValue()
+            let function_args = res.get("function_args").getOrThrow().asString().getValue()
+            let value: JsonObject = JsonValue.fromStr(function_args).asObject()
+            let action: AgentAction = AgentAction(function_name, value)
+            let ob: String = executeTools(action, tools)
+            return ob
+        }
     }
 }

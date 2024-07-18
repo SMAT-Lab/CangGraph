@@ -30,7 +30,6 @@ public struct Args {
 */
 public abstract class BaseTool <: Runnable {
 
-
     // the name of the tool
     public var name : String
 
@@ -63,30 +62,104 @@ public abstract class BaseTool <: Runnable {
     }
 
     public func setArgs() {
-        this.args_schema = get_tool_args(this)
+        this.args_schema = get_tool_args()
+    }
+
+    public func get_tool_args(): JsonObject {
+        var properties = JsonObject()
+        var parameters = JsonObject()
+        var required = JsonArray()
+        var function = JsonObject()
+        var args_schema = JsonObject()
+
+        for (arg in this.args) {
+            var arg_json = JsonObject()
+            arg_json.put("type", JsonString("string"))
+            arg_json.put("description", JsonString(arg.description))
+            properties.put(arg.name, arg_json)
+
+            if (arg.isRequired) {
+                required.add(JsonString(arg.name))
+            }
+        }
+
+        parameters.put("type", JsonString("object"))
+        parameters.put("properties", properties)
+        parameters.put("required", required)
+
+        function.put("name", JsonString(this.name))
+        function.put("description", JsonString(this.description))
+        function.put("parameters", parameters)
+
+        args_schema.put("type", JsonString("function"))
+        args_schema.put("function", function)
+
+        return args_schema
     }
 
 }
 
-public func get_tool_args(tool: BaseTool): JsonObject {
-    let description = tool.description
-    let name = tool.name
-    let args = tool.args
+public class Parameter {
+    public var name: String
+    public var description: String
+    public var required: Bool
 
+    public init(name: String, description: String, required: Bool) {
+        this.name = name
+        this.description = description
+        this.required = required
+    }
+
+}
+
+public class BaseFunction {
+    public var name: String
+    public var description: String
+    public var parameters: HashMap<String, Parameter> = HashMap() // key: name, value: description
+
+    public init(name: String, description: String, parameters: HashMap<String, Parameter>) {
+        this.name = name
+        this.description = description
+        this.parameters = parameters
+    }
+}
+
+/**
+convert function def to JsonObject
+{
+    "name": "route",
+    "description": "Select the next role.",
+    "parameters": {
+        "title": "routeSchema",
+        "type": "object",
+        "properties": {
+            "next": {
+                "title": "Next",
+                "anyOf": [
+                    {"enum": options},
+                ],
+            }
+        },
+        "required": ["next"],
+    },
+}
+*/
+
+public func get_function_schema(function: BaseFunction) {
     var properties = JsonObject()
     var parameters = JsonObject()
     var required = JsonArray()
-    var function = JsonObject()
-    var args_schema = JsonObject()
+    var function_json = JsonObject()
+    var function_schema = JsonObject()
 
-    for (arg in args) {
+    for ((key, value) in function.parameters) {
         var arg_json = JsonObject()
         arg_json.put("type", JsonString("string"))
-        arg_json.put("description", JsonString(arg.description))
-        properties.put(arg.name, arg_json)
+        arg_json.put("description", JsonString(value.description))
+        properties.put(key, arg_json)
 
-        if (arg.isRequired) {
-            required.add(JsonString(arg.name))
+        if (value.required) {
+            required.add(JsonString(key))
         }
     }
     
@@ -94,12 +167,12 @@ public func get_tool_args(tool: BaseTool): JsonObject {
     parameters.put("properties", properties)
     parameters.put("required", required)
 
-    function.put("name", JsonString(name))
-    function.put("description", JsonString(description))
-    function.put("parameters", parameters)
+    function_json.put("name", JsonString(function.name))
+    function_json.put("description", JsonString(function.description))
+    function_json.put("parameters", parameters)
 
-    args_schema.put("type", JsonString("function"))
-    args_schema.put("function", function)
+    function_schema.put("type", JsonString("function"))
+    function_schema.put("function", function_json)
 
-    return args_schema
+    return function_schema
 }
