@@ -12,42 +12,43 @@ public class FileSaver <: BaseTool {
 
         // description
         this.description = "When you need to save file, you must use this tool to save the content to a file"
-        setArgs()
+        this.args = ArrayList<Args>([Args("filename", "filename to save", true), Args("content", "the content to be saved", true)])
+        this.setArgs()
     }
 
-    public func setArgs() {
-        var filename = JsonObject()
-        filename.put("type", JsonString("string"))
-        filename.put("description", JsonString("filename to save"))
+    // public func setArgs() {
+    //     var filename = JsonObject()
+    //     filename.put("type", JsonString("string"))
+    //     filename.put("description", JsonString("filename to save"))
 
-        var content = JsonObject()
-        content.put("type", JsonString("string"))
-        content.put("description", JsonString("the content to be saved"))
+    //     var content = JsonObject()
+    //     content.put("type", JsonString("string"))
+    //     content.put("description", JsonString("the content to be saved"))
 
-        var properties = JsonObject()
-        properties.put("filename", filename)
-        properties.put("content", content)
+    //     var properties = JsonObject()
+    //     properties.put("filename", filename)
+    //     properties.put("content", content)
 
-        var required = JsonArray()
-        required.add(JsonString("filename"))
-        required.add(JsonString("content"))
+    //     var required = JsonArray()
+    //     required.add(JsonString("filename"))
+    //     required.add(JsonString("content"))
 
-        var parameters = JsonObject()
-        parameters.put("type", JsonString("object"))
-        parameters.put("properties", properties)
-        parameters.put("required", required)
+    //     var parameters = JsonObject()
+    //     parameters.put("type", JsonString("object"))
+    //     parameters.put("properties", properties)
+    //     parameters.put("required", required)
 
-        var function = JsonObject()
-        function.put("name", JsonString(this.name))
-        function.put("description", JsonString(this.description))
-        function.put("parameters", parameters)
+    //     var function = JsonObject()
+    //     function.put("name", JsonString(this.name))
+    //     function.put("description", JsonString(this.description))
+    //     function.put("parameters", parameters)
 
-        var args = JsonObject()
-        args.put("type", JsonString("function"))
-        args.put("function", function)
+    //     var args = JsonObject()
+    //     args.put("type", JsonString("function"))
+    //     args.put("function", function)
 
-        this.args_schema = args
-    }
+    //     this.args_schema = args
+    // }
 
     public func run(query : String): String {
         println("running file saver")

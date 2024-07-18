@@ -5,10 +5,10 @@ public enum LLMType {
     | AZURE_OPEN_AI
 }
 
-public func getLLMInstance(modelType: LLMType) {
+public func getLLMInstance(modelType: LLMType, model !: String = "gpt-4o") {
     return match (modelType) {
-        case OPEN_AI => OpenAI()
-        case AZURE_OPEN_AI => OpenAI(isAzureOpenAI:true)
+        case OPEN_AI => OpenAI(model:model)
+        case AZURE_OPEN_AI => OpenAI(model:model, isAzureOpenAI:true)
     }
 }
 

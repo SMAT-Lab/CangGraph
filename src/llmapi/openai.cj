@@ -48,12 +48,15 @@ public class OpenAI <: LargeModel {
     // private var embeddingUrl: CString = unsafe { LibC.mallocCString("https://api.xty.app/v1/embeddings") }
     private let history_messages = ArrayList<JsonValue>()
     public var queryWithHistoryMsg = false
+    public var model = "gpt-4o"
     public var queryWithStreamMode = false
     private let bufferSize: UIntNative = 1024000
     private let response: CPointer<UInt8> = unsafe{ LibC.malloc<UInt8>(count: Int64(bufferSize))}
-    public init(isAzureOpenAI!:Bool=false) {
+    public init(model!:String="gpt-4o", isAzureOpenAI!:Bool=false) {
+        this.model = model
         let envVars = envVars()
         let authKey = getAPIKey(envVars)
+        let baseUrl = getOpenAIUrl(envVars)
         let auHeader:HashMap<String, String> = HashMap<String, String>()
         // auHeader.put("Content-Type", "application/json")
         if (isAzureOpenAI) {
@@ -66,6 +69,8 @@ public class OpenAI <: LargeModel {
             this.embeddingUrl = unsafe { LibC.mallocCString(urls[1]) }
             auHeader.put("api-key", authKey)
         }else {
+            this.chatUrl = unsafe { LibC.mallocCString("${baseUrl}/chat/completions") }
+            this.embeddingUrl = unsafe { LibC.mallocCString("${baseUrl}/embeddings") }
             auHeader.put("Authorization", "Bearer "+authKey)
         }
         var auStr: String = String()
@@ -75,6 +80,17 @@ public class OpenAI <: LargeModel {
         this.authHeader = unsafe { LibC.mallocCString(auStr) }
         println("OpenAI init done.")
     }
+
+    func getOpenAIUrl(envVars:HashMap<String, String>):String{
+        let API_VERSION:String
+        let ENDPOINT:String
+        if (envVars.contains("OPENAI_API_BASE")) {
+            return envVars["OPENAI_API_BASE"]
+        }else {
+            return "https://api.openai.com/v1"
+        }
+    }
+
     func getAPIKey(envVars:HashMap<String, String>){
 
         if (envVars.contains("OPENAI_API_KEY")) {
@@ -141,7 +157,7 @@ public class OpenAI <: LargeModel {
 
         var data = JsonObject()
         // data.put("model", JsonString("gpt-4"))
-        data.put("model", JsonString("gpt-3.5-turbo"))
+        data.put("model", JsonString(this.model))
         data.put("temperature", JsonFloat(0.7))
         data.put("messages", JsonArray(messages))
         if (stop){
@@ -160,7 +176,7 @@ public class OpenAI <: LargeModel {
 
         var data = JsonObject()
         // data.put("model", JsonString("gpt-4"))
-        data.put("model", JsonString("gpt-3.5-turbo"))
+        data.put("model", JsonString(this.model))
         data.put("temperature", JsonFloat(0.7))
         data.put("messages", JsonArray(messages))
         data.put("tool_choice", JsonString("auto"))

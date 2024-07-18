@@ -1,31 +1,21 @@
 package agent
-from encoding import json.*
-
+import chain.*
 import llmapi.*
 
-public class CreateOpenAIToolsPromptTemplate <: PromptTemplate {
+public class CallToolsPromptTemplate <: PromptTemplate {
     public override func format(input: Dict): String {
         let PREFIX = """
-            You are the best programmer who can write every languages of codes.
-            !!! Your code should contain a main function that takes in the input and returns the output. 
-            For example, in python: 
-            if __main__ == "__main__":
-                print(main(input))  
-            You have access to the following tools:
-            ${input["tool_names"]}
-        """
-        let FORMAT_INSTRUCTIONS = """
-            Use the following format:
-            Question: the input question you must answer
-            Agent's Answer: I have saved the code to a file "fibonacci.py"
+            You are an openai tool call agent. You have access to the following tools: ${input["tool_names"]}.
+            Here're the description of the tools: ${input["tool_with_descriptions"]}.
+            I will give you a question, and if there's a tool which can be used to solve the question, you should choose it.
         """
 
         let SUFFIX = """
             Begin!
-            Question: ${input["text"]}
+            The input: ${input["text"]}
         """
         /* multi-role support */
-        let system_prompt =  PREFIX + "\n" + FORMAT_INSTRUCTIONS + "\n"
+        let system_prompt =  PREFIX + "\n"
         let user_prompt = SUFFIX
         let prompt_obj = JsonObject()
         prompt_obj.put("system", JsonString(system_prompt))
@@ -34,99 +24,60 @@ public class CreateOpenAIToolsPromptTemplate <: PromptTemplate {
     }
 }
 
-public class CreateOpenAIToolsChain <: LLMChain {
-    public init() {
-        super(OpenAI(), CreateOpenAIToolsPromptTemplate())
+public func callFunc(res: JsonObject): Bool {
+    match (res.get("message")) {
+        case None => return true
+        case Some(_) => return false
     }
 }
 
-public class CreateOpenAIToolsAgent <: Role {
-    public init(tools!: ArrayList<BaseTool> = ArrayList<BaseTool>(), agents!: ArrayList<Role> = ArrayList<Role>()) {
-        super("Create_OpenAI_Tools", "You ",CodeWriterChain(), MockOutputParser(), tools: tools, agents: agents)
-        setArgs()
-        println("CreateOpenAIToolsAgent init done.")
-    }
-    public override func takeNextStep(input: Dict, intermediateSteps: ArrayList<StepResult>, stepCount: Int64): StepResult {
-        println("${this.role}: takeNextStep(${stepCount})")
-        try {
-            let agentScratchpad: Dict = constructAgentScratchpad(input, intermediateSteps, stepCount)
-            let log: Dict = planner.predict(agentScratchpad)
-            var output: AgentOutput = outputParser.parse(log)
-            let executeOutput: AgentOutput = match (output) {
-                case Action(action) => 
-                    var newAction = action
-                    newAction.observation = executeAction(action)
-                    Action(newAction)
-                    // Finish(newAction.observation.getOrThrow())
-
-                case Actions(actions) => 
-                    let actionList = ArrayList<AgentAction>()
-                    for (action in actions) {
-                        var newAction = action
-                        newAction.observation = Some(executeAction(action))
-                        actionList.append(newAction)
-                    }
-                    Actions(actionList)
-
-                case Finish(result) =>              
-                    Finish(result) 
+public func executeTools(action: AgentAction, tools: ArrayList<BaseTool>): String {
+    for (tool in tools) {
+        if (tool.name == action.toolName) {
+            // println("Executing action: ${action.toolName}, input: ${action.input}")
+            match (action.toolInput) {
+                case Some(input) =>  
+                    return tool.run(input)
+                case None => return tool.run(action.input)
             }
-            let res = StepResult(executeOutput, log["text"])
-            return res
-        } catch (error: Exception) {
-            // println("Error: ${error}")
-            // return StepResult(Finish("Error: ${error}"), "Error: ${error}")
-            this.takeNextStep(input, intermediateSteps, stepCount)
         }
     }
+    // let output = planner.predict()
+    return "Unknown tool: ${action.toolName}"
+}
 
-    public func shouldContinue(res: JsonObject): Bool {
-        match (res.get("message")) {
-            case None => return true
-            case Some(_) => return false
-        }
+public func create_openai_tools_agent(llm: OpenAI, tools: ArrayList<BaseTool>, prompt: String) {
+    var openai_tools_agent_chain = LLMChain(llm, CallToolsPromptTemplate())
+    var schema_tools: ArrayList<JsonValue> = ArrayList()
+    for (tool in tools) {
+        schema_tools.append(tool.args_schema.getOrThrow())
     }
 
-    public func generate(text: String): String {
-        var schema_tools: ArrayList<JsonValue> = ArrayList()
-        for (tool in tools) {
-            schema_tools.append(tool.args_schema.getOrThrow())
-        }
-        let input = Dict()
-        input["text"] = text
-        let toolNamesList  = collectArrayList(map({tool:BaseTool => tool.name})(tools))
-        var toolNames = ""
-        for (toolName in toolNamesList) {
-            toolNames += toolName + ", "
-        }
-        input["tool_names"] = toolNames
+    let input = Dict()
+    input["text"] = prompt
+    let toolNamesList  = collectArrayList(map({tool:BaseTool => tool.name})(tools))
+    var toolNames = ""
+    for (toolName in toolNamesList) {
+        toolNames += toolName + ", "
+    }
+    input["tool_names"] = toolNames
 
-        let toolDescriptionsList  = collectArrayList(map({tool:BaseTool => tool.description})(tools))
-        var toolWithDescriptions = ""
-        for (i in 0..toolDescriptionsList.size) {
-            toolWithDescriptions += toolNamesList[i] + ": " + toolDescriptionsList[i] + ", "
-        }
-        input["tool_with_descriptions"] = toolWithDescriptions
+    let toolDescriptionsList  = collectArrayList(map({tool:BaseTool => tool.description})(tools))
+    var toolWithDescriptions = ""
+    for (i in 0..toolDescriptionsList.size) {
+        toolWithDescriptions += toolNamesList[i] + ": " + toolDescriptionsList[i] + ", "
+    }
+    input["tool_with_descriptions"] = toolWithDescriptions
 
-        var res = CodeWriterChain().function_call(input, schema_tools)
-
+    var res = openai_tools_agent_chain.function_call(input, schema_tools)
+    if (callFunc(res) == false) {
+        return res["message"]
+    } else {
         let function_name = res.get("function_name").getOrThrow().asString().getValue()
         let function_args = res.get("function_args").getOrThrow().asString().getValue()
         let value: JsonObject = JsonValue.fromStr(function_args).asObject()
         let action: AgentAction = AgentAction(function_name, value)
-        
-        executeAction(action)
-        input["text"] += "Observation: I have saved the code to ${value.get("filename").getOrThrow()}\n"
-
-        let msg: String = CodeWriterChain().generate_react(input)
-        let lines = msg.split("\n")
-        var ret = ""
-        for (line in lines) {
-            if (line.startsWith("Agent's Answer:")) {
-                ret = line.split(":")[1].trim()
-            }
-        }
-        return ret
+        let ob: String = executeTools(action, tools)
+        return ob
     }
-
 }

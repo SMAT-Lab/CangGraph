@@ -16,13 +16,8 @@ public class ExecutePythonRun <: BaseTool {
 
         // description
         this.description = "A wrapper to run python code"
-
-        setArgs()
-    }
-
-    public func setArgs() {
-        var args = JsonObject()
-        args.put("type", JsonString("object"))
+        this.args = ArrayList<Args>([Args("query", "The python code to run", true)])
+        this.setArgs()
     }
 
     public func run(query: String): String {

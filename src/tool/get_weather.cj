@@ -12,36 +12,37 @@ public class GetWeather <: BaseTool {
 
         // description
         this.description = "Get the current weather of a city"
-        setArgs()
+        this.args = ArrayList<Args>([Args("location", "The city and state", true)])
+        this.setArgs()
     }
 
-    public func setArgs() {
-        var location = JsonObject()
-        location.put("type", JsonString("string"))
-        location.put("description", JsonString("The city and state, e.g. New York, NY"))
+    // public func setArgs() {
+    //     var location = JsonObject()
+    //     location.put("type", JsonString("string"))
+    //     location.put("description", JsonString("The city and state, e.g. New York, NY"))
 
-        var properties = JsonObject()
-        properties.put("location", location)
+    //     var properties = JsonObject()
+    //     properties.put("location", location)
 
-        var required = JsonArray()
-        required.add(JsonString("location"))
+    //     var required = JsonArray()
+    //     required.add(JsonString("location"))
 
-        var parameters = JsonObject()
-        parameters.put("type", JsonString("object"))
-        parameters.put("properties", properties)
-        parameters.put("required", required)
+    //     var parameters = JsonObject()
+    //     parameters.put("type", JsonString("object"))
+    //     parameters.put("properties", properties)
+    //     parameters.put("required", required)
 
-        var function = JsonObject()
-        function.put("name", JsonString(this.name))
-        function.put("description", JsonString(this.description))
-        function.put("parameters", parameters)
+    //     var function = JsonObject()
+    //     function.put("name", JsonString(this.name))
+    //     function.put("description", JsonString(this.description))
+    //     function.put("parameters", parameters)
 
-        var args = JsonObject()
-        args.put("type", JsonString("function"))
-        args.put("function", function)
+    //     var args = JsonObject()
+    //     args.put("type", JsonString("function"))
+    //     args.put("function", function)
 
-        this.args_schema = args
-    }
+    //     this.args_schema = args
+    // }
 
     public func run(query : String): String {
         println("running getting weather")

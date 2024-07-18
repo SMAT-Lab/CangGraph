@@ -22,37 +22,37 @@ public class GoogleSearchRun <: BaseTool {
             "Input should be a search query."
 
         this.apiWrapper = GoogleSearchAPIWrapper(bufferSize: 10240)
-
-        setArgs()
+        this.args = ArrayList<Args>([Args("query", "query to search, mustn't contain any special characters.", true)])
+        this.setArgs()
     }
 
-    public func setArgs() {
-        var query = JsonObject()
-        query.put("type", JsonString("string"))
-        query.put("description", JsonString("query to search, mustn't contain any special characters."))
+    // public func setArgs() {
+    //     var query = JsonObject()
+    //     query.put("type", JsonString("string"))
+    //     query.put("description", JsonString("query to search, mustn't contain any special characters."))
 
-        var properties = JsonObject()
-        properties.put("query", query)
+    //     var properties = JsonObject()
+    //     properties.put("query", query)
 
-        var required = JsonArray()
-        required.add(JsonString("query"))
+    //     var required = JsonArray()
+    //     required.add(JsonString("query"))
 
-        var parameters = JsonObject()
-        parameters.put("type", JsonString("object"))
-        parameters.put("properties", properties)
-        parameters.put("required", required)
+    //     var parameters = JsonObject()
+    //     parameters.put("type", JsonString("object"))
+    //     parameters.put("properties", properties)
+    //     parameters.put("required", required)
 
-        var function = JsonObject()
-        function.put("name", JsonString(this.name))
-        function.put("description", JsonString(this.description))
-        function.put("parameters", parameters)
+    //     var function = JsonObject()
+    //     function.put("name", JsonString(this.name))
+    //     function.put("description", JsonString(this.description))
+    //     function.put("parameters", parameters)
 
-        var args = JsonObject()
-        args.put("type", JsonString("function"))
-        args.put("function", function)
+    //     var args = JsonObject()
+    //     args.put("type", JsonString("function"))
+    //     args.put("function", function)
 
-        this.args_schema = args
-    }
+    //     this.args_schema = args
+    // }
 
     public func run(query : String) {
         println("running google search")
