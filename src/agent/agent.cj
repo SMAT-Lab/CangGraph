@@ -59,7 +59,7 @@ public interface ActionExecutor {
     func executeAction(action: AgentAction): String
 }
 
-public abstract class BaseAgent <: Chain & ActionExecutor {
+public abstract class BaseAgent <: Chain & ActionExecutor{
     public let tools = ArrayList<BaseTool>()
 
     public open func executeAction(action: AgentAction): String {
@@ -67,7 +67,7 @@ public abstract class BaseAgent <: Chain & ActionExecutor {
             if (tool.name == action.toolName) {
                 // println("Executing action: ${action.toolName}, input: ${action.input}")
                 match (action.toolInput) {
-                    case Some(input) => 
+                    case Some(input) =>  
                         return tool.run(input)
                     case None => return tool.run(action.input)
                 }

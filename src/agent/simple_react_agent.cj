@@ -62,9 +62,50 @@ public class SimpleReActPromptTemplate <: PromptTemplate {
     }
 }
 
+public class GraphAgentPromptTemplate <: PromptTemplate {
+    public override func format(input: Dict): String {
+        let PREFIX = """
+            Answer the following questions as best you can. 
+            Choose the best node according the final result to take next step. 
+            Here are all nodes choices: ${input["choices"]}
+            You have access to the following tools:
+            """
+
+        let FORMAT_INSTRUCTIONS = """
+            If you don't know the final answer, your output must obey the following format:  
+                Question: the input question you must answer
+                Thought: you should always think about what to do
+                Action: the action to take, should be one of ${input["tool_names"]}
+                Action Input: the input to the action
+            Else, if you know the final answer, your output must obey the following format:
+                Question: the input question you must answer
+                Thought: I now know the final answer
+                Final Answer: the final answer to the original input question.
+                Next Node: the best node among given choices to take next step.
+            """
+
+        let SUFFIX = """
+            Begin!
+            Question: ${input["text"]}"""
+        /* multi-role support */
+        let system_prompt =  PREFIX + "\n" + FORMAT_INSTRUCTIONS + "\n"
+        let user_prompt = SUFFIX
+        let prompt_obj = JsonObject()
+        prompt_obj.put("user", JsonString(user_prompt))
+        prompt_obj.put("system", JsonString(system_prompt))
+        return prompt_obj.toString()
+    }
+}
+
 public class SimpleReActChain <: LLMChain {
     public init() {
         super(OpenAI(), SimpleReActPromptTemplate())
+    }
+}
+
+public class GraphAgentChain <: LLMChain {
+    public init() {
+        super(OpenAI(), GraphAgentPromptTemplate())
     }
 }
 
@@ -72,6 +113,10 @@ public class SimpleReActAgent <: Agent {
     public init(tools: ArrayList<BaseTool>) {
         super(SimpleReActChain(), ReActAgentOutputParser(), tools)
         println("ReActAgent init done.")
+    }
+    public init(input: String, edges: HashMap<String, HashMap<String, String>>, tools: ArrayList<BaseTool>) {
+        super(GraphAgentChain(), ReActAgentOutputParser(), tools)
+        println("GraphAgent init done.")
     }
     public override func constructAgentScratchpad(input: Dict, intermediateSteps: ArrayList<StepResult>, stepCount: Int64): Dict {
         println("ReActAgent: takeNextStep(${stepCount})")
