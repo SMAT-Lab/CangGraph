@@ -34,14 +34,14 @@ static size_t write_callback(void *contents, size_t size, size_t nmemb, void *us
             for(int i=0;i < strlen(token);i++){
                 cur = token[i];
                 if(pre == '\\' && cur == 'n'){
-                    printf("\n");
+                    // printf("\n");
                 } else if(pre == '\\' && cur == '\"'){
-                    printf("\"");
+                    // printf("\"");
                 } else if(cur == '\\'){
                     pre = cur;
                     continue;
                 } else {
-                    printf("%c", cur);
+                    // printf("%c", cur);
                 }
                 pre = cur;
             }    

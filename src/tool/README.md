@@ -1,29 +1,11 @@
 ## 能被agent调用的tool
-目前仅实现了get_weather,且get_weather里面的逻辑写死了
-当使用其它tool时，主要改写getArgs()函数，以文件保存工具为例，需要的数据格式如下：
-```json
-{
-   "type": "function",
-   "function": {
-     "name": "FileSaver",
-     "description": "Save the file",
-     "parameters": {
-       "type": "object",
-       "properties": {
-           "filename": {
-               "type": "string",
-               "description": "The filename to be saved"
-           },
-           "content": {
-               "type": "string",
-               "content": "the content to be saved"
-           }
-       },
-       "required": ["filename", "content"],
-     }
-   }
-}
-```
+自定义tools时，需要继承BaseTool类，并实现run方法，run方法的返回值为JsonObject类型。
+需要设定参数args来方便后续使用大模型来进行调用。
+Args类的构造函数为Args(name: string, description: string, required: bool)。
+this.args = ArrayList<Args>([Args("filename", "filename to save", true), Args("content", "the content to be saved", true)])
+
+## pythonREPL
+还未完全实现，需要的是接收传入的python code，然后保存文件，再从文件中导入执行
 
 ## 版本
 

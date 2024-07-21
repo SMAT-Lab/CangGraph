@@ -4,24 +4,22 @@ from std import collection.*
 import schema.*
 
 public interface Runnable {
-
     func run(args : Array<Any>) : Any
-
-    func run(query : String) : String
-
-    func run(args: JsonObject): String
-
+    func avoke(args: JsonObject): String
+    func avoke(args: Dict): JsonObject
 }
 
 public struct Args {
     public var name: String
     public var description: String
     public var isRequired: Bool
+    public var arg_type: String
 
-    public init(name: String, description: String, isRequired: Bool) {
+    public init(name: String, description: String, isRequired: Bool, arg_type!: String = "string") {
         this.name = name
         this.description = description
         this.isRequired = isRequired
+        this.arg_type = arg_type
     }
 }
 
@@ -74,7 +72,7 @@ public abstract class BaseTool <: Runnable {
 
         for (arg in this.args) {
             var arg_json = JsonObject()
-            arg_json.put("type", JsonString("string"))
+            arg_json.put("type", JsonString(arg.arg_type))
             arg_json.put("description", JsonString(arg.description))
             properties.put(arg.name, arg_json)
 
@@ -99,6 +97,7 @@ public abstract class BaseTool <: Runnable {
 
 }
 
+// function's parameter
 public class Parameter {
     public var name: String
     public var description: String
@@ -124,27 +123,7 @@ public class BaseFunction {
     }
 }
 
-/**
-convert function def to JsonObject
-{
-    "name": "route",
-    "description": "Select the next role.",
-    "parameters": {
-        "title": "routeSchema",
-        "type": "object",
-        "properties": {
-            "next": {
-                "title": "Next",
-                "anyOf": [
-                    {"enum": options},
-                ],
-            }
-        },
-        "required": ["next"],
-    },
-}
-*/
-
+// convert the base function to a json schema
 public func get_function_schema(function: BaseFunction) {
     var properties = JsonObject()
     var parameters = JsonObject()

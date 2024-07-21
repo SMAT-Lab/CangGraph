@@ -29,9 +29,17 @@ public class Node {
     let nodeType: String
     var edges: HashMap<Option<String>, Edge> = HashMap<Option<String>, Edge>()
     var message: String = String()
+    var runnable: Option<Runnable> = None
+
     public init(nodeName: String, nodeType: String) {
         this.nodeName = nodeName
         this.nodeType = nodeType
+    }
+
+    public init(nodeName: String, nodeType: String, runnable: Runnable) {
+        this.nodeName = nodeName
+        this.nodeType = nodeType
+        this.runnable = Some(runnable)
     }
 
     func addEdge(end: String) {
@@ -44,20 +52,28 @@ public class Node {
         edges.put(condition, edge)
     }
 
-    public func run(input: String) {
-        // let agent = ReActAgent(ArrayList<BaseTool>())
-        // let response = agent.predict(input)
-        // println(response)
-        println(nodeName)
-        if(this.edges.contains(None<String>)) {
-            return this.edges[None<String>].ends[""]
+    public func run(input: Dict): JsonObject {
+        match (runnable) {
+            case None => return JsonObject()
+            case Some(node) => 
+                if (node is CoTChain) {
+                    return (node as CoTChain).getOrThrow().avoke(input)
+                } else if (node is BaseTool) {
+                    return (node as BaseTool).getOrThrow().avoke(input)
+                } else if (node is create_openai_tools_agent) {
+                    return (node as create_openai_tools_agent).getOrThrow().avoke(input)
+                } 
+                else {
+                    return JsonObject()
+                }
         }
-        return END
     }
 }
 
+
 public class Graph {
     private var nodes: HashMap<String, Node> = HashMap<String, Node>()
+    let state: State = State()
     let logger: SimpleLogger = SimpleLogger()
     let startNode = Node(START, START)
     let endNode = Node(END, END)
@@ -145,15 +161,17 @@ public class Graph {
         }
     }
 
-    public func avoke(input: String) {
+    public func avoke(prompt: String) {
         var nowNode: String = START
-        var nowInPut: String = input
+        var nowInPut: String = prompt
         while(nowNode != END){
             if(nowNode == START) {
                 nowNode = this.startNode.edges[None<String>].ends[""]
             }
             else {
-                nowNode = this.nodes.get(nowNode).getOrThrow().run(nowInPut)
+                let input = Dict()
+                input["input"] = nowInPut
+                let res = this.nodes.get(nowNode).getOrThrow().runnable.getOrThrow().avoke(input)
             }
         } 
     }

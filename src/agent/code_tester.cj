@@ -45,7 +45,7 @@ public class CodeTesterChain <: LLMChain {
 public class CodeTesterAgent <: Role {
     public init(tools!: ArrayList<BaseTool> = ArrayList<BaseTool>(), agents!: ArrayList<Role> = ArrayList<Role>()) {
         super("Code_Tester", "When you have the code, you use this agent to construct the test case and test the code", CodeTesterChain(), MockOutputParser(), tools: tools, agents: agents)
-        tools.append(ExecutePythonRun())
+        tools.append(pythonREPL())
         setArgs()
         println("CodeTesterAgent init done.")
     }

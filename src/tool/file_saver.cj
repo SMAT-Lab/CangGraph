@@ -74,7 +74,22 @@ public class FileSaver <: BaseTool {
         return "saved successfully"
     }
 
-    public func run(args: JsonObject): String {
+    public func avoke(args: Dict): JsonObject {
+        let filename: String = args["filename"]
+        let content: String = args["content"]
+        var file: File = File(filename, OpenOption.CreateOrTruncate(true))
+        if(File.exists(filename)) {
+            println("${filename} is create successfully in current directory.\n")
+        }
+        let bytes: Array<Byte> = content.toArray()
+        file.write(bytes)
+        file.close()
+        let res = JsonObject()
+        res.put("content", JsonString("saved successfully"))
+        return res
+    }
+
+    public func avoke(args: JsonObject): String {
         let filename: String = args.get("filename").getOrThrow().asString().getValue()
         let content: String = args.get("content").getOrThrow().asString().getValue()
 

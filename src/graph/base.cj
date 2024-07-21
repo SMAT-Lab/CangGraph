@@ -1,6 +1,7 @@
 package graph
 from std import collection.*
 from std import reflect.*
+
 public class RunnableLike<Input, Output> {
     public var input: Option<Input>
     public var output: Option<Output>

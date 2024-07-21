@@ -8,48 +8,79 @@ from std import collection.*
 from encoding import json.*
 
 main() {
-  let llm = getLLMInstance(LLMType.OPEN_AI)
-  // println(llm.query("who are you?"))
-  // println(llm.query("translate what you have said into Chinese"))
-  let parameters = HashMap<String, Parameter>()
-  let next: Parameter = Parameter("next", "String", true)
-  parameters["next"] = next
-  let function_def = BaseFunction("route", "Select the next role", parameters)
-  let func_schema: JsonValue = get_function_schema(function_def)
-  // print(func_schema)
 
-  // let llm = getLLMInstance(LLMType.OPEN_AI)
-  let tools = ArrayList<BaseTool>([GetWeather()])
+    // chain
+    let llm = getLLMInstance(LLMType.OPEN_AI)
+    let parameters = HashMap<String, Parameter>()
+    let next: Parameter = Parameter("next", "String", true)
+    parameters["next"] = next
+    let function_def = BaseFunction("route", "Select the next role", parameters)
+    let func_schema: JsonValue = get_function_schema(function_def)
 
-  let chain = CoTChain(llm, promptTemplate:SelfDefinePromptTemplate(), tools:tools)
-  chain.bind_function(func_schema)
-  let members = ArrayList<String>(["Researcher", "Coder"])
-  let options = members.append("FINISH")
-  chain.add_prompt("system_message", 
-    """
-    You are a supervisor tasked with managing a conversation between the
-    following workers: ${members}. Given the following user request,
-    respond with the worker to act next. Each worker will perform a
-    task and respond with their results and status. When finished,
-    respond with FINISH.
-    Given the conversation above, who should act next?
-    Or should we FINISH? Select one of: ${options}
-    Please call the tool to help you make the decision.
-    """
-  )
-  let res = chain.avoke("Code hello world and print it to the terminal")
-  println(res)
+    let tools = ArrayList<BaseTool>([GetWeather()])
 
-  // let agent = create_openai_tools_agent(llm, tools)
-  // let res2 = agent.run("what is the weather like today in Guangzhou?")
-  // print(res2)
-  // var graph: Graph = Graph()
-  // graph.addNode("testNode", "")
-  // graph.addNode("testEmpty", "")
+    let chain = CoTChain(llm, promptTemplate:SelfDefinePromptTemplate(), tools:tools)
+    chain.bind_function(func_schema)
+    let members = ArrayList<String>(["Researcher", "Coder"])
+    let options = members.append("FINISH")
+    chain.add_prompt("system_message", 
+      """
+      You are a supervisor tasked with managing a conversation between the
+      following workers: ${members}. Given the following user request,
+      respond with the worker to act next. Each worker will perform a
+      task and respond with their results and status. When finished,
+      respond with FINISH.
+      Given the conversation above, who should act next?
+      Or should we FINISH? Select one of: ${options}
+      Please call the tool to help you make the decision.
+      """
+    )
 
-  // graph.setEntryPoint("testNode")
+    let supervisor_node = Node("supervisor", "chain", chain)
+    let input = Dict()
+    input["input"] = "who should act next?"
+    let res = supervisor_node.run(input)
+    println(res)
 
-  // graph.addEdge("testNode", "testEmpty")
-  // graph.addEdge("testEmpty", "__end__")
-  // graph.avoke("who are you?")
+    // tool
+    let tool = pythonREPL()
+    let input2 = Dict()
+    input2.put("code", """
+def main():
+    print('hello world')
+""")
+    input2.put("filename","test")
+    let tool_node = Node("pythonREPL", "tool", tool)
+    let res2 = tool_node.run(input2)
+    println(res2)
+
+    // agent
+
+    let agent = create_openai_tools_agent(llm, ArrayList<BaseTool>([GetWeather()]))
+
+    let weather_agent = Node("weather", "agent", agent)
+    let input3 = Dict()
+    input3.put("input", "what is the weather like today in Guangzhou?")
+    let res3 = weather_agent.run(input3)
+    println(res3)
 }
+// main() {
+//   let llm = getLLMInstance(LLMType.OPEN_AI)
+//   let tools = ArrayList<BaseTool>([GetWeather(), pythonREPL()])
+
+//   let agent = create_openai_tools_agent(llm, tools)
+//   let res = agent.avoke("what is the weather like today in Guangzhou?")
+//   // let res = agent.avoke("What is the number of the fifth element in the Fibonacci sequence?")
+//   println(res)
+
+//   let graph = Graph()
+//   // var graph: Graph = Graph()
+//   // graph.addNode("testNode", "")
+//   // graph.addNode("testEmpty", "")
+
+//   // graph.setEntryPoint("testNode")
+
+//   // graph.addEdge("testNode", "testEmpty")
+//   // graph.addEdge("testEmpty", "__end__")
+//   // graph.avoke("who are you?")
+// }

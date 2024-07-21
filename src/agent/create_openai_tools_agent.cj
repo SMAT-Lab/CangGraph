@@ -37,8 +37,8 @@ public func executeTools(action: AgentAction, tools: ArrayList<BaseTool>): Strin
             // println("Executing action: ${action.toolName}, input: ${action.input}")
             match (action.toolInput) {
                 case Some(input) =>  
-                    return tool.run(input)
-                case None => return tool.run(action.input)
+                    return tool.avoke(input)
+                case None => return (tool.run([action.input]) as String).getOrThrow()
             }
         }
     }
@@ -46,7 +46,7 @@ public func executeTools(action: AgentAction, tools: ArrayList<BaseTool>): Strin
     return "Unknown tool: ${action.toolName}"
 }
 
-public class create_openai_tools_agent {
+public class create_openai_tools_agent <: Runnable{
     public var llm: OpenAI
     public var tools: ArrayList<BaseTool>
 
@@ -55,8 +55,14 @@ public class create_openai_tools_agent {
         this.tools = tools
     }
 
-    public func run(prompt: String) {
- 
+    public func run(args : Array<Any>) : Any {}
+
+    public func avoke(args: JsonObject): String {
+        "unimplemented"
+    }
+
+    public func avoke(dict: Dict): JsonObject {
+        let prompt: String = dict["input"]
         var openai_tools_agent_chain = LLMChain(llm, CallToolsPromptTemplate())
         var schema_tools: ArrayList<JsonValue> = ArrayList()
         for (tool in tools) {
@@ -78,17 +84,21 @@ public class create_openai_tools_agent {
             toolWithDescriptions += toolNamesList[i] + ": " + toolDescriptionsList[i] + ", "
         }
         input["tool_with_descriptions"] = toolWithDescriptions
-
+        // println(schema_tools)
         var res = openai_tools_agent_chain.function_call(input, schema_tools)
         if (callFunc(res) == false) {
-            return res["message"]
+            let ret = JsonObject()
+            ret.put("content", res["message"])
+            return ret
         } else {
             let function_name = res.get("function_name").getOrThrow().asString().getValue()
             let function_args = res.get("function_args").getOrThrow().asString().getValue()
             let value: JsonObject = JsonValue.fromStr(function_args).asObject()
             let action: AgentAction = AgentAction(function_name, value)
             let ob: String = executeTools(action, tools)
-            return ob
+            let ret = JsonObject()
+            ret.put("content", JsonString(ob))
+            return ret
         }
     }
 }
