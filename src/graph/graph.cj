@@ -4,31 +4,37 @@ from encoding import json.*
 import schema.*
 import agent.*
 import tool.*
+import chain.*
+
+public class State  {
+    // the messages of the graph
+    var messages: ArrayList<String> = ArrayList<String>()
+    // The 'next' field indicates where to route to next
+    var next: String = ""
+}
+
 
 public class Edge {
-    let start: String
-    let ends: HashMap<String, String>
-    let condition: Option<String>
-    public init(start: String, end: String) {
-        this.condition = None<String>
+    let start: Node
+    let end: Node
+    let condition: Bool
+    public init(start: Node, end: Node) {
+        this.condition = false
         this.start = start
-        var ends = HashMap<String, String>()
-        ends.put("", end)
-        this.ends = ends
+        this.end = end
     }
 
-    public init(start: String, condition: String, ends: HashMap<String, String>) {
+    public init(start: Node, end: Node, condition: Bool) {
         this.start = start
         this.condition = condition
-        this.ends = ends
+        this.end = end
     }
 }
 
 public class Node {
     let nodeName: String
     let nodeType: String
-    var edges: HashMap<Option<String>, Edge> = HashMap<Option<String>, Edge>()
-    var message: String = String()
+    var edges: HashMap<String, Edge> = HashMap<String, Edge>()
     var runnable: Option<Runnable> = None
 
     public init(nodeName: String, nodeType: String) {
@@ -42,14 +48,22 @@ public class Node {
         this.runnable = Some(runnable)
     }
 
-    func addEdge(end: String) {
-        let edge: Edge = Edge(nodeName, end)
-        edges.put(None<String>, edge)
+    func addEdge(end: Node) {
+        let edge: Edge = Edge(this, end)
+        edges.put(end.nodeName, edge)
     }
 
-    func addEdge(condition: String, ends: HashMap<String, String>) {
-        let edge: Edge = Edge(nodeName, condition, ends)
-        edges.put(condition, edge)
+    func addEdge(end: Node, condition: Bool) {
+        let edge: Edge = Edge(this, end, condition)
+        edges.put(end.nodeName, edge)
+    }
+
+    public operator func !=(other: Node): Bool {
+        return this.nodeName != other.nodeName
+    }
+
+    public operator func ==(other: Node): Bool {
+        return this.nodeName == other.nodeName
     }
 
     public func run(input: Dict): JsonObject {
@@ -73,7 +87,7 @@ public class Node {
 
 public class Graph {
     private var nodes: HashMap<String, Node> = HashMap<String, Node>()
-    let state: State = State()
+    private var state: State = State()
     let logger: SimpleLogger = SimpleLogger()
     let startNode = Node(START, START)
     let endNode = Node(END, END)
@@ -82,32 +96,18 @@ public class Graph {
         nodes.put(END, endNode)
     }
 
-    private func checkNode(nodeName: String, existence: Bool): Bool {
-        // if (compiled == false) {
-        //     logger.log(LogLevel.ERROR, "Adding node to graph before compilation")
-        //     return false
-        // }
-        if (existence != nodes.contains(nodeName)) {
-            if(existence) {
-                logger.log(LogLevel.ERROR, "Node ${nodeName} doesn't exist in graph")
-            }
-            else {
-                logger.log(LogLevel.ERROR, "Node ${nodeName} already exists in graph")
-            }
-            
-            return false
-        }
-        return true
+    private func checkNode(node: Node): Bool {
+        // check if the node exists in the graph
+        return nodes.contains(node.nodeName)
     }
 
-    public func addNode(nodeName: String, nodeType: String) {
-        if (nodeName == END || nodeName == START) {
-            logger.log(LogLevel.ERROR, "Node ${nodeName} is a reserved node name")
+    public func addNode(node: Node)  {
+        if (node.nodeName == END || node.nodeName == START) {
+            logger.log(LogLevel.ERROR, "Node ${node.nodeName} is a reserved node name")
             return
         }
-        if (checkNode(nodeName, false)) {
-            var node = Node(nodeName, nodeType)
-            this.nodes.put(nodeName, node)
+        if (!checkNode(node)) {
+            this.nodes.put(node.nodeName, node)
         }
     }
 
@@ -127,52 +127,52 @@ public class Graph {
         return true
     }
 
-    public func addEdge(start: String, end: String) {
-        var checkStart: String = start
+    public func addEdge(start: Node, end: Node) {
+        var checkStart: String = start.nodeName
         var checkEnds: HashSet<String> = HashSet<String>()
-        checkNode(end, true)
-        checkEnds.put(end)
-        if(this.checkEdge(checkStart, checkEnds)) {
-            let startNode = this.nodes.get(start).getOrThrow()
-            startNode.addEdge(end)
-        }
-    }
-
-    public func addEdge(start: String, condition: String, ends: HashMap<String, String>) {
-        var checkStart: String = start
-        var checkEnds: HashSet<String> = HashSet<String>()
-        for((choice, end) in ends) {
-            checkNode(end, true)
-            checkEnds.put(end)
-        }
-        if(this.checkEdge(checkStart, checkEnds)) {
-            let startNode = this.nodes.get(start).getOrThrow()
-            var endsName: HashMap<String, String> = HashMap<String, String>()
-            for((choice, end) in ends) {
-                endsName.put(choice, end)
+        if (checkNode(end)) {
+            checkEnds.put(end.nodeName)
+            if(this.checkEdge(checkStart, checkEnds)) {
+                let startNode = this.nodes.get(start.nodeName).getOrThrow()
+                startNode.addEdge(end)
             }
-            startNode.addEdge(condition, endsName)
         }
     }
 
-    public func setEntryPoint(nodeName: String) {
-        if(checkNode(nodeName, true)) {
-            startNode.addEdge(nodeName)
+    public func addConditionalEdge(start: Node, ends: Node, condition: Bool) {
+        // var checkStart: Node = start
+        // var checkEnds: HashSet<String> = HashSet<String>()
+        // for((choice, end) in ends) {
+        //     checkNode(end, true)
+        //     checkEnds.put(end)
+        // }
+        // if(this.checkEdge(checkStart, checkEnds)) {
+        //     let startNode = this.nodes.get(start).getOrThrow()
+        //     var endsName: HashMap<String, String> = HashMap<String, String>()
+        //     for((choice, end) in ends) {
+        //         endsName.put(choice, end)
+        //     }
+        //     startNode.addEdge(condition, endsName)
+        // }
+    }
+
+    public func setEntryPoint(node: Node) {
+        if(checkNode(node)) {
+            startNode.addEdge(node)
+            state.next = node.nodeName
         }
     }
 
-    public func avoke(prompt: String) {
-        var nowNode: String = START
+    public func avoke(input: Dict) {
+        var nowNode: Node = startNode
+        let prompt = input["input"]
         var nowInPut: String = prompt
-        while(nowNode != END){
-            if(nowNode == START) {
-                nowNode = this.startNode.edges[None<String>].ends[""]
-            }
-            else {
-                let input = Dict()
-                input["input"] = nowInPut
-                let res = this.nodes.get(nowNode).getOrThrow().runnable.getOrThrow().avoke(input)
-            }
+        while(nowNode != endNode){
+            nowNode = nowNode.edges.get(state.next).getOrThrow().end
+            let input = Dict()
+            input["input"] = nowInPut
+            let res = nowNode.runnable.getOrThrow().avoke(input)
+            println("${nowNode.nodeName}: ${(res["content"] as JsonValue).getOrThrow()}")
         } 
     }
 

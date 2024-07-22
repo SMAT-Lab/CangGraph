@@ -21,8 +21,9 @@ main() {
 
     let chain = CoTChain(llm, promptTemplate:SelfDefinePromptTemplate(), tools:tools)
     chain.bind_function(func_schema)
-    let members = ArrayList<String>(["Researcher", "Coder"])
-    let options = members.append("FINISH")
+    let members = ArrayList<String>(["Researcher", "Coder", "Weather"])
+    var options = members.clone()
+    options.append("FINISH")
     chain.add_prompt("system_message", 
       """
       You are a supervisor tasked with managing a conversation between the
@@ -32,15 +33,15 @@ main() {
       respond with FINISH.
       Given the conversation above, who should act next?
       Or should we FINISH? Select one of: ${options}
-      Please call the tool to help you make the decision.
+      You must call the tool 'root' to help you make the decision.
       """
     )
 
     let supervisor_node = Node("supervisor", "chain", chain)
     let input = Dict()
     input["input"] = "who should act next?"
-    let res = supervisor_node.run(input)
-    println(res)
+    // let res = supervisor_node.run(input)
+    // println(res)
 
     // tool
     let tool = pythonREPL()
@@ -51,8 +52,8 @@ def main():
 """)
     input2.put("filename","test")
     let tool_node = Node("pythonREPL", "tool", tool)
-    let res2 = tool_node.run(input2)
-    println(res2)
+    // let res2 = tool_node.run(input2)
+    // println(res2)
 
     // agent
 
@@ -61,8 +62,21 @@ def main():
     let weather_agent = Node("weather", "agent", agent)
     let input3 = Dict()
     input3.put("input", "what is the weather like today in Guangzhou?")
-    let res3 = weather_agent.run(input3)
-    println(res3)
+    // let res3 = weather_agent.run(input3)
+    // println(res3)
+
+    // graph
+    let graph = Graph()
+    graph.addNode(supervisor_node)
+    graph.addNode(tool_node)
+    graph.addNode(weather_agent)
+
+    graph.setEntryPoint(supervisor_node)
+
+    // graph.addEdge(supervisor_node, tool_node)
+    graph.addEdge(tool_node, weather_agent)
+
+    graph.avoke(input3)
 }
 // main() {
 //   let llm = getLLMInstance(LLMType.OPEN_AI)

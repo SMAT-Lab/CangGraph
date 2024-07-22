@@ -369,6 +369,7 @@ public class OpenAI <: LargeModel {
 
     public func queryFunctionCall(content: String, tools: ArrayList<JsonValue>): JsonObject{
         let postData = this.creatFunctionCallingQueryPostData(content, tools)
+        println(postData)
         let query = unsafe { LibC.mallocCString(postData) }
         // println("authHeader:${authHeader}")
         // println("chatUrl:${chatUrl}")
