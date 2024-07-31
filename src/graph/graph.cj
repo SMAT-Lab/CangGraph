@@ -29,6 +29,10 @@ public class Edge {
         this.condition = condition
         this.end = end
     }
+
+    public func printEdge() {
+        println("Edge: ${start.nodeName} -> ${end.nodeName}")
+    }
 }
 
 public class Node {
@@ -56,6 +60,12 @@ public class Node {
     func addEdge(end: Node, condition: Bool) {
         let edge: Edge = Edge(this, end, condition)
         edges.put(end.nodeName, edge)
+    }
+
+    func printEdges() {
+        for((k, v) in edges) {
+            println("Edge: ${k}")
+        }
     }
 
     public operator func !=(other: Node): Bool {
@@ -168,11 +178,31 @@ public class Graph {
         let prompt = input["input"]
         var nowInPut: String = prompt
         while(nowNode != endNode){
+            println("nowNode: ${nowNode.nodeName}")
+            nowNode.printEdges()
             nowNode = nowNode.edges.get(state.next).getOrThrow().end
             let input = Dict()
             input["input"] = nowInPut
             let res = nowNode.runnable.getOrThrow().avoke(input)
-            println("${nowNode.nodeName}: ${(res["content"] as JsonValue).getOrThrow()}")
+            let json: JsonObject = ((res["content"] as JsonValue).getOrThrow() as JsonObject).getOrThrow()
+            
+            println("nowNode: ${nowNode.nodeName}")
+            println(json)
+            let function_call: Bool = json.get("tool_call").getOrThrow().asBool().getValue()
+            if (function_call == true) {
+                let function_name: String = json.get("function_name").getOrThrow().asString().getValue()
+                var function_args = json.get("function_args").getOrThrow().toString()
+                //function_args = function_args[1..function_args.size-1]
+                //println("function_args: ${function_args}")
+                if (function_name == "RouteDecider") {
+                    var kO = JsonValue.fromStr("{\"next\":\"Weather\"}")
+                    var resO: JsonValue = kO.asObject().get("next").getOrThrow()
+                    println(resO.toString())
+                    state.next = resO.toString()
+                }
+            } else {
+                nowInPut = (json.get("output").getOrThrow() as String).getOrThrow()
+            }
         } 
     }
 

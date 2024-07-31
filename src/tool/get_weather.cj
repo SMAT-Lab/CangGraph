@@ -41,8 +41,8 @@ public class GetWeather <: BaseTool {
 
     public func avoke(args: JsonObject): String {
         println("running getting weather")
-        let location = args.get("location").getOrThrow()
-        var time = "today"
+        let location: String = args.get("location").getOrThrow().asString().getValue()
+        var time: String = "today"
         if (args.containsKey("time")) {
             time = args.get("time").getOrThrow().asString().getValue()
         }

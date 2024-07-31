@@ -6,15 +6,16 @@ import schema.*
 import chain.*
 from std import collection.*
 from encoding import json.*
+from std import ffi.python.*
 
 main() {
-
+    
     // chain
-    let llm = getLLMInstance(LLMType.OPEN_AI)
+    let llm = getLLMInstance(LLMType.OPEN_AI, model: "gpt-4o")
     let parameters = HashMap<String, Parameter>()
-    let next: Parameter = Parameter("next", "String", true)
+    let next: Parameter = Parameter("Next", "The next role to act", true)
     parameters["next"] = next
-    let function_def = BaseFunction("route", "Select the next role", parameters)
+    let function_def = BaseFunction("RouteDecider", "Select the next role to act", parameters)
     let func_schema: JsonValue = get_function_schema(function_def)
 
     let tools = ArrayList<BaseTool>([GetWeather()])
@@ -33,7 +34,7 @@ main() {
       respond with FINISH.
       Given the conversation above, who should act next?
       Or should we FINISH? Select one of: ${options}
-      You must call the tool 'root' to help you make the decision.
+      !!!You must call the tool 'RouteDecider' to help you make the decision. 
       """
     )
 

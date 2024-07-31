@@ -32,7 +32,7 @@ public class CoTChain <: LLMChain & Runnable {
         let input: String = dict["input"]
         this.add_prompt("user_message", input)
         let prompt: String = promptTemplate.format(this.input)
-        let output = llm.queryFunctionCall(prompt, this.functions)
+        let output = llm.queryFunctionCall(prompt, this.functions, useTool: true)
         let res = JsonObject()
         res.put("content", output)
         return res

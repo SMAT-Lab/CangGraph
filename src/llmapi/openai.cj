@@ -50,7 +50,7 @@ public class OpenAI <: LargeModel {
     public var queryWithHistoryMsg = false
     public var model = "gpt-4o"
     public var queryWithStreamMode = false
-    private let bufferSize: UIntNative = 1024000
+    private let bufferSize: UIntNative = 4096000
     private let response: CPointer<UInt8> = unsafe{ LibC.malloc<UInt8>(count: Int64(bufferSize))}
     public init(model!:String="gpt-4o", isAzureOpenAI!:Bool=false) {
         this.model = model
@@ -167,7 +167,7 @@ public class OpenAI <: LargeModel {
         return data.toJsonString()
     }
     
-    func creatFunctionCallingQueryPostData(content: String, tools: ArrayList<JsonValue>) {
+    func creatFunctionCallingQueryPostData(content: String, tools: ArrayList<JsonValue>, useTool: Bool) {
         let messages:ArrayList<JsonValue> = ArrayList<JsonValue>()
         let userQuery = JsonObject()
         userQuery.put("role", JsonString("user"))
@@ -177,9 +177,14 @@ public class OpenAI <: LargeModel {
         var data = JsonObject()
         // data.put("model", JsonString("gpt-4"))
         data.put("model", JsonString(this.model))
-        data.put("temperature", JsonFloat(0.7))
+        data.put("temperature", JsonFloat(0))
         data.put("messages", JsonArray(messages))
-        data.put("tool_choice", JsonString("auto"))
+    
+        if (useTool) {
+            data.put("tool_choice", JsonString("required"))
+        } else {
+            data.put("tool_choice", JsonString("auto"))
+        }
         data.put("tools", JsonArray(tools))
 
         return data.toJsonString()
@@ -244,7 +249,7 @@ public class OpenAI <: LargeModel {
                     case Some(choices) =>
                         let jsonArray = choices.asArray()
                         let theFirst = jsonArray[0].asObject()
-                        if (theFirst.get("finish_reason").getOrThrow().asString().getValue() == "tool_calls") {
+                        if (theFirst.get("finish_reason").getOrThrow().asString().getValue() == "tool_calls" || theFirst.get("finish_reason").getOrThrow().asString().getValue() == "stop") {
                             let tool_calls = 
                                 theFirst.get("message").getOrThrow().asObject().get("tool_calls").getOrThrow().asArray()[0].asObject()
 
@@ -367,14 +372,16 @@ public class OpenAI <: LargeModel {
         return processChatQueryRepsonse(result)
     }
 
-    public func queryFunctionCall(content: String, tools: ArrayList<JsonValue>): JsonObject{
-        let postData = this.creatFunctionCallingQueryPostData(content, tools)
-        println(postData)
+    public func queryFunctionCall(content: String, tools: ArrayList<JsonValue>, useTool!:Bool = false): JsonObject{
+        let postData = this.creatFunctionCallingQueryPostData(content, tools, useTool)
+        // let postData = this.creatChatQueryPostData(content, stop: false)
+        // println(postData)
         let query = unsafe { LibC.mallocCString(postData) }
         // println("authHeader:${authHeader}")
         // println("chatUrl:${chatUrl}")
         let repsonse = unsafe { send_llm_request(this.authHeader, this.chatUrl, this.response, this.bufferSize, query) }
         let result = repsonse.toString()
+        // println(result)
         unsafe {
             LibC.free(query)
         }

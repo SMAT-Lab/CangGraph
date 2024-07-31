@@ -33,7 +33,7 @@ public open class LLMChain <: Chain {
         let prompt = promptTemplate.format(input)
         // println("prompt: ${prompt}")
         // println("tools: ${tools}")
-        let output = llm.queryFunctionCall(prompt, tools)
+        let output = llm.queryFunctionCall(prompt, tools, useTool:false)
         return output
     }
 
