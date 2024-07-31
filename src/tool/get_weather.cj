@@ -27,7 +27,7 @@ public class GetWeather <: BaseTool {
         return "the weather in ${location} ${time} is 72 degrees Fahrenheit with clear skies."
     }
 
-    public func avoke(args: Dict): JsonObject {
+    public func invoke(args: Dict): JsonObject {
         println("running getting weather")
         let location = args["location"]
         var time = "today"
@@ -39,7 +39,7 @@ public class GetWeather <: BaseTool {
         return res
     }
 
-    public func avoke(args: JsonObject): String {
+    public func invoke(args: JsonObject): String {
         println("running getting weather")
         let location: String = args.get("location").getOrThrow().asString().getValue()
         var time: String = "today"

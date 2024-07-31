@@ -74,7 +74,7 @@ public class FileSaver <: BaseTool {
         return "saved successfully"
     }
 
-    public func avoke(args: Dict): JsonObject {
+    public func invoke(args: Dict): JsonObject {
         let filename: String = args["filename"]
         let content: String = args["content"]
         var file: File = File(filename, OpenOption.CreateOrTruncate(true))
@@ -89,7 +89,7 @@ public class FileSaver <: BaseTool {
         return res
     }
 
-    public func avoke(args: JsonObject): String {
+    public func invoke(args: JsonObject): String {
         let filename: String = args.get("filename").getOrThrow().asString().getValue()
         let content: String = args.get("content").getOrThrow().asString().getValue()
 

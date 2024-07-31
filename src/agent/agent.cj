@@ -68,7 +68,7 @@ public abstract class BaseAgent <: Chain & ActionExecutor{
                 // println("Executing action: ${action.toolName}, input: ${action.input}")
                 match (action.toolInput) {
                     case Some(input) =>  
-                        return tool.avoke(input)
+                        return tool.invoke(input)
                     case None => return  (tool.run([action.input]) as String).getOrThrow()
                 }
             }

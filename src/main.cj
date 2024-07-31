@@ -77,15 +77,15 @@ def main():
     // graph.addEdge(supervisor_node, tool_node)
     graph.addEdge(tool_node, weather_agent)
 
-    graph.avoke(input3)
+    graph.invoke(input3)
 }
 // main() {
 //   let llm = getLLMInstance(LLMType.OPEN_AI)
 //   let tools = ArrayList<BaseTool>([GetWeather(), pythonREPL()])
 
 //   let agent = create_openai_tools_agent(llm, tools)
-//   let res = agent.avoke("what is the weather like today in Guangzhou?")
-//   // let res = agent.avoke("What is the number of the fifth element in the Fibonacci sequence?")
+//   let res = agent.invoke("what is the weather like today in Guangzhou?")
+//   // let res = agent.invoke("What is the number of the fifth element in the Fibonacci sequence?")
 //   println(res)
 
 //   let graph = Graph()
@@ -97,5 +97,5 @@ def main():
 
 //   // graph.addEdge("testNode", "testEmpty")
 //   // graph.addEdge("testEmpty", "__end__")
-//   // graph.avoke("who are you?")
+//   // graph.invoke("who are you?")
 // }

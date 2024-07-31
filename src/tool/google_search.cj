@@ -46,12 +46,12 @@ public class GoogleSearchRun <: BaseTool {
         return res
     }
 
-    public func avoke(args: JsonObject): String {
+    public func invoke(args: JsonObject): String {
         var query: String = args.get("query").getOrThrow().asString().getValue()
         (run([query]) as String).getOrThrow()
     }
 
-    public func avoke(args: Dict): JsonObject {
+    public func invoke(args: Dict): JsonObject {
         var query: String = args["query"]
         var res = JsonObject()
         res.put("content", JsonString((run([query]) as String).getOrThrow()))
@@ -94,11 +94,11 @@ public class GoogleSearchResults <: BaseTool {
         apiWrapper.results(query)
     }
 
-    public func avoke(args: JsonObject): String {
+    public func invoke(args: JsonObject): String {
         return run(args.toString())
     }
 
-    public func avoke(args: Dict): JsonObject {
+    public func invoke(args: Dict): JsonObject {
         var query: String = args["query"]
         var res = JsonObject()
         res.put("content", JsonString((run([query]) as String).getOrThrow()))

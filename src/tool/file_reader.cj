@@ -27,7 +27,7 @@ public class FileReader <: BaseTool {
         return "read successfully"
     }
 
-    public func avoke(args: Dict): JsonObject {
+    public func invoke(args: Dict): JsonObject {
         let filename: String = args["filename"]
         let allBytes: Array<Byte> = File.readFrom(filename)
         let res = JsonObject()
@@ -35,7 +35,7 @@ public class FileReader <: BaseTool {
         return res
     }
 
-    public func avoke(args: JsonObject): String {
+    public func invoke(args: JsonObject): String {
         let filename: String = args.get("filename").getOrThrow().asString().getValue()
         let allBytes: Array<Byte> = File.readFrom(filename)
         return String.fromUtf8(allBytes)

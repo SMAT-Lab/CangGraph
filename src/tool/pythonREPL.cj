@@ -31,7 +31,7 @@ public class pythonREPL <: BaseTool {
         Python.unload()
     }
 
-    public func avoke(args: JsonObject): String {
+    public func invoke(args: JsonObject): String {
         let query = args.get("code").getOrThrow().asString().getValue()
         var filename = ""
         if (args.containsKey("filename")) {
@@ -59,7 +59,7 @@ public class pythonREPL <: BaseTool {
         // return sum.toString()
     }
 
-    public func avoke(args: Dict): JsonObject {
+    public func invoke(args: Dict): JsonObject {
         let query = args["code"]
         if (args.contains("arguments")) {
             let arguments = args["arguments"]

@@ -45,7 +45,7 @@ def main():
 """)
     args.put("filename","test")
 
-    println(tool.avoke(args))
+    println(tool.invoke(args))
 }
 ```
 
@@ -67,7 +67,7 @@ main() {
     let agent = create_openai_tools_agent(llm, tools)
     let input = Dict()
     input["input"] = "what is the weather like today in Guangzhou?"
-    let res = agent.avoke(input)
+    let res = agent.invoke(input)
     print(res)
 }
 ```
@@ -111,7 +111,7 @@ main() {
     )
     let input = Dict()
     input["input"] = "What is the weather like today in Guangzhou?"
-    let res = chain.avoke(input)
+    let res = chain.invoke(input)
     println(res)
 }
 ```

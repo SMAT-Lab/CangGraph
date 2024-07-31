@@ -28,7 +28,7 @@ public class CoTChain <: LLMChain & Runnable {
         this.input[key] = value
     }
 
-    public func avoke(dict: Dict): JsonObject {
+    public func invoke(dict: Dict): JsonObject {
         let input: String = dict["input"]
         this.add_prompt("user_message", input)
         let prompt: String = promptTemplate.format(this.input)
@@ -40,7 +40,7 @@ public class CoTChain <: LLMChain & Runnable {
 
     public func run(args : Array<Any>) : Any {}
 
-    public func avoke(args: JsonObject): String {
+    public func invoke(args: JsonObject): String {
         "unimplemented"
     }
 

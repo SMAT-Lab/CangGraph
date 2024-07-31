@@ -46,13 +46,13 @@ public class SerpAPIRun <: BaseTool {
     }
 
 
-    public func avoke(args: JsonObject): String {
+    public func invoke(args: JsonObject): String {
         let query: String = args.get("query").getOrThrow().asString().getValue()
 
         (apiWrapper.run(query) as String).getOrThrow()
     }
 
-    public func avoke(args: Dict): JsonObject {
+    public func invoke(args: Dict): JsonObject {
         var query: String = args["query"]
         var res = JsonObject()
         res.put("content", JsonString((run([query]) as String).getOrThrow()))
@@ -95,11 +95,11 @@ public class SerpAPIResults <: BaseTool {
         apiWrapper.results(query)
     }
 
-    public func avoke(args: JsonObject): String {
+    public func invoke(args: JsonObject): String {
         return run(args.toString())
     }
 
-    public func avoke(args: Dict): JsonObject {
+    public func invoke(args: Dict): JsonObject {
         var query: String = args["query"]
         var res = JsonObject()
         res.put("content", JsonString((run([query]) as String).getOrThrow()))

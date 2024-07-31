@@ -81,11 +81,11 @@ public class Node {
             case None => return JsonObject()
             case Some(node) => 
                 if (node is CoTChain) {
-                    return (node as CoTChain).getOrThrow().avoke(input)
+                    return (node as CoTChain).getOrThrow().invoke(input)
                 } else if (node is BaseTool) {
-                    return (node as BaseTool).getOrThrow().avoke(input)
+                    return (node as BaseTool).getOrThrow().invoke(input)
                 } else if (node is create_openai_tools_agent) {
-                    return (node as create_openai_tools_agent).getOrThrow().avoke(input)
+                    return (node as create_openai_tools_agent).getOrThrow().invoke(input)
                 } 
                 else {
                     return JsonObject()
@@ -173,7 +173,7 @@ public class Graph {
         }
     }
 
-    public func avoke(input: Dict) {
+    public func invoke(input: Dict) {
         var nowNode: Node = startNode
         let prompt = input["input"]
         var nowInPut: String = prompt
@@ -183,7 +183,7 @@ public class Graph {
             nowNode = nowNode.edges.get(state.next).getOrThrow().end
             let input = Dict()
             input["input"] = nowInPut
-            let res = nowNode.runnable.getOrThrow().avoke(input)
+            let res = nowNode.runnable.getOrThrow().invoke(input)
             let json: JsonObject = ((res["content"] as JsonValue).getOrThrow() as JsonObject).getOrThrow()
             
             println("nowNode: ${nowNode.nodeName}")

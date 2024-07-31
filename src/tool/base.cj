@@ -5,8 +5,8 @@ import schema.*
 
 public interface Runnable {
     func run(args : Array<Any>) : Any
-    func avoke(args: JsonObject): String
-    func avoke(args: Dict): JsonObject
+    func invoke(args: JsonObject): String
+    func invoke(args: Dict): JsonObject
 }
 
 public struct Args {

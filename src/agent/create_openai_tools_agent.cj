@@ -37,7 +37,7 @@ public func executeTools(action: AgentAction, tools: ArrayList<BaseTool>): Strin
             // println("Executing action: ${action.toolName}, input: ${action.input}")
             match (action.toolInput) {
                 case Some(input) =>  
-                    return tool.avoke(input)
+                    return tool.invoke(input)
                 case None => return (tool.run([action.input]) as String).getOrThrow()
             }
         }
@@ -57,11 +57,11 @@ public class create_openai_tools_agent <: Runnable{
 
     public func run(args : Array<Any>) : Any {}
 
-    public func avoke(args: JsonObject): String {
+    public func invoke(args: JsonObject): String {
         "unimplemented"
     }
 
-    public func avoke(dict: Dict): JsonObject {
+    public func invoke(dict: Dict): JsonObject {
         let prompt: String = dict["input"]
         var openai_tools_agent_chain = LLMChain(llm, CallToolsPromptTemplate())
         var schema_tools: ArrayList<JsonValue> = ArrayList()
