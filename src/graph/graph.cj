@@ -8,7 +8,7 @@ import chain.*
 
 public class State  {
     // the messages of the graph
-    var messages: ArrayList<String> = ArrayList<String>()
+    var messages: ArrayList<JsonValue> = ArrayList<JsonValue>()
     // The 'next' field indicates where to route to next
     var next: String = ""
 }
@@ -68,6 +68,17 @@ public class Node {
         }
     }
 
+    func getOnlyEdge(): Edge {
+        if (edges.size != 1) {
+            println("Node ${nodeName} has more than one edge")
+            return Edge(this, this)
+        }
+        for ((k, v) in edges) {
+            return v
+        }
+        Edge(this, this)
+    }
+
     public operator func !=(other: Node): Bool {
         return this.nodeName != other.nodeName
     }
@@ -104,6 +115,10 @@ public class Graph {
     public init() {
         nodes.put(START, startNode)
         nodes.put(END, endNode)
+
+        let systemMessage = JsonObject()
+        systemMessage.put("system", JsonString("Hello, you are a helpful assistant."))
+        state.messages.append(systemMessage)
     }
 
     private func checkNode(node: Node): Bool {
@@ -173,36 +188,49 @@ public class Graph {
         }
     }
 
+    public func setExitPoint(node: Node) {
+        if(checkNode(node)) {
+            node.addEdge(endNode)
+        }
+    }
+
     public func invoke(input: Dict) {
         var nowNode: Node = startNode
         let prompt = input["input"]
+        let message = JsonObject()
+        message.put("user", JsonString(prompt))
+        state.messages.append(message)
         var nowInPut: String = prompt
         while(nowNode != endNode){
             println("nowNode: ${nowNode.nodeName}")
             nowNode.printEdges()
-            nowNode = nowNode.edges.get(state.next).getOrThrow().end
+            if (nowNode == startNode) {
+                nowNode = nowNode.edges.get(state.next).getOrThrow().end
+                continue
+            }
             let input = Dict()
             input["input"] = nowInPut
             let res = nowNode.runnable.getOrThrow().invoke(input)
-            let json: JsonObject = ((res["content"] as JsonValue).getOrThrow() as JsonObject).getOrThrow()
             
-            println("nowNode: ${nowNode.nodeName}")
-            println(json)
-            let function_call: Bool = json.get("tool_call").getOrThrow().asBool().getValue()
-            if (function_call == true) {
+            let content = res.get("content").getOrThrow()
+            try {
+                let json: JsonObject = ((res["content"] as JsonValue).getOrThrow() as JsonObject).getOrThrow()
                 let function_name: String = json.get("function_name").getOrThrow().asString().getValue()
-                var function_args = json.get("function_args").getOrThrow().toString()
-                //function_args = function_args[1..function_args.size-1]
-                //println("function_args: ${function_args}")
+                var function_args: JsonObject = json["function_args"].asObject()
                 if (function_name == "RouteDecider") {
-                    var kO = JsonValue.fromStr("{\"next\":\"Weather\"}")
-                    var resO: JsonValue = kO.asObject().get("next").getOrThrow()
-                    println(resO.toString())
-                    state.next = resO.toString()
-                }
-            } else {
-                nowInPut = (json.get("output").getOrThrow() as String).getOrThrow()
+                    let next = function_args.get("next").getOrThrow().asString().getValue()
+                    state.next = next      
+                }       
+                
+                nowNode = nowNode.edges.get(state.next).getOrThrow().end
+            }        
+            catch(e: Exception) {
+                state.next = nowNode.getOnlyEdge().end.nodeName
+                let ob = content.asString().getValue()
+                state.messages.append(Message("assistant", ob))
+                nowNode = nowNode.edges.get(state.next).getOrThrow().end
             }
+            
         } 
     }
 

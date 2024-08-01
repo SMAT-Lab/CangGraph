@@ -14,5 +14,6 @@ public func getLLMInstance(modelType: LLMType, model !: String = "gpt-4o-mini") 
 
 public abstract class LargeModel {
     public open func query(content: String, stop!: Bool): String
+    public open func query(messages: ArrayList<JsonValue>, stop!: Bool, tools!: ArrayList<JsonValue> , useTool!: Bool): String
     public open func queryFunctionCall(content: String, tools: ArrayList<JsonValue>, useTool!: Bool): JsonObject
 }

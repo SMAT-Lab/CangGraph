@@ -9,9 +9,8 @@ from encoding import json.*
 from std import ffi.python.*
 
 main() {
-    
     // chain
-    let llm = getLLMInstance(LLMType.OPEN_AI, model: "gpt-4o")
+    let llm = getLLMInstance(LLMType.OPEN_AI, model: "gpt-4o-mini")
     let parameters = HashMap<String, Parameter>()
     let next: Parameter = Parameter("Next", "The next role to act", true)
     parameters["next"] = next
@@ -60,7 +59,7 @@ def main():
 
     let agent = create_openai_tools_agent(llm, ArrayList<BaseTool>([GetWeather()]))
 
-    let weather_agent = Node("weather", "agent", agent)
+    let weather_agent = Node("Weather", "agent", agent)
     let input3 = Dict()
     input3.put("input", "what is the weather like today in Guangzhou?")
     // let res3 = weather_agent.run(input3)
@@ -76,6 +75,10 @@ def main():
 
     // graph.addEdge(supervisor_node, tool_node)
     graph.addEdge(tool_node, weather_agent)
+    graph.addEdge(supervisor_node, weather_agent)
+    graph.addEdge(weather_agent, supervisor_node)
+
+    graph.setExitPoint(supervisor_node)
 
     graph.invoke(input3)
 }

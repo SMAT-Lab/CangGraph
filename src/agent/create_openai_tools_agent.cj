@@ -91,10 +91,10 @@ public class create_openai_tools_agent <: Runnable{
             ret.put("content", res["message"])
             return ret
         } else {
-            let function_name = res.get("function_name").getOrThrow().asString().getValue()
-            let function_args = res.get("function_args").getOrThrow().asString().getValue()
-            let value: JsonObject = JsonValue.fromStr(function_args).asObject()
-            let action: AgentAction = AgentAction(function_name, value)
+            let function_name: String = res.get("function_name").getOrThrow().asString().getValue()
+            var function_args: JsonObject = res["function_args"].asObject()
+            println("function_name: ${function_name}, function_args: ${function_args}")
+            let action: AgentAction = AgentAction(function_name, function_args)
             let ob: String = executeTools(action, tools)
             let ret = JsonObject()
             ret.put("content", JsonString(ob))

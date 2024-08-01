@@ -8,6 +8,7 @@ from std import collection.*
 from encoding import json.*
 from std import fs.File
 import tool.*
+from std import reflect.*
 
 foreign func send_llm_request(auth_header: CString, url: CString, response: CPointer<UInt8>, buffer_size: UIntNative,  data_content: CString): CString
 foreign func set_stream(cb:CFunc< (CString) -> Int32 >):Unit
@@ -131,6 +132,26 @@ public class OpenAI <: LargeModel {
         return (chatUrl,embeddingUrl)
     }
 
+    func createChatQueryPostData(messages: ArrayList<JsonValue>, stop!: Bool=false, tools!: ArrayList<JsonValue> = ArrayList<JsonValue>(), useTool!: Bool=false) {
+        var data = JsonObject()
+        data.put("model", JsonString(this.model))
+        data.put("temperature", JsonFloat(0.7))
+        data.put("messages", JsonArray(messages))
+        if (stop){
+            data.put("stop", JsonString("Observation:"))
+        }
+        if (useTool) {
+            data.put("tool_choice", JsonString("required"))
+        } else {
+            data.put("tool_choice", JsonString("auto"))
+        }
+        
+        data.put("tools", JsonArray(tools))
+
+        return data.toJsonString()
+
+    }
+
     // todo: enable multiple messages, e.g., 
     // [{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": "Hello!"}] 
     func creatChatQueryPostData(content: String, stop!: Bool=false) {
@@ -239,8 +260,17 @@ public class OpenAI <: LargeModel {
         }
     }
 
+    func parseString(raw_json: String): String {
+        var str = raw_json[1..raw_json.size-1]
+        str = str.replace("\\n", "\n")
+        str = str.replace("\\t", "\t")
+        str = str.replace("\\\"", "\"")
+        return str
+    }
+
     func processFuncCallQueryResponse(response: String): JsonObject {
         // println("response:${response}")
+        // println(response)
         let rep = string2JsonObject(response) 
         match (rep.get("error")) {
             case Some(error) => throw Exception(error.toJsonString())
@@ -249,34 +279,39 @@ public class OpenAI <: LargeModel {
                     case Some(choices) =>
                         let jsonArray = choices.asArray()
                         let theFirst = jsonArray[0].asObject()
-                        if (theFirst.get("finish_reason").getOrThrow().asString().getValue() == "tool_calls" || theFirst.get("finish_reason").getOrThrow().asString().getValue() == "stop") {
+                        let message = theFirst["message"].asObject()
+
+                        if (message.containsKey("tool_calls")) {
                             let tool_calls = 
                                 theFirst.get("message").getOrThrow().asObject().get("tool_calls").getOrThrow().asArray()[0].asObject()
 
-                            let function = tool_calls.get("function").getOrThrow().asObject()
-                            let function_name = function.get("name").getOrThrow().asString().getValue()
-                            let function_args = function.get("arguments").getOrThrow().asString().getValue()
+                            let function: JsonObject = tool_calls["function"].asObject()
+                            let function_name: JsonValue = function["name"]
+                            let function_args: String = function["arguments"].toJsonString()
+
+                            var parse_args = parseString(function_args) 
+                            var parse_args_obj = string2JsonObject(parse_args)
 
                             var res = JsonObject()
-                            res.put("function_name", JsonString(function_name))
-                            res.put("function_args", JsonString(function_args))
+                            res.put("function_name", function_name)
+                            res.put("function_args", parse_args_obj)
                             res.put("tool_call", JsonBool(true))
 
                             return res
-                            
                         }
                         else {
-                            let message = 
-                                theFirst.get("message").getOrThrow().asObject().get("content").getOrThrow().asString().getValue()
+                            let content = message["content"].asObject()
+                            let role = content["role"].asString().getValue()
+                            let content_str = content["content"].asString().getValue()
                             if (this.queryWithHistoryMsg) {
-                                let role =  theFirst.get("message").getOrThrow().asObject().get("role").getOrThrow().asString().getValue()
-                                this.recordResponse(role,message)
+                                this.recordResponse(role,content_str)
                             }
                             var res = JsonObject()
-                            res.put("message", JsonString(message))
+                            res.put("message", JsonString(content_str))
                             res.put("tool_call", JsonBool(false))
                             return res
                         }
+
                     case None => 
                         println("Something wrong with the response")
                         throw Exception(rep.toString())
@@ -368,6 +403,17 @@ public class OpenAI <: LargeModel {
         println("")
         if (this.queryWithStreamMode){
             return processChatQueryRepsonseWithStreamMode(result)
+        }
+        return processChatQueryRepsonse(result)
+    }
+
+    public func query(messages: ArrayList<JsonValue>, stop!:Bool = false, tools!: ArrayList<JsonValue> = ArrayList<JsonValue>(), useTool!: Bool = false): String {
+        let postData = this.createChatQueryPostData(messages, stop: stop, tools: tools, useTool: useTool)
+        let query = unsafe { LibC.mallocCString(postData) }
+        let response = unsafe { send_llm_request(this.authHeader, this.chatUrl, this.response, this.bufferSize, query) }
+        let result = response.toString()
+        unsafe {
+            LibC.free(query)
         }
         return processChatQueryRepsonse(result)
     }

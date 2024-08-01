@@ -42,6 +42,11 @@ public open class LLMChain <: Chain {
         let output = llm.query(promptTemplate.format(input), stop:true)
         return output
     }
+
+    public func invoke(messages: ArrayList<JsonValue>, tools!: ArrayList<JsonValue> = ArrayList<JsonValue>(), useTool!: Bool = false): String {
+        let output = llm.query(messages, stop:false, tools:tools, useTool:useTool)
+        return output
+    }
 }
 
 
