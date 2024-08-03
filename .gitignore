@@ -1,3 +1,5 @@
 target/
 .cache/
 .vscode/
+resource/
+lib/libonnxruntime_providers_cuda.so

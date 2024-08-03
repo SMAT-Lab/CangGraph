@@ -227,7 +227,9 @@ public class Graph {
             catch(e: Exception) {
                 state.next = nowNode.getOnlyEdge().end.nodeName
                 let ob = content.asString().getValue()
-                state.messages.append(Message("assistant", ob))
+                let msg = JsonObject()
+                msg.put("assistant", JsonString(ob))
+                state.messages.append(msg)
                 nowNode = nowNode.edges.get(state.next).getOrThrow().end
             }
             
