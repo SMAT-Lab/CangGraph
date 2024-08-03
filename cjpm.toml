@@ -1,0 +1,31 @@
+[dependencies]
+
+[ffi]
+  [ffi.c]
+    apirequest = {path = "./lib"}
+    duckdb = {path = "./lib"}
+    execute_python = {path = "./lib"}
+    googlesearch = {path = "./lib"}
+    hnswlibcj = {path = "./lib"}
+    onnxruntime_cj_api = {path = "./lib"}
+    onnxutils = {path = "./lib"}
+    serpapisearch = {path = "./lib"}
+
+[package]
+  cjc-version = "0.51.4"
+  compile-option = ""
+  description = "nothing here"
+  link-option = ""
+  name = "cangchain"
+  output-type = "executable"
+  src-dir = "src"
+  target-dir = ""
+  version = "1.0.0"
+  package-configuration = {}
+
+[target]
+  [target.x86_64-unknown-linux-gnu]
+    [target.x86_64-unknown-linux-gnu.bin-dependencies]
+      path-option = ["./lib/uuid4cj", "./lib/crypto4cj", "./lib/charset"]
+      package-option = {}
+

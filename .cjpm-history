@@ -1,0 +1,3721 @@
+{
+  "resolves": [
+    {
+      "name": "cangchain",
+      "packagePath": "/home/CangGraph/src/onnx",
+      "packageName": "cangchain/onnx",
+      "isMacroPackage": false,
+      "output_type": "static",
+      "command_option": "",
+      "condition_option": {},
+      "link_option": "",
+      "requires": [],
+      "package_requires": {
+        "charset/charset.encoding": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.encoding"
+        },
+        "crypto4cj/utils": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_utils"
+        },
+        "charset/charset.unicode": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.unicode"
+        },
+        "charset/charset.simplechinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.simplechinese"
+        },
+        "charset/charset.traditionchinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.traditionchinese"
+        },
+        "charset/charset.singlebyte": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.singlebyte"
+        },
+        "charset/charset.japanese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.japanese"
+        },
+        "charset/charset.korean": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.korean"
+        },
+        "crypto4cj/aescj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_aescj"
+        },
+        "crypto4cj/rc4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc4cj"
+        },
+        "crypto4cj/hmaccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_hmaccj"
+        },
+        "crypto4cj/rc2cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc2cj"
+        },
+        "crypto4cj/digestcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_digestcj"
+        },
+        "crypto4cj/sha1cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha1cj"
+        },
+        "crypto4cj/dsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dsacj"
+        },
+        "crypto4cj/md5cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_md5cj"
+        },
+        "crypto4cj/sha224cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha224cj"
+        },
+        "crypto4cj/sha384cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha384cj"
+        },
+        "crypto4cj/bignumcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_bignumcj"
+        },
+        "crypto4cj/symmetrycj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_symmetrycj"
+        },
+        "charset/charset": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding",
+            "charset/charset.japanese",
+            "charset/charset.korean",
+            "charset/charset.simplechinese",
+            "charset/charset.singlebyte",
+            "charset/charset.traditionchinese",
+            "charset/charset.unicode"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset"
+        },
+        "crypto4cj/sha256cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha224cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha256cj"
+        },
+        "crypto4cj/sha512cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha384cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha512cj"
+        },
+        "crypto4cj/dhcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dhcj"
+        },
+        "crypto4cj/eccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_eccj"
+        },
+        "crypto4cj/rsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/digestcj",
+            "crypto4cj/symmetrycj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rsacj"
+        },
+        "uuid4cj/uuid4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset",
+            "charset/charset.encoding",
+            "charset/charset.unicode",
+            "crypto4cj/md5cj",
+            "crypto4cj/sha1cj",
+            "crypto4cj/sha224cj",
+            "crypto4cj/sha256cj",
+            "crypto4cj/sha384cj",
+            "crypto4cj/sha512cj"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/uuid4cj",
+          "libName": "uuid4cj_uuid4cj"
+        }
+      },
+      "foreign_requires": {
+        "apirequest": "/home/CangGraph/lib",
+        "serpapisearch": "/home/CangGraph/lib",
+        "onnxruntime_cj_api": "/home/CangGraph/lib",
+        "onnxutils": "/home/CangGraph/lib",
+        "duckdb": "/home/CangGraph/lib",
+        "hnswlibcj": "/home/CangGraph/lib",
+        "googlesearch": "/home/CangGraph/lib",
+        "execute_python": "/home/CangGraph/lib"
+      },
+      "isTestPkg": false
+    },
+    {
+      "name": "cangchain",
+      "packagePath": "/home/CangGraph/src/onnxrt",
+      "packageName": "cangchain/onnxrt",
+      "isMacroPackage": false,
+      "output_type": "static",
+      "command_option": "",
+      "condition_option": {},
+      "link_option": "",
+      "requires": [],
+      "package_requires": {
+        "charset/charset.encoding": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.encoding"
+        },
+        "crypto4cj/utils": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_utils"
+        },
+        "charset/charset.unicode": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.unicode"
+        },
+        "charset/charset.simplechinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.simplechinese"
+        },
+        "charset/charset.traditionchinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.traditionchinese"
+        },
+        "charset/charset.singlebyte": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.singlebyte"
+        },
+        "charset/charset.japanese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.japanese"
+        },
+        "charset/charset.korean": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.korean"
+        },
+        "crypto4cj/aescj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_aescj"
+        },
+        "crypto4cj/rc4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc4cj"
+        },
+        "crypto4cj/hmaccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_hmaccj"
+        },
+        "crypto4cj/rc2cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc2cj"
+        },
+        "crypto4cj/digestcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_digestcj"
+        },
+        "crypto4cj/sha1cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha1cj"
+        },
+        "crypto4cj/dsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dsacj"
+        },
+        "crypto4cj/md5cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_md5cj"
+        },
+        "crypto4cj/sha224cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha224cj"
+        },
+        "crypto4cj/sha384cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha384cj"
+        },
+        "crypto4cj/bignumcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_bignumcj"
+        },
+        "crypto4cj/symmetrycj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_symmetrycj"
+        },
+        "charset/charset": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding",
+            "charset/charset.japanese",
+            "charset/charset.korean",
+            "charset/charset.simplechinese",
+            "charset/charset.singlebyte",
+            "charset/charset.traditionchinese",
+            "charset/charset.unicode"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset"
+        },
+        "crypto4cj/sha256cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha224cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha256cj"
+        },
+        "crypto4cj/sha512cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha384cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha512cj"
+        },
+        "crypto4cj/dhcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dhcj"
+        },
+        "crypto4cj/eccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_eccj"
+        },
+        "crypto4cj/rsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/digestcj",
+            "crypto4cj/symmetrycj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rsacj"
+        },
+        "uuid4cj/uuid4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset",
+            "charset/charset.encoding",
+            "charset/charset.unicode",
+            "crypto4cj/md5cj",
+            "crypto4cj/sha1cj",
+            "crypto4cj/sha224cj",
+            "crypto4cj/sha256cj",
+            "crypto4cj/sha384cj",
+            "crypto4cj/sha512cj"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/uuid4cj",
+          "libName": "uuid4cj_uuid4cj"
+        }
+      },
+      "foreign_requires": {
+        "apirequest": "/home/CangGraph/lib",
+        "serpapisearch": "/home/CangGraph/lib",
+        "onnxruntime_cj_api": "/home/CangGraph/lib",
+        "onnxutils": "/home/CangGraph/lib",
+        "duckdb": "/home/CangGraph/lib",
+        "hnswlibcj": "/home/CangGraph/lib",
+        "googlesearch": "/home/CangGraph/lib",
+        "execute_python": "/home/CangGraph/lib"
+      },
+      "isTestPkg": false
+    },
+    {
+      "name": "cangchain",
+      "packagePath": "/home/CangGraph/src/schema",
+      "packageName": "cangchain/schema",
+      "isMacroPackage": false,
+      "output_type": "static",
+      "command_option": "",
+      "condition_option": {},
+      "link_option": "",
+      "requires": [],
+      "package_requires": {
+        "charset/charset.encoding": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.encoding"
+        },
+        "crypto4cj/utils": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_utils"
+        },
+        "charset/charset.unicode": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.unicode"
+        },
+        "charset/charset.simplechinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.simplechinese"
+        },
+        "charset/charset.traditionchinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.traditionchinese"
+        },
+        "charset/charset.singlebyte": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.singlebyte"
+        },
+        "charset/charset.japanese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.japanese"
+        },
+        "charset/charset.korean": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.korean"
+        },
+        "crypto4cj/aescj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_aescj"
+        },
+        "crypto4cj/rc4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc4cj"
+        },
+        "crypto4cj/hmaccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_hmaccj"
+        },
+        "crypto4cj/rc2cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc2cj"
+        },
+        "crypto4cj/digestcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_digestcj"
+        },
+        "crypto4cj/sha1cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha1cj"
+        },
+        "crypto4cj/dsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dsacj"
+        },
+        "crypto4cj/md5cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_md5cj"
+        },
+        "crypto4cj/sha224cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha224cj"
+        },
+        "crypto4cj/sha384cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha384cj"
+        },
+        "crypto4cj/bignumcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_bignumcj"
+        },
+        "crypto4cj/symmetrycj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_symmetrycj"
+        },
+        "charset/charset": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding",
+            "charset/charset.japanese",
+            "charset/charset.korean",
+            "charset/charset.simplechinese",
+            "charset/charset.singlebyte",
+            "charset/charset.traditionchinese",
+            "charset/charset.unicode"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset"
+        },
+        "crypto4cj/sha256cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha224cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha256cj"
+        },
+        "crypto4cj/sha512cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha384cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha512cj"
+        },
+        "crypto4cj/dhcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dhcj"
+        },
+        "crypto4cj/eccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_eccj"
+        },
+        "crypto4cj/rsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/digestcj",
+            "crypto4cj/symmetrycj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rsacj"
+        },
+        "uuid4cj/uuid4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset",
+            "charset/charset.encoding",
+            "charset/charset.unicode",
+            "crypto4cj/md5cj",
+            "crypto4cj/sha1cj",
+            "crypto4cj/sha224cj",
+            "crypto4cj/sha256cj",
+            "crypto4cj/sha384cj",
+            "crypto4cj/sha512cj"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/uuid4cj",
+          "libName": "uuid4cj_uuid4cj"
+        }
+      },
+      "foreign_requires": {
+        "apirequest": "/home/CangGraph/lib",
+        "serpapisearch": "/home/CangGraph/lib",
+        "onnxruntime_cj_api": "/home/CangGraph/lib",
+        "onnxutils": "/home/CangGraph/lib",
+        "duckdb": "/home/CangGraph/lib",
+        "hnswlibcj": "/home/CangGraph/lib",
+        "googlesearch": "/home/CangGraph/lib",
+        "execute_python": "/home/CangGraph/lib"
+      },
+      "isTestPkg": false
+    },
+    {
+      "name": "cangchain",
+      "packagePath": "/home/CangGraph/src/vdclient/duckdb4cj",
+      "packageName": "cangchain/vdclient.duckdb4cj",
+      "isMacroPackage": false,
+      "output_type": "static",
+      "command_option": "",
+      "condition_option": {},
+      "link_option": "",
+      "requires": [],
+      "package_requires": {
+        "charset/charset.encoding": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.encoding"
+        },
+        "crypto4cj/utils": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_utils"
+        },
+        "charset/charset.unicode": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.unicode"
+        },
+        "charset/charset.simplechinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.simplechinese"
+        },
+        "charset/charset.traditionchinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.traditionchinese"
+        },
+        "charset/charset.singlebyte": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.singlebyte"
+        },
+        "charset/charset.japanese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.japanese"
+        },
+        "charset/charset.korean": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.korean"
+        },
+        "crypto4cj/aescj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_aescj"
+        },
+        "crypto4cj/rc4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc4cj"
+        },
+        "crypto4cj/hmaccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_hmaccj"
+        },
+        "crypto4cj/rc2cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc2cj"
+        },
+        "crypto4cj/digestcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_digestcj"
+        },
+        "crypto4cj/sha1cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha1cj"
+        },
+        "crypto4cj/dsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dsacj"
+        },
+        "crypto4cj/md5cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_md5cj"
+        },
+        "crypto4cj/sha224cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha224cj"
+        },
+        "crypto4cj/sha384cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha384cj"
+        },
+        "crypto4cj/bignumcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_bignumcj"
+        },
+        "crypto4cj/symmetrycj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_symmetrycj"
+        },
+        "charset/charset": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding",
+            "charset/charset.japanese",
+            "charset/charset.korean",
+            "charset/charset.simplechinese",
+            "charset/charset.singlebyte",
+            "charset/charset.traditionchinese",
+            "charset/charset.unicode"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset"
+        },
+        "crypto4cj/sha256cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha224cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha256cj"
+        },
+        "crypto4cj/sha512cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha384cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha512cj"
+        },
+        "crypto4cj/dhcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dhcj"
+        },
+        "crypto4cj/eccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_eccj"
+        },
+        "crypto4cj/rsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/digestcj",
+            "crypto4cj/symmetrycj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rsacj"
+        },
+        "uuid4cj/uuid4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset",
+            "charset/charset.encoding",
+            "charset/charset.unicode",
+            "crypto4cj/md5cj",
+            "crypto4cj/sha1cj",
+            "crypto4cj/sha224cj",
+            "crypto4cj/sha256cj",
+            "crypto4cj/sha384cj",
+            "crypto4cj/sha512cj"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/uuid4cj",
+          "libName": "uuid4cj_uuid4cj"
+        }
+      },
+      "foreign_requires": {
+        "apirequest": "/home/CangGraph/lib",
+        "serpapisearch": "/home/CangGraph/lib",
+        "onnxruntime_cj_api": "/home/CangGraph/lib",
+        "onnxutils": "/home/CangGraph/lib",
+        "duckdb": "/home/CangGraph/lib",
+        "hnswlibcj": "/home/CangGraph/lib",
+        "googlesearch": "/home/CangGraph/lib",
+        "execute_python": "/home/CangGraph/lib"
+      },
+      "isTestPkg": false
+    },
+    {
+      "name": "cangchain",
+      "packagePath": "/home/CangGraph/src/graph",
+      "packageName": "cangchain/graph",
+      "isMacroPackage": false,
+      "output_type": "static",
+      "command_option": "",
+      "condition_option": {},
+      "link_option": "",
+      "requires": [
+        "cangchain/schema"
+      ],
+      "package_requires": {
+        "charset/charset.encoding": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.encoding"
+        },
+        "crypto4cj/utils": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_utils"
+        },
+        "charset/charset.unicode": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.unicode"
+        },
+        "charset/charset.simplechinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.simplechinese"
+        },
+        "charset/charset.traditionchinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.traditionchinese"
+        },
+        "charset/charset.singlebyte": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.singlebyte"
+        },
+        "charset/charset.japanese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.japanese"
+        },
+        "charset/charset.korean": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.korean"
+        },
+        "crypto4cj/aescj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_aescj"
+        },
+        "crypto4cj/rc4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc4cj"
+        },
+        "crypto4cj/hmaccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_hmaccj"
+        },
+        "crypto4cj/rc2cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc2cj"
+        },
+        "crypto4cj/digestcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_digestcj"
+        },
+        "crypto4cj/sha1cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha1cj"
+        },
+        "crypto4cj/dsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dsacj"
+        },
+        "crypto4cj/md5cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_md5cj"
+        },
+        "crypto4cj/sha224cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha224cj"
+        },
+        "crypto4cj/sha384cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha384cj"
+        },
+        "crypto4cj/bignumcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_bignumcj"
+        },
+        "crypto4cj/symmetrycj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_symmetrycj"
+        },
+        "charset/charset": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding",
+            "charset/charset.japanese",
+            "charset/charset.korean",
+            "charset/charset.simplechinese",
+            "charset/charset.singlebyte",
+            "charset/charset.traditionchinese",
+            "charset/charset.unicode"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset"
+        },
+        "crypto4cj/sha256cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha224cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha256cj"
+        },
+        "crypto4cj/sha512cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha384cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha512cj"
+        },
+        "crypto4cj/dhcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dhcj"
+        },
+        "crypto4cj/eccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_eccj"
+        },
+        "crypto4cj/rsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/digestcj",
+            "crypto4cj/symmetrycj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rsacj"
+        },
+        "uuid4cj/uuid4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset",
+            "charset/charset.encoding",
+            "charset/charset.unicode",
+            "crypto4cj/md5cj",
+            "crypto4cj/sha1cj",
+            "crypto4cj/sha224cj",
+            "crypto4cj/sha256cj",
+            "crypto4cj/sha384cj",
+            "crypto4cj/sha512cj"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/uuid4cj",
+          "libName": "uuid4cj_uuid4cj"
+        }
+      },
+      "foreign_requires": {
+        "apirequest": "/home/CangGraph/lib",
+        "serpapisearch": "/home/CangGraph/lib",
+        "onnxruntime_cj_api": "/home/CangGraph/lib",
+        "onnxutils": "/home/CangGraph/lib",
+        "duckdb": "/home/CangGraph/lib",
+        "hnswlibcj": "/home/CangGraph/lib",
+        "googlesearch": "/home/CangGraph/lib",
+        "execute_python": "/home/CangGraph/lib"
+      },
+      "isTestPkg": false
+    },
+    {
+      "name": "cangchain",
+      "packagePath": "/home/CangGraph/src/titoken",
+      "packageName": "cangchain/titoken",
+      "isMacroPackage": false,
+      "output_type": "static",
+      "command_option": "",
+      "condition_option": {},
+      "link_option": "",
+      "requires": [
+        "cangchain/onnx"
+      ],
+      "package_requires": {
+        "charset/charset.encoding": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.encoding"
+        },
+        "crypto4cj/utils": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_utils"
+        },
+        "charset/charset.unicode": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.unicode"
+        },
+        "charset/charset.simplechinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.simplechinese"
+        },
+        "charset/charset.traditionchinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.traditionchinese"
+        },
+        "charset/charset.singlebyte": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.singlebyte"
+        },
+        "charset/charset.japanese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.japanese"
+        },
+        "charset/charset.korean": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.korean"
+        },
+        "crypto4cj/aescj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_aescj"
+        },
+        "crypto4cj/rc4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc4cj"
+        },
+        "crypto4cj/hmaccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_hmaccj"
+        },
+        "crypto4cj/rc2cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc2cj"
+        },
+        "crypto4cj/digestcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_digestcj"
+        },
+        "crypto4cj/sha1cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha1cj"
+        },
+        "crypto4cj/dsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dsacj"
+        },
+        "crypto4cj/md5cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_md5cj"
+        },
+        "crypto4cj/sha224cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha224cj"
+        },
+        "crypto4cj/sha384cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha384cj"
+        },
+        "crypto4cj/bignumcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_bignumcj"
+        },
+        "crypto4cj/symmetrycj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_symmetrycj"
+        },
+        "charset/charset": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding",
+            "charset/charset.japanese",
+            "charset/charset.korean",
+            "charset/charset.simplechinese",
+            "charset/charset.singlebyte",
+            "charset/charset.traditionchinese",
+            "charset/charset.unicode"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset"
+        },
+        "crypto4cj/sha256cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha224cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha256cj"
+        },
+        "crypto4cj/sha512cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha384cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha512cj"
+        },
+        "crypto4cj/dhcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dhcj"
+        },
+        "crypto4cj/eccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_eccj"
+        },
+        "crypto4cj/rsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/digestcj",
+            "crypto4cj/symmetrycj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rsacj"
+        },
+        "uuid4cj/uuid4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset",
+            "charset/charset.encoding",
+            "charset/charset.unicode",
+            "crypto4cj/md5cj",
+            "crypto4cj/sha1cj",
+            "crypto4cj/sha224cj",
+            "crypto4cj/sha256cj",
+            "crypto4cj/sha384cj",
+            "crypto4cj/sha512cj"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/uuid4cj",
+          "libName": "uuid4cj_uuid4cj"
+        }
+      },
+      "foreign_requires": {
+        "apirequest": "/home/CangGraph/lib",
+        "serpapisearch": "/home/CangGraph/lib",
+        "onnxruntime_cj_api": "/home/CangGraph/lib",
+        "onnxutils": "/home/CangGraph/lib",
+        "duckdb": "/home/CangGraph/lib",
+        "hnswlibcj": "/home/CangGraph/lib",
+        "googlesearch": "/home/CangGraph/lib",
+        "execute_python": "/home/CangGraph/lib"
+      },
+      "isTestPkg": false
+    },
+    {
+      "name": "cangchain",
+      "packagePath": "/home/CangGraph/src/tool/utilities",
+      "packageName": "cangchain/tool.utilities",
+      "isMacroPackage": false,
+      "output_type": "static",
+      "command_option": "",
+      "condition_option": {},
+      "link_option": "",
+      "requires": [
+        "cangchain/schema"
+      ],
+      "package_requires": {
+        "charset/charset.encoding": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.encoding"
+        },
+        "crypto4cj/utils": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_utils"
+        },
+        "charset/charset.unicode": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.unicode"
+        },
+        "charset/charset.simplechinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.simplechinese"
+        },
+        "charset/charset.traditionchinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.traditionchinese"
+        },
+        "charset/charset.singlebyte": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.singlebyte"
+        },
+        "charset/charset.japanese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.japanese"
+        },
+        "charset/charset.korean": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.korean"
+        },
+        "crypto4cj/aescj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_aescj"
+        },
+        "crypto4cj/rc4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc4cj"
+        },
+        "crypto4cj/hmaccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_hmaccj"
+        },
+        "crypto4cj/rc2cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc2cj"
+        },
+        "crypto4cj/digestcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_digestcj"
+        },
+        "crypto4cj/sha1cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha1cj"
+        },
+        "crypto4cj/dsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dsacj"
+        },
+        "crypto4cj/md5cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_md5cj"
+        },
+        "crypto4cj/sha224cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha224cj"
+        },
+        "crypto4cj/sha384cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha384cj"
+        },
+        "crypto4cj/bignumcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_bignumcj"
+        },
+        "crypto4cj/symmetrycj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_symmetrycj"
+        },
+        "charset/charset": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding",
+            "charset/charset.japanese",
+            "charset/charset.korean",
+            "charset/charset.simplechinese",
+            "charset/charset.singlebyte",
+            "charset/charset.traditionchinese",
+            "charset/charset.unicode"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset"
+        },
+        "crypto4cj/sha256cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha224cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha256cj"
+        },
+        "crypto4cj/sha512cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha384cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha512cj"
+        },
+        "crypto4cj/dhcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dhcj"
+        },
+        "crypto4cj/eccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_eccj"
+        },
+        "crypto4cj/rsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/digestcj",
+            "crypto4cj/symmetrycj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rsacj"
+        },
+        "uuid4cj/uuid4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset",
+            "charset/charset.encoding",
+            "charset/charset.unicode",
+            "crypto4cj/md5cj",
+            "crypto4cj/sha1cj",
+            "crypto4cj/sha224cj",
+            "crypto4cj/sha256cj",
+            "crypto4cj/sha384cj",
+            "crypto4cj/sha512cj"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/uuid4cj",
+          "libName": "uuid4cj_uuid4cj"
+        }
+      },
+      "foreign_requires": {
+        "apirequest": "/home/CangGraph/lib",
+        "serpapisearch": "/home/CangGraph/lib",
+        "onnxruntime_cj_api": "/home/CangGraph/lib",
+        "onnxutils": "/home/CangGraph/lib",
+        "duckdb": "/home/CangGraph/lib",
+        "hnswlibcj": "/home/CangGraph/lib",
+        "googlesearch": "/home/CangGraph/lib",
+        "execute_python": "/home/CangGraph/lib"
+      },
+      "isTestPkg": false
+    },
+    {
+      "name": "cangchain",
+      "packagePath": "/home/CangGraph/src/tool",
+      "packageName": "cangchain/tool",
+      "isMacroPackage": false,
+      "output_type": "static",
+      "command_option": "",
+      "condition_option": {},
+      "link_option": "",
+      "requires": [
+        "cangchain/tool.utilities"
+      ],
+      "package_requires": {
+        "charset/charset.encoding": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.encoding"
+        },
+        "crypto4cj/utils": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_utils"
+        },
+        "charset/charset.unicode": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.unicode"
+        },
+        "charset/charset.simplechinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.simplechinese"
+        },
+        "charset/charset.traditionchinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.traditionchinese"
+        },
+        "charset/charset.singlebyte": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.singlebyte"
+        },
+        "charset/charset.japanese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.japanese"
+        },
+        "charset/charset.korean": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.korean"
+        },
+        "crypto4cj/aescj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_aescj"
+        },
+        "crypto4cj/rc4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc4cj"
+        },
+        "crypto4cj/hmaccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_hmaccj"
+        },
+        "crypto4cj/rc2cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc2cj"
+        },
+        "crypto4cj/digestcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_digestcj"
+        },
+        "crypto4cj/sha1cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha1cj"
+        },
+        "crypto4cj/dsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dsacj"
+        },
+        "crypto4cj/md5cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_md5cj"
+        },
+        "crypto4cj/sha224cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha224cj"
+        },
+        "crypto4cj/sha384cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha384cj"
+        },
+        "crypto4cj/bignumcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_bignumcj"
+        },
+        "crypto4cj/symmetrycj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_symmetrycj"
+        },
+        "charset/charset": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding",
+            "charset/charset.japanese",
+            "charset/charset.korean",
+            "charset/charset.simplechinese",
+            "charset/charset.singlebyte",
+            "charset/charset.traditionchinese",
+            "charset/charset.unicode"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset"
+        },
+        "crypto4cj/sha256cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha224cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha256cj"
+        },
+        "crypto4cj/sha512cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha384cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha512cj"
+        },
+        "crypto4cj/dhcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dhcj"
+        },
+        "crypto4cj/eccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_eccj"
+        },
+        "crypto4cj/rsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/digestcj",
+            "crypto4cj/symmetrycj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rsacj"
+        },
+        "uuid4cj/uuid4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset",
+            "charset/charset.encoding",
+            "charset/charset.unicode",
+            "crypto4cj/md5cj",
+            "crypto4cj/sha1cj",
+            "crypto4cj/sha224cj",
+            "crypto4cj/sha256cj",
+            "crypto4cj/sha384cj",
+            "crypto4cj/sha512cj"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/uuid4cj",
+          "libName": "uuid4cj_uuid4cj"
+        }
+      },
+      "foreign_requires": {
+        "apirequest": "/home/CangGraph/lib",
+        "serpapisearch": "/home/CangGraph/lib",
+        "onnxruntime_cj_api": "/home/CangGraph/lib",
+        "onnxutils": "/home/CangGraph/lib",
+        "duckdb": "/home/CangGraph/lib",
+        "hnswlibcj": "/home/CangGraph/lib",
+        "googlesearch": "/home/CangGraph/lib",
+        "execute_python": "/home/CangGraph/lib"
+      },
+      "isTestPkg": false
+    },
+    {
+      "name": "cangchain",
+      "packagePath": "/home/CangGraph/src/vdclient",
+      "packageName": "cangchain/vdclient",
+      "isMacroPackage": false,
+      "output_type": "static",
+      "command_option": "",
+      "condition_option": {},
+      "link_option": "",
+      "requires": [
+        "cangchain/titoken",
+        "cangchain/vdclient.duckdb4cj"
+      ],
+      "package_requires": {
+        "charset/charset.encoding": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.encoding"
+        },
+        "crypto4cj/utils": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_utils"
+        },
+        "charset/charset.unicode": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.unicode"
+        },
+        "charset/charset.simplechinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.simplechinese"
+        },
+        "charset/charset.traditionchinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.traditionchinese"
+        },
+        "charset/charset.singlebyte": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.singlebyte"
+        },
+        "charset/charset.japanese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.japanese"
+        },
+        "charset/charset.korean": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.korean"
+        },
+        "crypto4cj/aescj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_aescj"
+        },
+        "crypto4cj/rc4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc4cj"
+        },
+        "crypto4cj/hmaccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_hmaccj"
+        },
+        "crypto4cj/rc2cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc2cj"
+        },
+        "crypto4cj/digestcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_digestcj"
+        },
+        "crypto4cj/sha1cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha1cj"
+        },
+        "crypto4cj/dsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dsacj"
+        },
+        "crypto4cj/md5cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_md5cj"
+        },
+        "crypto4cj/sha224cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha224cj"
+        },
+        "crypto4cj/sha384cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha384cj"
+        },
+        "crypto4cj/bignumcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_bignumcj"
+        },
+        "crypto4cj/symmetrycj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_symmetrycj"
+        },
+        "charset/charset": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding",
+            "charset/charset.japanese",
+            "charset/charset.korean",
+            "charset/charset.simplechinese",
+            "charset/charset.singlebyte",
+            "charset/charset.traditionchinese",
+            "charset/charset.unicode"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset"
+        },
+        "crypto4cj/sha256cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha224cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha256cj"
+        },
+        "crypto4cj/sha512cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha384cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha512cj"
+        },
+        "crypto4cj/dhcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dhcj"
+        },
+        "crypto4cj/eccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_eccj"
+        },
+        "crypto4cj/rsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/digestcj",
+            "crypto4cj/symmetrycj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rsacj"
+        },
+        "uuid4cj/uuid4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset",
+            "charset/charset.encoding",
+            "charset/charset.unicode",
+            "crypto4cj/md5cj",
+            "crypto4cj/sha1cj",
+            "crypto4cj/sha224cj",
+            "crypto4cj/sha256cj",
+            "crypto4cj/sha384cj",
+            "crypto4cj/sha512cj"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/uuid4cj",
+          "libName": "uuid4cj_uuid4cj"
+        }
+      },
+      "foreign_requires": {
+        "apirequest": "/home/CangGraph/lib",
+        "serpapisearch": "/home/CangGraph/lib",
+        "onnxruntime_cj_api": "/home/CangGraph/lib",
+        "onnxutils": "/home/CangGraph/lib",
+        "duckdb": "/home/CangGraph/lib",
+        "hnswlibcj": "/home/CangGraph/lib",
+        "googlesearch": "/home/CangGraph/lib",
+        "execute_python": "/home/CangGraph/lib"
+      },
+      "isTestPkg": false
+    },
+    {
+      "name": "cangchain",
+      "packagePath": "/home/CangGraph/src/llmapi",
+      "packageName": "cangchain/llmapi",
+      "isMacroPackage": false,
+      "output_type": "static",
+      "command_option": "",
+      "condition_option": {},
+      "link_option": "",
+      "requires": [
+        "cangchain/tool"
+      ],
+      "package_requires": {
+        "charset/charset.encoding": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.encoding"
+        },
+        "crypto4cj/utils": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_utils"
+        },
+        "charset/charset.unicode": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.unicode"
+        },
+        "charset/charset.simplechinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.simplechinese"
+        },
+        "charset/charset.traditionchinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.traditionchinese"
+        },
+        "charset/charset.singlebyte": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.singlebyte"
+        },
+        "charset/charset.japanese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.japanese"
+        },
+        "charset/charset.korean": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.korean"
+        },
+        "crypto4cj/aescj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_aescj"
+        },
+        "crypto4cj/rc4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc4cj"
+        },
+        "crypto4cj/hmaccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_hmaccj"
+        },
+        "crypto4cj/rc2cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc2cj"
+        },
+        "crypto4cj/digestcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_digestcj"
+        },
+        "crypto4cj/sha1cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha1cj"
+        },
+        "crypto4cj/dsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dsacj"
+        },
+        "crypto4cj/md5cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_md5cj"
+        },
+        "crypto4cj/sha224cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha224cj"
+        },
+        "crypto4cj/sha384cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha384cj"
+        },
+        "crypto4cj/bignumcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_bignumcj"
+        },
+        "crypto4cj/symmetrycj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_symmetrycj"
+        },
+        "charset/charset": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding",
+            "charset/charset.japanese",
+            "charset/charset.korean",
+            "charset/charset.simplechinese",
+            "charset/charset.singlebyte",
+            "charset/charset.traditionchinese",
+            "charset/charset.unicode"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset"
+        },
+        "crypto4cj/sha256cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha224cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha256cj"
+        },
+        "crypto4cj/sha512cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha384cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha512cj"
+        },
+        "crypto4cj/dhcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dhcj"
+        },
+        "crypto4cj/eccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_eccj"
+        },
+        "crypto4cj/rsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/digestcj",
+            "crypto4cj/symmetrycj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rsacj"
+        },
+        "uuid4cj/uuid4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset",
+            "charset/charset.encoding",
+            "charset/charset.unicode",
+            "crypto4cj/md5cj",
+            "crypto4cj/sha1cj",
+            "crypto4cj/sha224cj",
+            "crypto4cj/sha256cj",
+            "crypto4cj/sha384cj",
+            "crypto4cj/sha512cj"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/uuid4cj",
+          "libName": "uuid4cj_uuid4cj"
+        }
+      },
+      "foreign_requires": {
+        "apirequest": "/home/CangGraph/lib",
+        "serpapisearch": "/home/CangGraph/lib",
+        "onnxruntime_cj_api": "/home/CangGraph/lib",
+        "onnxutils": "/home/CangGraph/lib",
+        "duckdb": "/home/CangGraph/lib",
+        "hnswlibcj": "/home/CangGraph/lib",
+        "googlesearch": "/home/CangGraph/lib",
+        "execute_python": "/home/CangGraph/lib"
+      },
+      "isTestPkg": false
+    },
+    {
+      "name": "cangchain",
+      "packagePath": "/home/CangGraph/src/chain",
+      "packageName": "cangchain/chain",
+      "isMacroPackage": false,
+      "output_type": "static",
+      "command_option": "",
+      "condition_option": {},
+      "link_option": "",
+      "requires": [
+        "cangchain/llmapi",
+        "cangchain/schema"
+      ],
+      "package_requires": {
+        "charset/charset.encoding": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.encoding"
+        },
+        "crypto4cj/utils": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_utils"
+        },
+        "charset/charset.unicode": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.unicode"
+        },
+        "charset/charset.simplechinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.simplechinese"
+        },
+        "charset/charset.traditionchinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.traditionchinese"
+        },
+        "charset/charset.singlebyte": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.singlebyte"
+        },
+        "charset/charset.japanese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.japanese"
+        },
+        "charset/charset.korean": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.korean"
+        },
+        "crypto4cj/aescj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_aescj"
+        },
+        "crypto4cj/rc4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc4cj"
+        },
+        "crypto4cj/hmaccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_hmaccj"
+        },
+        "crypto4cj/rc2cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc2cj"
+        },
+        "crypto4cj/digestcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_digestcj"
+        },
+        "crypto4cj/sha1cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha1cj"
+        },
+        "crypto4cj/dsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dsacj"
+        },
+        "crypto4cj/md5cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_md5cj"
+        },
+        "crypto4cj/sha224cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha224cj"
+        },
+        "crypto4cj/sha384cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha384cj"
+        },
+        "crypto4cj/bignumcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_bignumcj"
+        },
+        "crypto4cj/symmetrycj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_symmetrycj"
+        },
+        "charset/charset": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding",
+            "charset/charset.japanese",
+            "charset/charset.korean",
+            "charset/charset.simplechinese",
+            "charset/charset.singlebyte",
+            "charset/charset.traditionchinese",
+            "charset/charset.unicode"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset"
+        },
+        "crypto4cj/sha256cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha224cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha256cj"
+        },
+        "crypto4cj/sha512cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha384cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha512cj"
+        },
+        "crypto4cj/dhcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dhcj"
+        },
+        "crypto4cj/eccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_eccj"
+        },
+        "crypto4cj/rsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/digestcj",
+            "crypto4cj/symmetrycj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rsacj"
+        },
+        "uuid4cj/uuid4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset",
+            "charset/charset.encoding",
+            "charset/charset.unicode",
+            "crypto4cj/md5cj",
+            "crypto4cj/sha1cj",
+            "crypto4cj/sha224cj",
+            "crypto4cj/sha256cj",
+            "crypto4cj/sha384cj",
+            "crypto4cj/sha512cj"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/uuid4cj",
+          "libName": "uuid4cj_uuid4cj"
+        }
+      },
+      "foreign_requires": {
+        "apirequest": "/home/CangGraph/lib",
+        "serpapisearch": "/home/CangGraph/lib",
+        "onnxruntime_cj_api": "/home/CangGraph/lib",
+        "onnxutils": "/home/CangGraph/lib",
+        "duckdb": "/home/CangGraph/lib",
+        "hnswlibcj": "/home/CangGraph/lib",
+        "googlesearch": "/home/CangGraph/lib",
+        "execute_python": "/home/CangGraph/lib"
+      },
+      "isTestPkg": false
+    },
+    {
+      "name": "cangchain",
+      "packagePath": "/home/CangGraph/src/agent",
+      "packageName": "cangchain/agent",
+      "isMacroPackage": false,
+      "output_type": "static",
+      "command_option": "",
+      "condition_option": {},
+      "link_option": "",
+      "requires": [
+        "cangchain/chain",
+        "cangchain/llmapi",
+        "cangchain/schema",
+        "cangchain/tool"
+      ],
+      "package_requires": {
+        "charset/charset.encoding": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.encoding"
+        },
+        "crypto4cj/utils": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_utils"
+        },
+        "charset/charset.unicode": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.unicode"
+        },
+        "charset/charset.simplechinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.simplechinese"
+        },
+        "charset/charset.traditionchinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.traditionchinese"
+        },
+        "charset/charset.singlebyte": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.singlebyte"
+        },
+        "charset/charset.japanese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.japanese"
+        },
+        "charset/charset.korean": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.korean"
+        },
+        "crypto4cj/aescj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_aescj"
+        },
+        "crypto4cj/rc4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc4cj"
+        },
+        "crypto4cj/hmaccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_hmaccj"
+        },
+        "crypto4cj/rc2cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc2cj"
+        },
+        "crypto4cj/digestcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_digestcj"
+        },
+        "crypto4cj/sha1cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha1cj"
+        },
+        "crypto4cj/dsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dsacj"
+        },
+        "crypto4cj/md5cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_md5cj"
+        },
+        "crypto4cj/sha224cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha224cj"
+        },
+        "crypto4cj/sha384cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha384cj"
+        },
+        "crypto4cj/bignumcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_bignumcj"
+        },
+        "crypto4cj/symmetrycj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_symmetrycj"
+        },
+        "charset/charset": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding",
+            "charset/charset.japanese",
+            "charset/charset.korean",
+            "charset/charset.simplechinese",
+            "charset/charset.singlebyte",
+            "charset/charset.traditionchinese",
+            "charset/charset.unicode"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset"
+        },
+        "crypto4cj/sha256cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha224cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha256cj"
+        },
+        "crypto4cj/sha512cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha384cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha512cj"
+        },
+        "crypto4cj/dhcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dhcj"
+        },
+        "crypto4cj/eccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_eccj"
+        },
+        "crypto4cj/rsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/digestcj",
+            "crypto4cj/symmetrycj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rsacj"
+        },
+        "uuid4cj/uuid4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset",
+            "charset/charset.encoding",
+            "charset/charset.unicode",
+            "crypto4cj/md5cj",
+            "crypto4cj/sha1cj",
+            "crypto4cj/sha224cj",
+            "crypto4cj/sha256cj",
+            "crypto4cj/sha384cj",
+            "crypto4cj/sha512cj"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/uuid4cj",
+          "libName": "uuid4cj_uuid4cj"
+        }
+      },
+      "foreign_requires": {
+        "apirequest": "/home/CangGraph/lib",
+        "serpapisearch": "/home/CangGraph/lib",
+        "onnxruntime_cj_api": "/home/CangGraph/lib",
+        "onnxutils": "/home/CangGraph/lib",
+        "duckdb": "/home/CangGraph/lib",
+        "hnswlibcj": "/home/CangGraph/lib",
+        "googlesearch": "/home/CangGraph/lib",
+        "execute_python": "/home/CangGraph/lib"
+      },
+      "isTestPkg": false
+    },
+    {
+      "name": "cangchain",
+      "packagePath": "/home/CangGraph/src",
+      "packageName": "cangchain/default",
+      "isMacroPackage": false,
+      "output_type": "executable",
+      "command_option": "",
+      "condition_option": {},
+      "link_option": "",
+      "requires": [
+        "cangchain/agent",
+        "cangchain/llmapi",
+        "cangchain/tool"
+      ],
+      "package_requires": {
+        "charset/charset.encoding": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.encoding"
+        },
+        "crypto4cj/utils": {
+          "isMacroPackage": false,
+          "requires": [],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_utils"
+        },
+        "charset/charset.unicode": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.unicode"
+        },
+        "charset/charset.simplechinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.simplechinese"
+        },
+        "charset/charset.traditionchinese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.traditionchinese"
+        },
+        "charset/charset.singlebyte": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.singlebyte"
+        },
+        "charset/charset.japanese": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.japanese"
+        },
+        "charset/charset.korean": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset.korean"
+        },
+        "crypto4cj/aescj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_aescj"
+        },
+        "crypto4cj/rc4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc4cj"
+        },
+        "crypto4cj/hmaccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_hmaccj"
+        },
+        "crypto4cj/rc2cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rc2cj"
+        },
+        "crypto4cj/digestcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_digestcj"
+        },
+        "crypto4cj/sha1cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha1cj"
+        },
+        "crypto4cj/dsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dsacj"
+        },
+        "crypto4cj/md5cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_md5cj"
+        },
+        "crypto4cj/sha224cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha224cj"
+        },
+        "crypto4cj/sha384cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha384cj"
+        },
+        "crypto4cj/bignumcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_bignumcj"
+        },
+        "crypto4cj/symmetrycj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_symmetrycj"
+        },
+        "charset/charset": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset.encoding",
+            "charset/charset.japanese",
+            "charset/charset.korean",
+            "charset/charset.simplechinese",
+            "charset/charset.singlebyte",
+            "charset/charset.traditionchinese",
+            "charset/charset.unicode"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/charset",
+          "libName": "charset_charset"
+        },
+        "crypto4cj/sha256cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha224cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha256cj"
+        },
+        "crypto4cj/sha512cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/sha384cj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_sha512cj"
+        },
+        "crypto4cj/dhcj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_dhcj"
+        },
+        "crypto4cj/eccj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_eccj"
+        },
+        "crypto4cj/rsacj": {
+          "isMacroPackage": false,
+          "requires": [
+            "crypto4cj/bignumcj",
+            "crypto4cj/digestcj",
+            "crypto4cj/symmetrycj",
+            "crypto4cj/utils"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/crypto4cj",
+          "libName": "crypto4cj_rsacj"
+        },
+        "uuid4cj/uuid4cj": {
+          "isMacroPackage": false,
+          "requires": [
+            "charset/charset",
+            "charset/charset.encoding",
+            "charset/charset.unicode",
+            "crypto4cj/md5cj",
+            "crypto4cj/sha1cj",
+            "crypto4cj/sha224cj",
+            "crypto4cj/sha256cj",
+            "crypto4cj/sha384cj",
+            "crypto4cj/sha512cj"
+          ],
+          "cjPath": "/home/CangGraph/lib",
+          "libPath": "/home/CangGraph/lib/uuid4cj",
+          "libName": "uuid4cj_uuid4cj"
+        }
+      },
+      "foreign_requires": {
+        "apirequest": "/home/CangGraph/lib",
+        "serpapisearch": "/home/CangGraph/lib",
+        "onnxruntime_cj_api": "/home/CangGraph/lib",
+        "onnxutils": "/home/CangGraph/lib",
+        "duckdb": "/home/CangGraph/lib",
+        "hnswlibcj": "/home/CangGraph/lib",
+        "googlesearch": "/home/CangGraph/lib",
+        "execute_python": "/home/CangGraph/lib"
+      },
+      "isTestPkg": false
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "packageInformation": {
+    "crypto4cj/digestcj": {
+      "moduleName": "crypto4cj",
+      "fileNameHash": "-3492072082823448535",
+      "timeStamp": 1719486344,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "crypto4cj/sha224cj": {
+      "moduleName": "crypto4cj",
+      "fileNameHash": "-5941701943777427071",
+      "timeStamp": 1719486344,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "crypto4cj/rc2cj": {
+      "moduleName": "crypto4cj",
+      "fileNameHash": "-7062162383415164803",
+      "timeStamp": 1719486344,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "crypto4cj/rc4cj": {
+      "moduleName": "crypto4cj",
+      "fileNameHash": "-1171336797997251230",
+      "timeStamp": 1719486344,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "crypto4cj/hmaccj": {
+      "moduleName": "crypto4cj",
+      "fileNameHash": "6206145508190090039",
+      "timeStamp": 1719486344,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "crypto4cj/pbkdf2cj": {
+      "moduleName": "crypto4cj",
+      "fileNameHash": "-4140349017788436815",
+      "timeStamp": 1719486344,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "crypto4cj/sha1cj": {
+      "moduleName": "crypto4cj",
+      "fileNameHash": "4145180145125880474",
+      "timeStamp": 1719486344,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "crypto4cj/rsacj": {
+      "moduleName": "crypto4cj",
+      "fileNameHash": "-7535776331059311192",
+      "timeStamp": 1719486344,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "crypto4cj/symmetrycj": {
+      "moduleName": "crypto4cj",
+      "fileNameHash": "-3931490333770077117",
+      "timeStamp": 1719486344,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "crypto4cj/sha384cj": {
+      "moduleName": "crypto4cj",
+      "fileNameHash": "-7585982097515668706",
+      "timeStamp": 1719486344,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "crypto4cj/eccj": {
+      "moduleName": "crypto4cj",
+      "fileNameHash": "7300378051439937034",
+      "timeStamp": 1719486344,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "crypto4cj/aescj": {
+      "moduleName": "crypto4cj",
+      "fileNameHash": "9040966698681195804",
+      "timeStamp": 1719486344,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "crypto4cj/bignumcj": {
+      "moduleName": "crypto4cj",
+      "fileNameHash": "4371464267504345136",
+      "timeStamp": 1719486344,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "crypto4cj/sha512cj": {
+      "moduleName": "crypto4cj",
+      "fileNameHash": "2439212599141018742",
+      "timeStamp": 1719486344,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "crypto4cj/md5cj": {
+      "moduleName": "crypto4cj",
+      "fileNameHash": "3717532353579960959",
+      "timeStamp": 1719486344,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "crypto4cj/utils": {
+      "moduleName": "crypto4cj",
+      "fileNameHash": "-649697368320643534",
+      "timeStamp": 1719486344,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "crypto4cj/dhcj": {
+      "moduleName": "crypto4cj",
+      "fileNameHash": "-333974184008084789",
+      "timeStamp": 1719486344,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "crypto4cj/sha256cj": {
+      "moduleName": "crypto4cj",
+      "fileNameHash": "4166996333738567657",
+      "timeStamp": 1719486344,
+      "buildFlag": true,
+      "exeName": ""
+    },
+    "crypto4cj/dsacj": {
+      "moduleName": "crypto4cj",
+      "fileNameHash": "2292107970133890892",
+      "timeStamp": 1719486344,
+      "buildFlag": true,
+      "exeName": ""
+    }
+  },
+  "jsonHash": "5175430476084853535",
+  "moduleName": "crypto4cj"
+}
