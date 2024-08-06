@@ -7,7 +7,10 @@
     execute_python = {path = "./lib"}
     googlesearch = {path = "./lib"}
     hnswlibcj = {path = "./lib"}
+    onnxruntime_cj_api = {path = "./lib"}
+    onnxutils = {path = "./lib"}
     serpapisearch = {path = "./lib"}
+
 
 [package]
   cjc-version = "0.51.4"

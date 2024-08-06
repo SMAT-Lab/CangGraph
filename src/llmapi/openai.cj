@@ -53,12 +53,16 @@ public class OpenAI <: LargeModel {
     public var queryWithStreamMode = false
     private let bufferSize: UIntNative = 4096000
     private let response: CPointer<UInt8> = unsafe{ LibC.malloc<UInt8>(count: Int64(bufferSize))}
-    public init(model!:String="gpt-4o", isAzureOpenAI!:Bool=false) {
+    public init(model!:String="gpt-4o", isAzureOpenAI!:Bool=false, chatUrl!:Option<String>=None) {
         this.model = model
         let envVars = envVars()
         let authKey = getAPIKey(envVars)
-        let baseUrl = getOpenAIUrl(envVars)
+        var baseUrl = getOpenAIUrl(envVars)
         let auHeader:HashMap<String, String> = HashMap<String, String>()
+        match(chatUrl) {
+            case Some(url) => baseUrl = url
+            case None => baseUrl = getOpenAIUrl(envVars)
+        }
         // auHeader.put("Content-Type", "application/json")
         if (isAzureOpenAI) {
             unsafe{

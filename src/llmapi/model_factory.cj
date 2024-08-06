@@ -5,9 +5,9 @@ public enum LLMType {
     | AZURE_OPEN_AI
 }
 
-public func getLLMInstance(modelType: LLMType, model !: String = "gpt-4o-mini") {
+public func getLLMInstance(modelType: LLMType, model !: String = "gpt-4o-mini", chatUrl !: Option<String> = None): LargeModel {
     return match (modelType) {
-        case OPEN_AI => OpenAI(model:model)
+        case OPEN_AI => OpenAI(model:model, chatUrl:chatUrl)
         case AZURE_OPEN_AI => OpenAI(model:model, isAzureOpenAI:true)
     }
 }
