@@ -25,8 +25,8 @@ main(): Int64 {
     let sentence_embeddings = embedder(sentences)
     println("embedding: ${sentence_embeddings[0].size}")
 
-    let pipeCone = PipeCone()
-    pipeCone.upsertVectors(sentences, sentence_embeddings)
+    let pineCone = PineCone()
+    pineCone.upsertVectors(sentences, sentence_embeddings)
 
     return 0 
 }

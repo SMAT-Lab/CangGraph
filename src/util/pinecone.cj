@@ -46,7 +46,7 @@ public class Vector <: Serializable<Vector> {
 }
 
 
-public class PipeCone {
+public class PineCone {
     // Your Pinecone API key
     var api_key = "40075f49-8396-4571-924a-4b6d342cc81d"
     var index_host = "https://canggraph-5e309b3.svc.aped-4627-b74a.pinecone.io"
