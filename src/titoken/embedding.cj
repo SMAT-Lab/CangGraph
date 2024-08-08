@@ -25,7 +25,7 @@ public class Embedder{
 
     public operator func()(sentences: Array<String>):ArrayList<ArrayList<Float32>>{
         var encodeInput = this.tokenizer(sentences)
-        var res = this.model(encodeInput);
+        var res = this.model(encodeInput)
         // for ((k, v) in res) {
         //     println(k)
         //     println(v)

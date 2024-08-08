@@ -120,7 +120,7 @@ public class ONNXModel <: ToString {
         var arrays: CPointer<CXDArray> = unsafe { LibC.malloc<CXDArray>(count: Int64(inp_names.size)) }
         var out_arrays: CPointer<CXDArray> = unsafe { LibC.malloc<CXDArray>(count: Int64(out_names.size)) }
 
-        // try {
+        try {
             for (i in 0..inp_names.size) {
                 var name = unsafe { inp_names.ptr.read(Int64(i)).toString() }
                 if (!inputs.contains(name)) {
@@ -159,7 +159,10 @@ public class ONNXModel <: ToString {
                     throw Exception("unsupport output type, [${name}: ${type_str}]")
                 }
             }
-        // }
+        }
+        catch (e: Exception) {
+            println("Error: ${e.toString()}")
+        }
 
         return ret
     }

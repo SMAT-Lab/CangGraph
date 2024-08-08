@@ -27,6 +27,6 @@
 [target]
   [target.x86_64-unknown-linux-gnu]
     [target.x86_64-unknown-linux-gnu.bin-dependencies]
-      path-option = ["./lib/uuid4cj", "./lib/crypto4cj", "./lib/charset"]
+      path-option = ["./lib/uuid4cj", "./lib/crypto4cj", "./lib/charset", "./lib/csv4cj"]
       package-option = {}
 
