@@ -2,6 +2,7 @@ package tool
 from encoding import json.*
 from std import collection.*
 import schema.*
+import util.*
 
 public interface Runnable {
     func run(args : Array<Any>) : Any
@@ -37,6 +38,8 @@ public abstract class BaseTool <: Runnable {
     public var args: ArrayList<Args>
 
     public var args_schema: Option<JsonValue> = None
+
+    public var tool: Tool
     
 
     // contruction
@@ -44,6 +47,7 @@ public abstract class BaseTool <: Runnable {
         this.name = ""
         this.description = ""
         this.args = ArrayList<Args>()
+        this.tool = Tool()
     }
 
     // contruction with name and description
@@ -51,16 +55,38 @@ public abstract class BaseTool <: Runnable {
         this.name = _name
         this.description = _description
         this.args = ArrayList<Args>()
+        this.tool = Tool()
     }
 
     public init(_name : String, _description : String, _args: ArrayList<Args>) {
         this.name = _name
         this.description = _description
         this.args = _args
+        this.tool = Tool()
     }
 
     public func setArgs() {
         this.args_schema = get_tool_args()
+        this.tool = get_tool()
+    }
+
+    public func get_tool(): Tool {
+        let tool_properties = HashMap<String, ToolProperties>()
+
+        let required: ArrayList<String> = ArrayList<String>()
+
+        for (arg in this.args) {
+            tool_properties.put(arg.name, ToolProperties(arg.arg_type, arg.description))
+            if (arg.isRequired) {
+                required.append(arg.name)
+            }
+        }
+
+        let required_array = required.toArray()
+        let tool_parameters = ToolParameters("object", tool_properties, required_array, false)
+    
+        let tool_args = ToolArgs(this.name, this.description, tool_parameters)
+        return Tool("function", tool_args)
     }
 
     public func get_tool_args(): JsonObject {

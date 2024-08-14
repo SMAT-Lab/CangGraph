@@ -114,7 +114,7 @@ public class PineCone {
         let response = client.post(url, body: body.toJson().toJsonString(), header: header)
     }
 
-    public func query(query: String, rule!: Option<String> = None, top_k!: Int64 = 5) {
+    public func query(query: String, rule!: Option<String> = None, top_k!: Int64 = 3) {
         let header: HttpHeaders = HttpHeaders()
         header.add("Api-Key", api_key)
         header.add("Content-Type", "application/json")
@@ -135,19 +135,19 @@ public class PineCone {
             body.add(field<Filter>("filter", filter))
         }
 
-        let response = client.post(url, body: body.toJson().toJsonString(), header: header, max_length: 100000)
-        
+        let response = client.post(url, body: body.toJson().toJsonString(), header: header)
+        println(response)
         let res_obj = JsonValue.fromStr(response).asObject()
         return res_obj
     }
 
     public func get_vector(id: String, obj: JsonObject, embedding!: Option<ArrayList<Float32>> = None): Vector {
         let row = obj.get("values").getOrThrow().asArray()
-        let rule = row[0].toString()
-        let description = row[1].toString()
-        let buggy_code = row[2].toString()
-        let buggy_explanation = row[3].toString()
-        let fixed_code = row[4].toString()
+        let rule = row[0].asString().getValue()
+        let description = row[1].asString().getValue()
+        let buggy_code = row[2].asString().getValue()
+        let buggy_explanation = row[3].asString().getValue()
+        let fixed_code = row[4].asString().getValue()
 
         var sentence_embedding: ArrayList<Float32> = ArrayList<Float32>()
         if (embedding.isSome()) {
@@ -177,6 +177,13 @@ public class PineCone {
         // let sentence_embeddings = embedder(sentences)
 
         for (i in 0..objs.size) {
+            if(i==4 || i == 8 || i == 9) {
+                continue
+            }
+            if (i<10) {
+                continue
+            }
+            println("Processing ${i}")
             let obj = objs[i].asObject()
             // let vector: Vector = get_vector(i.toString(), obj, embedding: sentence_embeddings[i])
             let vector: Vector = get_vector(i.toString(), obj)

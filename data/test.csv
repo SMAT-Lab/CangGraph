@@ -74,8 +74,9 @@ floatNum2 = 9964.0;"
 @performance/sparse-array-check,建议避免使用稀疏数组。,"let test_array: string[] = new Array(9009);
 array[4708] = 'mid';",,let test_array: string[] = ['mid'];
 @performance/typed-array-check,数值数组推荐使用TypedArray。,"let largeArray: number[] = [];
-for (let i = 0; i < 1000000; i++) {
-    largeArray[i] = Math.random();
+largeArray[0] = 1;
+for (let i = 1; i < 1000000; i++) {
+    largeArray[i] = (largeArray[i - 1] + i) / 2;
 }",,"let largeArray = new Float32Array(1000000);
 for (let i = 0; i < largeArray.length; i++) {
     largeArray[i] = Math.random();

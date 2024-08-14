@@ -24,7 +24,7 @@ public class Requests {
 
     }
 
-    public func get(url: String, max_length!: Int64 = 1024, header!: HttpHeaders = getDefaultHeader()): String {  
+    public func get(url: String, max_length!: Int64 = 4096, header!: HttpHeaders = getDefaultHeader()): String {  
         let req = requestBuilder
                     .method("GET")
                     .url(url)
@@ -37,7 +37,7 @@ public class Requests {
         return String.fromUtf8(buf.slice(0, len))
     }
 
-    public func post(url: String, max_length!: Int64 = 1024, header!: HttpHeaders = getDefaultHeader(), body!: String = ""): String {
+    public func post(url: String, max_length!: Int64 = 8192, header!: HttpHeaders = getDefaultHeader(), body!: String = ""): String {
         // println("url: ${url}")
         let req = requestBuilder
                     .method("POST")

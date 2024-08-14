@@ -264,13 +264,7 @@ public class OpenAI <: LargeModel {
         }
     }
 
-    func parseString(raw_json: String): String {
-        var str = raw_json[1..raw_json.size-1]
-        str = str.replace("\\n", "\n")
-        str = str.replace("\\t", "\t")
-        str = str.replace("\\\"", "\"")
-        return str
-    }
+    
 
     func processFuncCallQueryResponse(response: String): JsonObject {
         // println("response:${response}")
