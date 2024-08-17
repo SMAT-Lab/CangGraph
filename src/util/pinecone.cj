@@ -83,6 +83,24 @@ public class Filter <: Serializable<Filter> {
     }   
 }
 
+// 
+// "options": {
+//     "num_ctx": 4096
+// }
+public func getEmbedding(sentence: String): JsonArray {
+    let url = "http://localhost:11434/api/embeddings"
+    // let header: HttpHeaders = HttpHeaders()
+    // header.add("Content-Type", "application/json")
+    let body: DataModelStruct = DataModelStruct()
+    body.add(field<String>("model", "shaw/dmeta-embedding-zh"))
+    body.add(field<String>("prompt", sentence))
+
+    let client = Requests()
+    let response = string2JsonObject(client.post(url, body: body.toJson().toJsonString()))
+
+    return response["embeddings"].asArray()
+}
+
 
 public class PineCone {
     // Your Pinecone API key

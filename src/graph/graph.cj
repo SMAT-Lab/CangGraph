@@ -4,11 +4,12 @@ from encoding import json.*
 import schema.*
 import agent.*
 import tool.*
+import util.*
 import chain.*
 
 public class State  {
     // the messages of the graph
-    var messages: ArrayList<JsonValue> = ArrayList<JsonValue>()
+    var messages: ArrayList<Message> = ArrayList<Message>()
     // The 'next' field indicates where to route to next
     var next: String = ""
 }
@@ -116,8 +117,7 @@ public class Graph {
         nodes.put(START, startNode)
         nodes.put(END, endNode)
 
-        let systemMessage = JsonObject()
-        systemMessage.put("system", JsonString("Hello, you are a helpful assistant."))
+        let systemMessage = Message("system", "You are a helpful assistant!")
         state.messages.append(systemMessage)
     }
 
@@ -197,9 +197,9 @@ public class Graph {
     public func invoke(input: Dict) {
         var nowNode: Node = startNode
         let prompt = input["input"]
-        let message = JsonObject()
-        message.put("user", JsonString(prompt))
+        let message = Message("user", prompt)
         state.messages.append(message)
+        
         var nowInPut: String = prompt
         while(nowNode != endNode){
             println("nowNode: ${nowNode.nodeName}")
@@ -213,6 +213,7 @@ public class Graph {
             let res = nowNode.runnable.getOrThrow().invoke(input)
             
             let content = res.get("content").getOrThrow()
+            // 执行函数
             try {
                 let json: JsonObject = ((res["content"] as JsonValue).getOrThrow() as JsonObject).getOrThrow()
                 let function_name: String = json.get("function_name").getOrThrow().asString().getValue()
@@ -223,12 +224,14 @@ public class Graph {
                 }       
                 
                 nowNode = nowNode.edges.get(state.next).getOrThrow().end
-            }        
+            }   
+            // 直接返回了结果     
             catch(e: Exception) {
                 state.next = nowNode.getOnlyEdge().end.nodeName
                 let ob = content.asString().getValue()
-                let msg = JsonObject()
-                msg.put("assistant", JsonString(ob))
+                // let msg = JsonObject()
+                // msg.put("assistant", JsonString(ob))
+                let msg = Message("assistant", ob)
                 state.messages.append(msg)
                 nowNode = nowNode.edges.get(state.next).getOrThrow().end
             }
