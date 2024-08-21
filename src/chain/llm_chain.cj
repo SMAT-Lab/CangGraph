@@ -8,43 +8,79 @@ import llmapi.*
 public open class LLMChain <: Chain {
     protected let llm: LargeModel
     protected let promptTemplate: PromptTemplate
+    protected var tools: ArrayList<BaseTool> = ArrayList<BaseTool>()
+    public var input: Dict = Dict()
+    public var openai_tools: ArrayList<Tool> = ArrayList<Tool>()
 
     public init() {
-        this.llm = OpenAI()
+        this.llm = getLLMInstance(LLMType.OPEN_AI, model:"gpt-4o-mini")
         this.promptTemplate = SelfDefinePromptTemplate()
+        this.openai_tools = ArrayList<Tool>()
     }
 
     public init(llm: LargeModel, promptTemplate: PromptTemplate) {
         this.llm = llm
         this.promptTemplate = promptTemplate
+
+        this.openai_tools = ArrayList<Tool>()
     }
 
-    public override func generate(inputs: Collection<Dict>): Collection<Dict> {
-        return collectArrayList(map({ input: Dict =>
-            //println("input: ${input}")
-            let prompt = promptTemplate.format(input)
-            //println("prompt: ${prompt}")
-            let output = llm.query(prompt, stop:false)
-            return HashMap([("text", output)])
-        })(inputs))
+    public init(llm: LargeModel, promptTemplate: PromptTemplate, tools: ArrayList<BaseTool>) {
+        this.llm = llm
+        this.promptTemplate = promptTemplate
+        this.tools = tools
+        
+        for (tool in tools) {
+            this.openai_tools.append(tool.tool)
+        }
     }
 
-    public func function_call(input: Dict, tools: ArrayList<JsonValue>): JsonObject {
-        let prompt = promptTemplate.format(input)
-        // println("prompt: ${prompt}")
-        // println("tools: ${tools}")
-        let output = llm.queryFunctionCall(prompt, tools, useTool:false)
-        return output
+    public func add_tool(tool: BaseTool) {
+        this.tools.append(tool)
+        this.openai_tools.append(tool.tool)
     }
 
-    public func generate_react(input: Dict): String {
-        //println("prompt: ${prompt}")
-        let output = llm.query(promptTemplate.format(input), stop:true)
-        return output
+    
+    public func add_prompts(inputs: Dict) {
+        for((k,v) in inputs) {
+            this.input[k] = v
+        }
     }
 
-    public func invoke(messages: ArrayList<JsonValue>, tools!: ArrayList<JsonValue> = ArrayList<JsonValue>(), useTool!: Bool = false): String {
-        let output = llm.query(messages, stop:false, tools:tools, useTool:useTool)
+    public func add_prompt(key: String, value: String) {
+        this.input[key] = value
+    }
+
+    public func invoke(dict: Dict): ResponseMessage {
+        let input: String = dict["input"]
+        this.add_prompt("user_message", input)
+        let prompt: String = promptTemplate.format(this.input)
+        return llm.query(prompt, openai_tools.toArray())
+    }
+
+    public func invoke(input: JsonObject): ResponseMessage {
+        let messages = input["input"].toString()
+        let tools = input["tools"]
+
+        return invoke(messages)
+    }
+
+    public func invoke(message: String): ResponseMessage {
+        let messages = ArrayList<Message>()
+        let sys_msg = Message("system", "You are a helpful assistant.")
+        let user_msg = Message("user", message)
+        messages.append(sys_msg)
+        messages.append(user_msg)
+
+        return invoke(messages)
+    }
+
+    public func invoke(messages: ArrayList<Message>): ResponseMessage {
+        let openai_tools = ArrayList<Tool>()
+        for (tool in tools) {
+            openai_tools.append(tool.tool)
+        }
+        let output = llm.query(messages.toArray(), openai_tools.toArray())
         return output
     }
 }

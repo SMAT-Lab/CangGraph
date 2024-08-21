@@ -88,9 +88,9 @@ public class Node {
         return this.nodeName == other.nodeName
     }
 
-    public func run(input: Dict): JsonObject {
+    public func run(input: Dict): ResponseMessage {
         match (runnable) {
-            case None => return JsonObject()
+            case None => return ResponseMessage()
             case Some(node) => 
                 if (node is CoTChain) {
                     return (node as CoTChain).getOrThrow().invoke(input)
@@ -100,7 +100,7 @@ public class Node {
                     return (node as create_openai_tools_agent).getOrThrow().invoke(input)
                 } 
                 else {
-                    return JsonObject()
+                    return ResponseMessage()
                 }
         }
     }
@@ -210,32 +210,26 @@ public class Graph {
             }
             let input = Dict()
             input["input"] = nowInPut
-            let res = nowNode.runnable.getOrThrow().invoke(input)
+            let res: ResponseMessage = nowNode.runnable.getOrThrow().invoke(input)
+
+            let obj: JsonObject = (res.serialize().toJson() as JsonObject).getOrThrow()
             
-            let content = res.get("content").getOrThrow()
-            // 执行函数
-            try {
-                let json: JsonObject = ((res["content"] as JsonValue).getOrThrow() as JsonObject).getOrThrow()
-                let function_name: String = json.get("function_name").getOrThrow().asString().getValue()
-                var function_args: JsonObject = json["function_args"].asObject()
-                if (function_name == "RouteDecider") {
-                    let next = function_args.get("next").getOrThrow().asString().getValue()
-                    state.next = next      
-                }       
-                
-                nowNode = nowNode.edges.get(state.next).getOrThrow().end
-            }   
-            // 直接返回了结果     
-            catch(e: Exception) {
+            if (((obj.get("tool_call").getOrThrow()) as JsonBool).getOrThrow().getValue()) {
+                let toolCalls = (obj.get("tool_calls").getOrThrow() as JsonArray).getOrThrow()
+                for (i in 0..toolCalls.size()) {
+                    let toolCall = (toolCalls.get(i).getOrThrow() as JsonObject).getOrThrow()
+                    let toolName = toolCall.get("name").getOrThrow().asString().getValue()
+                    let toolInput = toolCall.get("args").getOrThrow().asString().getValue()
+                    let tool = nodes.get(toolName).getOrThrow()
+                    let toolRes = (tool.runnable.getOrThrow() as BaseTool).getOrThrow().invoke(toolInput)
+                    let obs = (toolRes.serialize().toJson() as JsonObject).getOrThrow()
+                    state.messages.append(Message("assistant", obs["content"].asString().getValue()))
+                }
+            } else {
+                let content = obj.get("content").getOrThrow().asString().getValue()
                 state.next = nowNode.getOnlyEdge().end.nodeName
-                let ob = content.asString().getValue()
-                // let msg = JsonObject()
-                // msg.put("assistant", JsonString(ob))
-                let msg = Message("assistant", ob)
-                state.messages.append(msg)
-                nowNode = nowNode.edges.get(state.next).getOrThrow().end
+                state.messages.append(Message("assistant", content))
             }
-            
-        } 
+        }
     }
 }

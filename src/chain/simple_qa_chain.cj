@@ -10,6 +10,6 @@ public class SimpleQAPromptTemplate <: PromptTemplate {
 
 public class SimpleQAChain <: LLMChain {
     public init() {
-        super(OpenAI(), SimpleQAPromptTemplate())
+        super(getLLMInstance(LLMType.OPEN_AI, model:"gpt-4o-mini"), SimpleQAPromptTemplate())
     }
 }

@@ -45,7 +45,6 @@ public class Requests {
                     .body(body)
                     .build()
         let rsp: HttpResponse = client.send(req)
-        println(rsp.toString())
         let buf = Array<UInt8>(10000000, item: 0)
         let len = rsp.body.read(buf)
         return String.fromUtf8(buf.slice(0, len))

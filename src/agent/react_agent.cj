@@ -39,53 +39,14 @@ public class ReActPromptTemplate <: PromptTemplate {
 
 public class ReActChain <: LLMChain {
     public init() {
-        super(OpenAI(), ReActPromptTemplate())
+        super(getLLMInstance(LLMType.OPEN_AI, model:"gpt-4o-mini"), ReActPromptTemplate())
     }
 }
 
 public class ReActAgent <: Agent {
     public init(tools: ArrayList<BaseTool>) {
-        super(ReActChain(), ReActAgentOutputParser(), tools)
+        super(ReActChain(), tools)
         println("ReActAgent init done.")
-    }
-    public override func constructAgentScratchpad(input: Dict, intermediateSteps: ArrayList<StepResult>, stepCount: Int64): Dict {
-        println("ReActAgent: takeNextStep(${stepCount})")
-        let scratchpad = Dict()
-        scratchpad["text"] = ""
-        let toolNamesList  = collectArrayList(map({tool:BaseTool => tool.name})(tools))
-        var toolNames = ""
-        for (toolName in toolNamesList) {
-            toolNames += toolName + ", "
-        }
-       
-        let toolDescriptionsList  = collectArrayList(map({tool:BaseTool => tool.description})(tools)) 
-        var toolWithDescriptions = ""
-        for (toolDescription in toolDescriptionsList) {
-            toolWithDescriptions += toolDescription + ", "
-        }
-
-        scratchpad["tool_names"] = toolNames
-        scratchpad["tool_with_descriptions"] = toolWithDescriptions
-        scratchpad["step_count"] = stepCount.toString()
-        println("intermediateSteps: ${intermediateSteps.size}")
-        for (stepResult in intermediateSteps) {
-            let output = stepResult.output
-            let log = stepResult.log
-            scratchpad["text"] += "Step: "; scratchpad["text"] += stepCount.toString(); scratchpad["text"] += "\n"
-            scratchpad["text"] += log + "\n"
-            match (output) {
-                case Finish(text) => 
-                    scratchpad["text"] += "Result: "; scratchpad["text"] += text
-                case Action(action) => scratchpad["text"] += "Observation: "; scratchpad["text"] += action.observation ?? "No observation" ; scratchpad["text"] += "\n"
-                case Actions(actions) => 
-                    for (action in actions) {
-                        scratchpad["text"] += "Observation: "
-                        scratchpad["text"] += action.observation ?? "No observation" ; scratchpad["text"] += "\n"
-                    }
-            }
-        }
-        scratchpad["text"] += input["text"]
-        scratchpad
     }
 
     public func constructInput(scratchpad: Dict): Dict {
@@ -94,54 +55,39 @@ public class ReActAgent <: Agent {
         input
     }
 
-    public func shouldContinue(res: JsonObject): Bool {
-        match (res.get("message")) {
-            case None => return true
-            case Some(_) => return false
-        }
+    public func shouldContinue(res: ResponseMessage): Bool {
+        let obj = (res.serialize().toJson() as JsonObject).getOrThrow()
+        let tool_call = obj.get("tool_call").getOrThrow().asBool().getValue()
+        return tool_call
     }
 
-    public func generate(text: String): String {
-        var schema_tools: ArrayList<JsonValue> = ArrayList()
-        for (tool in tools) {
-            schema_tools.append(tool.args_schema.getOrThrow())
-        }
-        let input = Dict()
-        input["text"] = text
-        let toolNamesList  = collectArrayList(map({tool:BaseTool => tool.name})(tools))
-        var toolNames = ""
-        for (toolName in toolNamesList) {
-            toolNames += toolName + ", "
-        }
-        input["tool_names"] = toolNames
 
-        let toolDescriptionsList  = collectArrayList(map({tool:BaseTool => tool.description})(tools))
-        var toolWithDescriptions = ""
-        for (i in 0..toolDescriptionsList.size) {
-            toolWithDescriptions += toolNamesList[i] + ": " + toolDescriptionsList[i] + ", "
-        }
-        input["tool_with_descriptions"] = toolWithDescriptions
+    // public func invoke(args: JsonObject): ResponseMessage {
+    //     let prompt: String = args.get("input").getOrThrow().asString().getValue()
 
-        var res = ReActChain().function_call(input, schema_tools)
-        var ans: String = ""
-        while (shouldContinue(res)){
-            let function_name = res.get("function_name").getOrThrow().asString().getValue()
-            let function_args = res.get("function_args").getOrThrow().asString().getValue()
-            let value: JsonObject = JsonValue.fromStr(function_args).asObject()
-            let action: AgentAction = AgentAction(function_name, value)
-            let ob: String = executeAction(action)
-            var msg: String = ReActChain().generate_react(input)
+    //     let input = Dict()
+    //     input["text"] = prompt
+    //     let toolNamesList  = collectArrayList(map({tool:BaseTool => tool.name})(tools))
+    //     var toolNames = ""
+    //     for (toolName in toolNamesList) {
+    //         toolNames += toolName + ", "
+    //     }
+    //     input["tool_names"] = toolNames
 
-            msg += "Observation: ${ob}\n"
-            ans += msg
-            input["text"] += msg
-            res = ReActChain().function_call(input, schema_tools)
-        }
+    //     let toolDescriptionsList  = collectArrayList(map({tool:BaseTool => tool.description})(tools))
+    //     var toolWithDescriptions = ""
+    //     for (i in 0..toolDescriptionsList.size) {
+    //         toolWithDescriptions += toolNamesList[i] + ": " + toolDescriptionsList[i] + ", "
+    //     }
+    //     input["tool_with_descriptions"] = toolWithDescriptions
 
-        ans += res.get("message").getOrThrow().asString().getValue()
-
-        return ans
-        
-    }
-
+    //     var res: ResponseMessage = planner.invoke(input)
+    //     while(shouldContinue(res)) {
+    //         let toolCalls = (res.serialize().toJson() as JsonObject).getOrThrow().get("tool_calls").getOrThrow().asArray()
+    //         for (i in 0..toolCalls.size()) {
+    //             //
+    //         }
+    //     }
+    //     return res
+    // }
 }

@@ -15,30 +15,20 @@ public class FileReader <: BaseTool {
         this.setArgs()
     }
 
-    public func run(query : String): String {
-        println("running file reader")
-        (run(["temp.py", query]) as String).getOrThrow()
-    }
-
-    public func run(args : Array<Any>) : Any {
-        let filename = (args[0] as String).getOrThrow()
+    public func invoke(filename: String): ResponseMessage {
         let allBytes: Array<Byte> = File.readFrom(filename)
-        println(String.fromUtf8(allBytes))
-        return "read successfully"
+        let content = String.fromUtf8(allBytes)
+        return ResponseMessage("file_reader", content, false, Array<ToolCall>())
     }
 
-    public func invoke(args: Dict): JsonObject {
-        let filename: String = args["filename"]
-        let allBytes: Array<Byte> = File.readFrom(filename)
-        let res = JsonObject()
-        res.put("content", JsonString(String.fromUtf8(allBytes)))
-        return res
+    public func invoke(input: HashMap<String, String>): ResponseMessage {
+        let filename: String = input.get("filename").getOrThrow()
+        return invoke(filename)
     }
 
-    public func invoke(args: JsonObject): String {
+    public func invoke(args: JsonObject): ResponseMessage {
         let filename: String = args.get("filename").getOrThrow().asString().getValue()
-        let allBytes: Array<Byte> = File.readFrom(filename)
-        return String.fromUtf8(allBytes)
+        return invoke(filename)
     }
 
     ~init() {

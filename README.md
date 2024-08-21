@@ -57,7 +57,7 @@ main(): Int64 {
 因此，每个node中都有一个runnable属性，该属性存储的是Runnable对象，agent，chain，tool都是Runnable的子类
 在执行一个node的时候，只需要执行node.runnable.run()即可
 
-### pythonREPL
+### Tool
 ```cj
 import llmapi.*
 import graph.*
@@ -67,20 +67,17 @@ import schema.*
 import chain.*
 from std import collection.*
 from encoding import json.*
+import util.*
 
 main() {
     let llm = getLLMInstance(LLMType.OPEN_AI)
 
+    let tool = GoogleSearchRun()
+    let input = Dict()
+    input.put("query","Dijkstra algorithm")
 
-    let tool = pythonREPL()
-    let args = Dict()
-    args.put("code", """
-def main():
-    print('hello world')
-""")
-    args.put("filename","test")
-
-    println(tool.invoke(args))
+    let res: ResponseMessage = tool.invoke(input)
+    println(res.serialize().toJson())
 }
 ```
 
@@ -96,14 +93,14 @@ from std import collection.*
 from encoding import json.*
 
 main() {
-    let llm = getLLMInstance(LLMType.OPEN_AI)
-    let tools = ArrayList<BaseTool>([GetWeather(), pythonREPL()])
+    let llm = (getLLMInstance(LLMType.OPEN_AI) as OpenAI).getOrThrow()
+    let tools = ArrayList<BaseTool>([GetWeather(), GoogleSearchRun()])
 
     let agent = create_openai_tools_agent(llm, tools)
     let input = Dict()
-    input["input"] = "what is the weather like today in Guangzhou?"
+    input["input"] = "what is the weather like the day after tomorrow in Guangzhou?"
     let res = agent.invoke(input)
-    print(res)
+    println(res.serialize().toJson())
 }
 ```
 
@@ -117,6 +114,7 @@ import schema.*
 import chain.*
 from std import collection.*
 from encoding import json.*
+import util.*
 
 main() {
     let llm = getLLMInstance(LLMType.OPEN_AI)
@@ -124,12 +122,11 @@ main() {
     let next: Parameter = Parameter("next", "String", true)
     parameters["next"] = next
     let function_def = BaseFunction("route", "Select the next role", parameters)
-    let func_schema: JsonValue = get_function_schema(function_def)
 
     let tools = ArrayList<BaseTool>([GetWeather()])
 
     let chain = CoTChain(llm, promptTemplate:SelfDefinePromptTemplate(), tools:tools)
-    chain.bind_function(func_schema)
+    chain.bind_function(function_def)
     let members = ArrayList<String>(["Researcher", "Coder"])
     let options = members.append("FINISH")
     chain.add_prompt("system_message", 
@@ -147,7 +144,7 @@ main() {
     let input = Dict()
     input["input"] = "What is the weather like today in Guangzhou?"
     let res = chain.invoke(input)
-    println(res)
+    println(res.serialize().toJson())
 }
 ```
 
@@ -199,14 +196,10 @@ main() {
     // println(res)
 
     // tool
-    let tool = pythonREPL()
+    let tool = GoogleSearchRun()
     let input2 = Dict()
-    input2.put("code", """
-def main():
-    print('hello world')
-""")
-    input2.put("filename","test")
-    let tool_node = Node("pythonREPL", "tool", tool)
+    input2.put("query","Dijkstra algorithm")
+    let tool_node = Node("GoogleSearch", "tool", tool)
     // let res2 = tool_node.run(input2)
     // println(res2)
 

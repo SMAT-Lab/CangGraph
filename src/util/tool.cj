@@ -153,3 +153,36 @@ public class Tool <: Serializable<Tool> {
     }
 }
 
+public class ToolCall <: Serializable<ToolCall> {
+    var name: String
+    var arguments: HashMap<String, String>
+
+    public init() {
+        this.name = ""
+        this.arguments = HashMap<String, String>()
+    }
+
+    public init(name: String, arguments: HashMap<String, String>) {
+        this.name = name
+        this.arguments = arguments
+    }
+
+    public func serialize(): DataModel {
+        let dms = DataModelStruct()
+        dms.add(field<String>("name", name))
+        dms.add(field<HashMap<String, String>>("arguments", arguments))
+        return dms
+    }
+
+    public static func deserialize(dm: DataModel): ToolCall {
+        let dms = match (dm) {
+            case data: DataModelStruct => data
+            case _ => throw Exception("this data is not DataModelStruct")
+        }
+        let result = ToolCall()
+        result.name = String.deserialize(dms.get("name"))
+        result.arguments = HashMap<String, String>.deserialize(dms.get("arguments"))
+
+        return result
+    }
+}

@@ -31,43 +31,26 @@ public func callFunc(res: JsonObject): Bool {
     }
 }
 
-public func executeTools(action: AgentAction, tools: ArrayList<BaseTool>): String {
-    for (tool in tools) {
-        if (tool.name == action.toolName) {
-            // println("Executing action: ${action.toolName}, input: ${action.input}")
-            match (action.toolInput) {
-                case Some(input) =>  
-                    return tool.invoke(input)
-                case None => return (tool.run([action.input]) as String).getOrThrow()
-            }
-        }
-    }
-    // let output = planner.predict()
-    return "Unknown tool: ${action.toolName}"
-}
-
 public class create_openai_tools_agent <: Runnable{
     public var llm: OpenAI
     public var tools: ArrayList<BaseTool>
+    public var promptTemplate = CallToolsPromptTemplate() 
 
     public init(llm: OpenAI, tools: ArrayList<BaseTool>) {
         this.llm = llm
         this.tools = tools
     }
 
-    public func run(args : Array<Any>) : Any {}
-
-    public func invoke(args: JsonObject): String {
-        "unimplemented"
+    public func invoke(input: Dict): ResponseMessage {
+        let args = input["input"]
+        let req = JsonObject()
+        req.put("input", JsonString(args))
+        return invoke(req)
     }
 
-    public func invoke(dict: Dict): JsonObject {
-        let prompt: String = dict["input"]
-        var openai_tools_agent_chain = LLMChain(llm, CallToolsPromptTemplate())
-        var schema_tools: ArrayList<JsonValue> = ArrayList()
-        for (tool in tools) {
-            schema_tools.append(tool.args_schema.getOrThrow())
-        }
+    public func invoke(args: JsonObject): ResponseMessage {
+        let prompt: String = args.get("input").getOrThrow().asString().getValue()
+        var openai_tools_agent_chain = LLMChain(llm, CallToolsPromptTemplate(), tools)
 
         let input = Dict()
         input["text"] = prompt
@@ -84,20 +67,29 @@ public class create_openai_tools_agent <: Runnable{
             toolWithDescriptions += toolNamesList[i] + ": " + toolDescriptionsList[i] + ", "
         }
         input["tool_with_descriptions"] = toolWithDescriptions
-        // println(schema_tools)
-        var res = openai_tools_agent_chain.function_call(input, schema_tools)
-        if (callFunc(res) == false) {
-            let ret = JsonObject()
-            ret.put("content", res["message"])
-            return ret
+
+        let input_string = promptTemplate.format(input)
+
+        var response = openai_tools_agent_chain.invoke(input_string)
+        var res: JsonObject = (response.serialize().toJson() as JsonObject).getOrThrow()
+
+        if (res.get("tool_call").getOrThrow().asBool().getValue() == false) {
+            return response
         } else {
-            let function_name: String = res.get("function_name").getOrThrow().asString().getValue()
-            var function_args: JsonObject = res["function_args"].asObject()
-            println("function_name: ${function_name}, function_args: ${function_args}")
-            let action: AgentAction = AgentAction(function_name, function_args)
-            let ob: String = executeTools(action, tools)
-            let ret = JsonObject()
-            ret.put("content", JsonString(ob))
+            let functions = res["tool_calls"].asArray()
+            var ob: String = ""
+            for (i in 0..functions.size()) {
+                let function = functions[i].asObject()
+                let toolName = function["name"].asString().getValue()
+                let toolInput = function["arguments"].asObject()
+                for (tool in tools) {
+                    if (tool.name == toolName) {
+                        let tool_res: ResponseMessage = tool.invoke(toolInput)
+                        ob += (tool_res.serialize().toJson() as JsonObject).getOrThrow().get("content").getOrThrow().asString().getValue()
+                    }
+                }
+            }
+            let ret = ResponseMessage("tool", ob, false, Array<ToolCall>())
             return ret
         }
     }

@@ -4,12 +4,6 @@ from std import collection.*
 import schema.*
 import util.*
 
-public interface Runnable {
-    func run(args : Array<Any>) : Any
-    func invoke(args: JsonObject): String
-    func invoke(args: Dict): JsonObject
-}
-
 public struct Args {
     public var name: String
     public var description: String
@@ -40,7 +34,6 @@ public abstract class BaseTool <: Runnable {
     public var args_schema: Option<JsonValue> = None
 
     public var tool: Tool
-    
 
     // contruction
     public init() {
@@ -64,6 +57,8 @@ public abstract class BaseTool <: Runnable {
         this.args = _args
         this.tool = Tool()
     }
+
+    public func invoke(input: String): ResponseMessage
 
     public func setArgs() {
         this.args_schema = get_tool_args()
@@ -147,6 +142,25 @@ public class BaseFunction {
         this.description = description
         this.parameters = parameters
     }
+
+    public func get_function_tool(): Tool {
+        let tool_properties = HashMap<String, ToolProperties>()
+
+        let required: ArrayList<String> = ArrayList<String>()
+
+        for ((name, param) in parameters) {
+            tool_properties.put(param.name, ToolProperties("string", param.description))
+            if (param.required) {
+                required.append(param.name)
+            }
+        }
+
+        let required_array = required.toArray()
+        let tool_parameters = ToolParameters("object", tool_properties, required_array, false)
+
+        let tool_args = ToolArgs(name, description, tool_parameters)
+        return Tool("function", tool_args)
+    }
 }
 
 // convert the base function to a json schema
@@ -181,3 +195,4 @@ public func get_function_schema(function: BaseFunction) {
 
     return function_schema
 }
+
