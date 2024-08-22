@@ -2,12 +2,80 @@ package util
 from serialization import serialization.*
 from encoding import json.*
 
+public class FunctionInfo <: Serializable<FunctionInfo> {
+    public var name: String
+    public var arguments: String
+
+    public init(name: String, arguments: String) {
+        this.name = name
+        this.arguments = arguments
+    }
+
+    public func serialize(): DataModel {
+        let dms = DataModelStruct()
+        dms.add(field<String>("name", name))
+        dms.add(field<String>("arguments", arguments))
+        return dms
+    }
+
+    public static func deserialize(dm: DataModel): FunctionInfo {
+        let dms = match (dm) {
+            case data: DataModelStruct => data
+            case _ => throw Exception("this data is not DataModelStruct")
+        }
+        let result = FunctionInfo(String.deserialize(dms.get("name")), String.deserialize(dms.get("arguments")))
+        return result
+    }
+}
+
+public class ToolCallMessage <: Serializable<ToolCallMessage>{
+    public var id: String
+    public var function: FunctionInfo
+    public var function_type: String = "function"
+
+    public init(id: String, function: FunctionInfo) {
+        this.id = id
+        this.function = function
+    }
+
+    public init(id: String, function: FunctionInfo, function_type: String) {
+        this.id = id
+        this.function = function
+        this.function_type = function_type
+    }
+
+    public func serialize(): DataModel {
+        let dms = DataModelStruct()
+        dms.add(field<String>("id", id))
+        dms.add(field<FunctionInfo>("function", function))
+        dms.add(field<String>("type", function_type))
+        return dms
+    }
+
+    public static func deserialize(dm: DataModel): ToolCallMessage {
+        let dms = match (dm) {
+            case data: DataModelStruct => data
+            case _ => throw Exception("this data is not DataModelStruct")
+        }
+        let result = ToolCallMessage(String.deserialize(dms.get("id")), FunctionInfo.deserialize(dms.get("function")), String.deserialize(dms.get("type")))
+        return result
+    }
+
+}
+
 public class Message <: Serializable<Message> {
     var role: String
     var content: String
+    var tool_call_id: Option<String> = None
+    var tool_calls: ArrayList<ToolCallMessage> = ArrayList<ToolCallMessage>()
 
     public init() {
         this.role = ""
+        this.content = ""
+    }
+
+    public init(role: String) {
+        this.role = role
         this.content = ""
     }
 
@@ -16,10 +84,30 @@ public class Message <: Serializable<Message> {
         this.content = content
     }
 
+    public func set_tool_call_id(id: String) {
+        this.tool_call_id = Some(id)
+    }
+
+    public func add_tool_calls(tool_call: ToolCallMessage) {
+        this.tool_calls.append(tool_call)
+    }
+
     public func serialize(): DataModel {
         let dms = DataModelStruct()
         dms.add(field<String>("role", role))
         dms.add(field<String>("content", content))
+        match(tool_call_id) {
+            case Some(id) => 
+                dms.add(field<String>("tool_call_id", id))
+            case None =>
+                dms
+        }
+        match(tool_calls.size) {
+            case 0 =>
+                dms
+            case _ =>
+                dms.add(field<ArrayList<ToolCallMessage>>("tool_calls", tool_calls))
+        }
         return dms
     }
 
@@ -31,6 +119,8 @@ public class Message <: Serializable<Message> {
         let result = Message()
         result.role = String.deserialize(dms.get("role"))
         result.content = String.deserialize(dms.get("content"))
+        result.tool_call_id = String.deserialize(dms.get("tool_call_id"))
+        result.tool_calls = ArrayList<ToolCallMessage>.deserialize(dms.get("tool_calls"))
 
         return result
     }
@@ -56,6 +146,7 @@ public class ResponseMessage <: Serializable<ResponseMessage> {
         this.tool_call = tool_call
         this.tool_calls = tool_calls
     }
+
 
     public func serialize(): DataModel {
         let dms = DataModelStruct()

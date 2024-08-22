@@ -52,6 +52,25 @@ main(): Int64 {
 }
 ```
 
+### ReAct
+```cangjie
+import llmapi.*
+import graph.*
+import tool.*
+import agent.*
+import schema.*
+import chain.*
+from std import collection.*
+from encoding import json.*
+import util.*
+
+main() {
+    let llm = getLLMInstance(LLMType.OPEN_AI)
+    let agent = ReActAgent(ArrayList<BaseTool>([GetWeather(), FileSaver()]))
+    println(agent.invoke("What is the weather like in New York?").serialize().toJson())
+}
+```
+
 ## Node
 在canggraph中，每个node都是一个可执行对象，可以是Agent，可以是Chain，可以是Tool
 因此，每个node中都有一个runnable属性，该属性存储的是Runnable对象，agent，chain，tool都是Runnable的子类
@@ -142,7 +161,7 @@ main() {
       """
     )
     let input = Dict()
-    input["input"] = "What is the weather like today in Guangzhou?"
+    input["text"] = "What is the weather like today in Guangzhou?"
     let res = chain.invoke(input)
     println(res.serialize().toJson())
 }

@@ -7,9 +7,19 @@ import util.*
 from serialization import serialization.*
 from encoding import json.*
 
-// public interface ActionExecutor {
-//     func executeAction(action: AgentAction): String
-// }
+public interface ActionExecutor {
+    func executeAction(action: AgentAction): String
+}
+
+public class AgentAction {
+    public let toolName: String
+    public let toolArgs: JsonObject
+    
+    public init(toolName: String, toolArgs: JsonObject) {
+        this.toolName = toolName
+        this.toolArgs = toolArgs
+    }
+}
 
 // public abstract class BaseAgent <: Chain & ActionExecutor{
 //     public let tools = ArrayList<BaseTool>()

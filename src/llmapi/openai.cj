@@ -25,7 +25,9 @@ public class OpenAI <: LargeModel {
     public func call_llm(header: HttpHeaders, body: DataModelStruct): ResponseMessage {
         let url = "${base_url}/chat/completions"
         let client = Requests()
+        //println(body.toJson())
         let response = client.post(url, header: header, body: body.toJson().toJsonString())
+        //println(response)
         let obj: JsonObject = string2JsonObject(response)
         let msg = obj["choices"].asArray()[0].asObject()["message"].asObject()
         var content: String
@@ -40,6 +42,7 @@ public class OpenAI <: LargeModel {
             var response: ResponseMessage
             var called_tools = ArrayList<ToolCall>()
             for (i in 0..functions.size()) {
+                let function_id = functions[i].asObject()["id"].asString().getValue()
                 let function = functions[i].asObject()["function"].asObject()
                 let function_name = function["name"].asString().getValue()
                 let function_args = function["arguments"].toJsonString()
@@ -51,7 +54,7 @@ public class OpenAI <: LargeModel {
                 for ((k,v) in args) {
                     tool_call_args[k] = v.toString()
                 }
-                called_tools.append(ToolCall(function_name, tool_call_args))
+                called_tools.append(ToolCall(function_name, tool_call_args, function_id))
             }
             response = ResponseMessage("assistant", "null", true, called_tools.toArray())
             return response

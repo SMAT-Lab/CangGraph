@@ -23,4 +23,6 @@ public abstract class Chain <: Runnable {
 
     public func invoke(input: Dict): ResponseMessage
 
+    public func invoke(input: Dict, messages: ArrayList<Message>): ResponseMessage
+
 }

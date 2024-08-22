@@ -6,21 +6,23 @@ import schema.*
 import chain.*
 from std import collection.*
 from encoding import json.*
-import util.*
+from std import ffi.python.*
 
 main() {
-    let llm = getLLMInstance(LLMType.OPEN_AI)
+    // chain
+    let llm = (getLLMInstance(LLMType.OPEN_AI, model: "gpt-4o-mini") as OpenAI).getOrThrow()
     let parameters = HashMap<String, Parameter>()
-    let next: Parameter = Parameter("next", "String", true)
+    let next: Parameter = Parameter("Next", "The next role to act", true)
     parameters["next"] = next
-    let function_def = BaseFunction("route", "Select the next role", parameters)
+    let function_def = BaseFunction("RouteDecider", "Select the next role to act", parameters)
 
     let tools = ArrayList<BaseTool>([GetWeather()])
 
     let chain = CoTChain(llm, promptTemplate:SelfDefinePromptTemplate(), tools:tools)
     chain.bind_function(function_def)
-    let members = ArrayList<String>(["Researcher", "Coder"])
-    let options = members.append("FINISH")
+    let members = ArrayList<String>(["Researcher", "Coder", "Weather"])
+    var options = members.clone()
+    options.append("FINISH")
     chain.add_prompt("system_message", 
       """
       You are a supervisor tasked with managing a conversation between the
@@ -30,11 +32,48 @@ main() {
       respond with FINISH.
       Given the conversation above, who should act next?
       Or should we FINISH? Select one of: ${options}
-      Please call the tool to help you make the decision.
+      !!!You must call the tool 'RouteDecider' to help you make the decision. 
       """
     )
+
+    let supervisor_node = Node("supervisor", "chain", chain)
     let input = Dict()
-    input["input"] = "What is the weather like today in Guangzhou?"
-    let res = chain.invoke(input)
-    println(res.serialize().toJson())
+    input["text"] = "who should act next?"
+    // let res = supervisor_node.run(input)
+    // println(res)
+
+    // tool
+    let tool = GoogleSearchRun()
+    let input2 = Dict()
+    input2.put("query","Dijkstra algorithm")
+    let tool_node = Node("GoogleSearch", "tool", tool)
+    // let res2 = tool_node.run(input2)
+    // println(res2)
+
+    // agent
+
+    let agent = create_openai_tools_agent(llm, ArrayList<BaseTool>([GetWeather()]))
+
+    let weather_agent = Node("Weather", "agent", agent)
+    let input3 = Dict()
+    input3.put("input", "what is the weather like today in Guangzhou?")
+    // let res3 = weather_agent.run(input3)
+    // println(res3)
+
+    // graph
+    let graph = Graph()
+    graph.addNode(supervisor_node)
+    graph.addNode(tool_node)
+    graph.addNode(weather_agent)
+
+    graph.setEntryPoint(supervisor_node)
+
+    // graph.addEdge(supervisor_node, tool_node)
+    graph.addEdge(tool_node, weather_agent)
+    graph.addEdge(supervisor_node, weather_agent)
+    graph.addEdge(weather_agent, supervisor_node)
+
+    graph.setExitPoint(supervisor_node)
+
+    graph.invoke(input3)
 }

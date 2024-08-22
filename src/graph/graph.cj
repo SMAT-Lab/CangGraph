@@ -64,8 +64,9 @@ public class Node {
     }
 
     func printEdges() {
+        println("Edges:")
         for((k, v) in edges) {
-            println("Edge: ${k}")
+            v.printEdge()
         }
     }
 
@@ -209,8 +210,9 @@ public class Graph {
                 continue
             }
             let input = Dict()
-            input["input"] = nowInPut
+            input["text"] = nowInPut
             let res: ResponseMessage = nowNode.runnable.getOrThrow().invoke(input)
+            println(res.serialize().toJson())
 
             let obj: JsonObject = (res.serialize().toJson() as JsonObject).getOrThrow()
             
@@ -219,14 +221,23 @@ public class Graph {
                 for (i in 0..toolCalls.size()) {
                     let toolCall = (toolCalls.get(i).getOrThrow() as JsonObject).getOrThrow()
                     let toolName = toolCall.get("name").getOrThrow().asString().getValue()
-                    let toolInput = toolCall.get("args").getOrThrow().asString().getValue()
-                    let tool = nodes.get(toolName).getOrThrow()
-                    let toolRes = (tool.runnable.getOrThrow() as BaseTool).getOrThrow().invoke(toolInput)
-                    let obs = (toolRes.serialize().toJson() as JsonObject).getOrThrow()
-                    state.messages.append(Message("assistant", obs["content"].asString().getValue()))
+                    let toolInput = toolCall.get("arguments").getOrThrow().asObject()
+                    println(toolName)
+                    match(toolName) {
+                        case "RouteDecider" => 
+                            let next = RouteDecider().selectNext(toolInput)
+                            println(next)
+                            state.next = next
+                        case _ =>
+                            // println(toolName)
+                            let tool = nodes.get(toolName).getOrThrow()
+                            let toolRes = (tool.runnable.getOrThrow() as BaseTool).getOrThrow().invoke(toolInput)
+                            let obs = (toolRes.serialize().toJson() as JsonObject).getOrThrow()
+                            state.messages.append(Message("assistant", obs["content"].asString().getValue()))
+                    }
                 }
             } else {
-                let content = obj.get("content").getOrThrow().asString().getValue()
+                let content = obj.get("cont ent").getOrThrow().asString().getValue()
                 state.next = nowNode.getOnlyEdge().end.nodeName
                 state.messages.append(Message("assistant", content))
             }

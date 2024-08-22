@@ -154,6 +154,7 @@ public class Tool <: Serializable<Tool> {
 }
 
 public class ToolCall <: Serializable<ToolCall> {
+    var id: String = ""
     var name: String
     var arguments: HashMap<String, String>
 
@@ -167,10 +168,17 @@ public class ToolCall <: Serializable<ToolCall> {
         this.arguments = arguments
     }
 
+    public init(name: String, arguments: HashMap<String, String>, id: String) {
+        this.name = name
+        this.arguments = arguments
+        this.id = id
+    }
+
     public func serialize(): DataModel {
         let dms = DataModelStruct()
         dms.add(field<String>("name", name))
         dms.add(field<HashMap<String, String>>("arguments", arguments))
+        dms.add(field<String>("id", id))
         return dms
     }
 
@@ -182,6 +190,7 @@ public class ToolCall <: Serializable<ToolCall> {
         let result = ToolCall()
         result.name = String.deserialize(dms.get("name"))
         result.arguments = HashMap<String, String>.deserialize(dms.get("arguments"))
+        result.id = String.deserialize(dms.get("id"))
 
         return result
     }

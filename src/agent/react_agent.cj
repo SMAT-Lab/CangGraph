@@ -15,16 +15,6 @@ public class ReActPromptTemplate <: PromptTemplate {
             The descriptions of the tools are follow:
             ${input["tool_with_descriptions"]}
 
-            Use the following format:
-
-            Question: the input question you must answer
-            Thought: you should always think about what to do
-            Action: the action to take, should be one of ${input["tool_names"]}
-            Action Input: the input to the action
-            Observation: the result of the action
-            ... (this Thought/Action/Action Input/Observation can repeat N times)
-            Thought: I now know the final answer
-            Final Answer: the final answer to the original input question
         """
 
         let SUFFIX = """
@@ -38,14 +28,14 @@ public class ReActPromptTemplate <: PromptTemplate {
 }
 
 public class ReActChain <: LLMChain {
-    public init() {
-        super(getLLMInstance(LLMType.OPEN_AI, model:"gpt-4o-mini"), ReActPromptTemplate())
+    public init(tools: ArrayList<BaseTool>) {
+        super(getLLMInstance(LLMType.OPEN_AI, model:"gpt-4o-mini"), ReActPromptTemplate(), tools)
     }
 }
 
-public class ReActAgent <: Agent {
+public class ReActAgent <: Agent & ActionExecutor {
     public init(tools: ArrayList<BaseTool>) {
-        super(ReActChain(), tools)
+        super(ReActChain(tools), tools)
         println("ReActAgent init done.")
     }
 
@@ -61,33 +51,60 @@ public class ReActAgent <: Agent {
         return tool_call
     }
 
+    public func invoke(message: String): ResponseMessage {
+        let input = Dict()
+        let messages = ArrayList<Message>()
+        input["text"] = message
+        let toolNamesList  = collectArrayList(map({tool:BaseTool => tool.name})(tools))
+        var toolNames = ""
+        for (toolName in toolNamesList) {
+            toolNames += toolName + ", "
+        }
+        input["tool_names"] = toolNames
 
-    // public func invoke(args: JsonObject): ResponseMessage {
-    //     let prompt: String = args.get("input").getOrThrow().asString().getValue()
+        let toolDescriptionsList  = collectArrayList(map({tool:BaseTool => tool.description})(tools))
+        var toolWithDescriptions = ""
+        for (i in 0..toolDescriptionsList.size) {
+            toolWithDescriptions += toolNamesList[i] + ": " + toolDescriptionsList[i] + ", "
+        }
+        input["tool_with_descriptions"] = toolWithDescriptions
 
-    //     let input = Dict()
-    //     input["text"] = prompt
-    //     let toolNamesList  = collectArrayList(map({tool:BaseTool => tool.name})(tools))
-    //     var toolNames = ""
-    //     for (toolName in toolNamesList) {
-    //         toolNames += toolName + ", "
-    //     }
-    //     input["tool_names"] = toolNames
+        var res: ResponseMessage = planner.invoke(input)
+        while(shouldContinue(res)) {
+            let toolCalls = (res.serialize().toJson() as JsonObject).getOrThrow().get("tool_calls").getOrThrow().asArray()
+            for (i in 0..toolCalls.size()) {
+                let toolCall = toolCalls[i].asObject()
+                let toolName: String = toolCall.get("name").getOrThrow().asString().getValue()
+                let toolArgs: JsonObject = toolCall.get("arguments").getOrThrow().asObject()
+                let tool_ids: String = toolCall.get("id").getOrThrow().asString().getValue()
 
-    //     let toolDescriptionsList  = collectArrayList(map({tool:BaseTool => tool.description})(tools))
-    //     var toolWithDescriptions = ""
-    //     for (i in 0..toolDescriptionsList.size) {
-    //         toolWithDescriptions += toolNamesList[i] + ": " + toolDescriptionsList[i] + ", "
-    //     }
-    //     input["tool_with_descriptions"] = toolWithDescriptions
+                let action = AgentAction(toolName, toolArgs)
+                let toolResponse = executeAction(action)
+                let function = JsonObject()
+                function.put("name", JsonString(toolName))
+                function.put("arguments", toolArgs)
 
-    //     var res: ResponseMessage = planner.invoke(input)
-    //     while(shouldContinue(res)) {
-    //         let toolCalls = (res.serialize().toJson() as JsonObject).getOrThrow().get("tool_calls").getOrThrow().asArray()
-    //         for (i in 0..toolCalls.size()) {
-    //             //
-    //         }
-    //     }
-    //     return res
-    // }
+                let toolCallMessage = ToolCallMessage(tool_ids, FunctionInfo(toolName, ""), "function")
+                let toolMessage = Message("assistant")
+                toolMessage.add_tool_calls(toolCallMessage)
+                messages.append(toolMessage)
+                
+                let resultMessage = Message("tool", toolResponse)
+                resultMessage.set_tool_call_id(tool_ids)
+                messages.append(resultMessage)
+            }
+            res = planner.invoke(input, messages)
+        }
+        return res
+    }
+
+    public func executeAction(action: AgentAction): String {
+        for (tool in tools) {
+            if (tool.name == action.toolName) {
+                let res: ResponseMessage = tool.invoke(action.toolArgs)
+                return res.serialize().toJson().asObject().get("content").getOrThrow().asString().getValue()
+            }
+        }
+        return "Unknown tool: ${action.toolName}"
+    }
 }

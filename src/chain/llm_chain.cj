@@ -52,10 +52,19 @@ public open class LLMChain <: Chain {
     }
 
     public func invoke(dict: Dict): ResponseMessage {
-        let input: String = dict["input"]
+        let input: String = dict["text"]
+        this.input.putAll(dict)
         this.add_prompt("user_message", input)
         let prompt: String = promptTemplate.format(this.input)
         return llm.query(prompt, openai_tools.toArray())
+    }
+
+    public func invoke(dict: Dict, messages: ArrayList<Message>): ResponseMessage {
+        let prompt: String = promptTemplate.format(dict)
+        let msgs = ArrayList<Message>()
+        msgs.append(Message("user", prompt))
+        msgs.appendAll(messages)
+        return llm.query(msgs.toArray(), openai_tools.toArray())
     }
 
     public func invoke(input: JsonObject): ResponseMessage {
@@ -65,7 +74,7 @@ public open class LLMChain <: Chain {
         return invoke(messages)
     }
 
-    public func invoke(message: String): ResponseMessage {
+    public open func invoke(message: String): ResponseMessage {
         let messages = ArrayList<Message>()
         let sys_msg = Message("system", "You are a helpful assistant.")
         let user_msg = Message("user", message)

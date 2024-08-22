@@ -31,7 +31,7 @@ public func callFunc(res: JsonObject): Bool {
     }
 }
 
-public class create_openai_tools_agent <: Runnable{
+public class create_openai_tools_agent <: Runnable {
     public var llm: OpenAI
     public var tools: ArrayList<BaseTool>
     public var promptTemplate = CallToolsPromptTemplate() 
