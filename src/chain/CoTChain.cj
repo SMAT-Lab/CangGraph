@@ -16,4 +16,8 @@ public class CoTChain <: LLMChain & Runnable {
             this.openai_tools.append(f.get_function_tool())
         }
     }
+
+    public func get_tools(): ArrayList<BaseTool> {
+        return this.tools
+    }
 }

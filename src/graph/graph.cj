@@ -64,7 +64,7 @@ public class Node {
     }
 
     func printEdges() {
-        println("Edges:")
+        println("Node have the following edges")
         for((k, v) in edges) {
             v.printEdge()
         }
@@ -79,6 +79,10 @@ public class Node {
             return v
         }
         Edge(this, this)
+    }
+
+    func hasEdge(): Bool {
+        return edges.size > 0
     }
 
     public operator func !=(other: Node): Bool {
@@ -154,6 +158,19 @@ public class Graph {
     }
 
     public func addEdge(start: Node, end: Node) {
+        // add an edge from start to end， 但是由于该边不是conditional的，所以start节点只允许有一个边
+        if (start.hasEdge()) {
+            logger.log(LogLevel.ERROR, "Node ${start.nodeName} already has an edge")
+            return
+        }
+
+        if (checkNode(start) && checkNode(end)) {
+            let startNode = this.nodes.get(start.nodeName).getOrThrow()
+            startNode.addEdge(end)
+        }
+    }
+
+    public func addConditionalEdge(start: Node, end: Node) {
         var checkStart: String = start.nodeName
         var checkEnds: HashSet<String> = HashSet<String>()
         if (checkNode(end)) {
@@ -163,23 +180,6 @@ public class Graph {
                 startNode.addEdge(end)
             }
         }
-    }
-
-    public func addConditionalEdge(start: Node, ends: Node, condition: Bool) {
-        // var checkStart: Node = start
-        // var checkEnds: HashSet<String> = HashSet<String>()
-        // for((choice, end) in ends) {
-        //     checkNode(end, true)
-        //     checkEnds.put(end)
-        // }
-        // if(this.checkEdge(checkStart, checkEnds)) {
-        //     let startNode = this.nodes.get(start).getOrThrow()
-        //     var endsName: HashMap<String, String> = HashMap<String, String>()
-        //     for((choice, end) in ends) {
-        //         endsName.put(choice, end)
-        //     }
-        //     startNode.addEdge(condition, endsName)
-        // }
     }
 
     public func setEntryPoint(node: Node) {
@@ -197,7 +197,7 @@ public class Graph {
 
     public func invoke(input: Dict) {
         var nowNode: Node = startNode
-        let prompt = input["input"]
+        let prompt = input["text"]
         let message = Message("user", prompt)
         state.messages.append(message)
         
@@ -209,9 +209,13 @@ public class Graph {
                 nowNode = nowNode.edges.get(state.next).getOrThrow().end
                 continue
             }
+            println("Messages:")
+            println(state.messages.serialize().toJson())
             let input = Dict()
             input["text"] = nowInPut
-            let res: ResponseMessage = nowNode.runnable.getOrThrow().invoke(input)
+            let res: ResponseMessage = nowNode.runnable.getOrThrow().invoke(input, state.messages)
+
+            println("Response:")
             println(res.serialize().toJson())
 
             let obj: JsonObject = (res.serialize().toJson() as JsonObject).getOrThrow()
@@ -222,25 +226,36 @@ public class Graph {
                     let toolCall = (toolCalls.get(i).getOrThrow() as JsonObject).getOrThrow()
                     let toolName = toolCall.get("name").getOrThrow().asString().getValue()
                     let toolInput = toolCall.get("arguments").getOrThrow().asObject()
-                    println(toolName)
+                    let tool_ids: String = toolCall.get("id").getOrThrow().asString().getValue()
+                    // println(toolName)
                     match(toolName) {
                         case "RouteDecider" => 
                             let next = RouteDecider().selectNext(toolInput)
-                            println(next)
+                            // println(next)
                             state.next = next
                         case _ =>
                             // println(toolName)
+                            let toolCallMessage = ToolCallMessage(tool_ids, FunctionInfo(toolName, ""), "function")
+                            let toolMessage = Message("assistant")
+                            toolMessage.add_tool_calls(toolCallMessage)
+                            state.messages.append(toolMessage)
+
                             let tool = nodes.get(toolName).getOrThrow()
                             let toolRes = (tool.runnable.getOrThrow() as BaseTool).getOrThrow().invoke(toolInput)
-                            let obs = (toolRes.serialize().toJson() as JsonObject).getOrThrow()
-                            state.messages.append(Message("assistant", obs["content"].asString().getValue()))
+                            let obs: String = (toolRes.serialize().toJson() as JsonObject).getOrThrow()["content"].asString().getValue()
+                            let resultMessage = Message("tool", obs)
+                            resultMessage.set_tool_call_id(tool_ids)
+                            state.messages.append(resultMessage)
                     }
                 }
             } else {
-                let content = obj.get("cont ent").getOrThrow().asString().getValue()
+                let content = obj.get("content").getOrThrow().asString().getValue()
                 state.next = nowNode.getOnlyEdge().end.nodeName
                 state.messages.append(Message("assistant", content))
             }
+
+            nowNode = nowNode.edges.get(state.next).getOrThrow().end
+
         }
     }
 }

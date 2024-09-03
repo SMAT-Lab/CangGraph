@@ -76,7 +76,7 @@ public class ReActAgent <: Agent & ActionExecutor {
                 let toolCall = toolCalls[i].asObject()
                 let toolName: String = toolCall.get("name").getOrThrow().asString().getValue()
                 let toolArgs: JsonObject = toolCall.get("arguments").getOrThrow().asObject()
-                let tool_ids: String = toolCall.get("id").getOrThrow().asString().getValue()
+                let tool_ids: String = "1" //toolCall.get("id").getOrThrow().asString().getValue()
 
                 let action = AgentAction(toolName, toolArgs)
                 let toolResponse = executeAction(action)
@@ -93,6 +93,7 @@ public class ReActAgent <: Agent & ActionExecutor {
                 resultMessage.set_tool_call_id(tool_ids)
                 messages.append(resultMessage)
             }
+            println(messages.serialize().toJson())
             res = planner.invoke(input, messages)
         }
         return res

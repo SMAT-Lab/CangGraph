@@ -92,6 +92,14 @@ public open class LLMChain <: Chain {
         let output = llm.query(messages.toArray(), openai_tools.toArray())
         return output
     }
+
+    public func invoke(message: String, messages: ArrayList<Message>): ResponseMessage {
+        let user_msg = Message("user", message)
+        let msgs = ArrayList<Message>()
+        msgs.append(user_msg)
+        msgs.appendAll(messages)
+        return invoke(msgs)
+    }
 }
 
 

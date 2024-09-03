@@ -25,7 +25,7 @@ public class OpenAI <: LargeModel {
     public func call_llm(header: HttpHeaders, body: DataModelStruct): ResponseMessage {
         let url = "${base_url}/chat/completions"
         let client = Requests()
-        //println(body.toJson())
+        println(body.toJson())
         let response = client.post(url, header: header, body: body.toJson().toJsonString())
         //println(response)
         let obj: JsonObject = string2JsonObject(response)
@@ -78,6 +78,10 @@ public class OpenAI <: LargeModel {
 
         if (!tools.isEmpty()) {
             body.add(field<String>("tool_choice", "auto"))
+        }
+
+        for(message in messages) {
+            this.messages.append(message)
         }
 
         return call_llm(header, body)
