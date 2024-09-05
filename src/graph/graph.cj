@@ -204,19 +204,15 @@ public class Graph {
         var nowInPut: String = prompt
         while(nowNode != endNode){
             println("nowNode: ${nowNode.nodeName}")
-            nowNode.printEdges()
+            // nowNode.printEdges()
             if (nowNode == startNode) {
                 nowNode = nowNode.edges.get(state.next).getOrThrow().end
                 continue
             }
-            println("Messages:")
-            println(state.messages.serialize().toJson())
             let input = Dict()
             input["text"] = nowInPut
-            let res: ResponseMessage = nowNode.runnable.getOrThrow().invoke(input, state.messages)
-
-            println("Response:")
-            println(res.serialize().toJson())
+            input["messages"] = state.messages.serialize().toJson().toString()
+            let res: ResponseMessage = nowNode.runnable.getOrThrow().invoke(input)
 
             let obj: JsonObject = (res.serialize().toJson() as JsonObject).getOrThrow()
             
@@ -254,8 +250,11 @@ public class Graph {
                 state.messages.append(Message("assistant", content))
             }
 
+            if  (state.next == "FINISH") {
+                break
+            }
             nowNode = nowNode.edges.get(state.next).getOrThrow().end
-
         }
+        return state.messages.serialize().toJson()
     }
 }

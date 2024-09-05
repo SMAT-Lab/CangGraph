@@ -54,9 +54,23 @@ public open class LLMChain <: Chain {
     public func invoke(dict: Dict): ResponseMessage {
         let input: String = dict["text"]
         this.input.putAll(dict)
-        this.add_prompt("user_message", input)
-        let prompt: String = promptTemplate.format(this.input)
-        return llm.query(prompt, openai_tools.toArray())
+        var msgs: ArrayList<Message> = ArrayList<Message>()
+        if (this.input.contains("system_message")) {
+            let system_message: String = this.input["system_message"]
+            msgs.append(Message("system", system_message))
+        }
+        // 这里再进行一个promptFormat的处理
+        let user_prompt: String = input
+        msgs.append(Message("user", user_prompt))
+        // this.add_prompt("user_message", input)
+        // let prompt: String = promptTemplate.format(this.input)
+        
+        if (dict.contains("messages")) {
+            let history = getMessages(dict["messages"])
+            msgs.appendAll(history.slice(1..history.size))
+            return llm.query(msgs.toArray(), openai_tools.toArray())
+        }
+        return llm.query(input, openai_tools.toArray())
     }
 
     public func invoke(dict: Dict, messages: ArrayList<Message>): ResponseMessage {

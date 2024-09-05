@@ -25,9 +25,9 @@ public class OpenAI <: LargeModel {
     public func call_llm(header: HttpHeaders, body: DataModelStruct): ResponseMessage {
         let url = "${base_url}/chat/completions"
         let client = Requests()
-        println(body.toJson())
+        // println(body.toJson())
         let response = client.post(url, header: header, body: body.toJson().toJsonString())
-        //println(response)
+        // println(response)
         let obj: JsonObject = string2JsonObject(response)
         let msg = obj["choices"].asArray()[0].asObject()["message"].asObject()
         var content: String
