@@ -1,9 +1,7 @@
 package tool.utilities
 
-from std import os.*
-from encoding import json.*
-from std import socket.*
-from encoding import url.*
+from std import os.*, socket.*
+from encoding import json.*, url.*
 
 foreign func search(url: CString,  reponse: CPointer<UInt8>, bufferSize: UIntNative) : CString
 

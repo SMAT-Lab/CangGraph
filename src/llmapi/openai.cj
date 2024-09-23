@@ -1,9 +1,11 @@
 package llmapi
+
 import requests.*
+import util.*
+
 from net import http.*
 from serialization import serialization.*
 from encoding import json.*
-import util.*
 
 public class OpenAI <: LargeModel {
     public var model_name: String = "arktsLLM"

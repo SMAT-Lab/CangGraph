@@ -1,5 +1,7 @@
 package schema
+
 from std import collection.*
+
 public type Dict = HashMap<String, String>
 public abstract class BaseMemory {
     public prop memoryVariables:Collection<Dict>

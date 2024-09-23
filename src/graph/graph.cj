@@ -1,11 +1,13 @@
 package graph
-from std import collection.*, log.*
-from encoding import json.*
+
 import schema.*
 import agent.*
 import tool.*
 import util.*
 import chain.*
+
+from std import collection.*,log.*
+from encoding import json.*
 
 public class State  {
     // the messages of the graph
@@ -213,7 +215,7 @@ public class Graph {
             println(state.messages.serialize().toJson())
             let input = Dict()
             input["text"] = nowInPut
-            let res: ResponseMessage = nowNode.runnable.getOrThrow().invoke(input, state.messages)
+            let res: ResponseMessage = nowNode.runnable.getOrThrow().invoke(input/*, state.messages*/)
 
             println("Response:")
             println(res.serialize().toJson())

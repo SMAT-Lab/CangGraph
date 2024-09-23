@@ -1,4 +1,5 @@
 package onnx
+
 from std import math.*
 
 foreign {

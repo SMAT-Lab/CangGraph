@@ -4,9 +4,9 @@ import tool.*
 import agent.*
 import schema.*
 import chain.*
-from std import collection.*
+
+from std import collection.*, ffi.python.*
 from encoding import json.*
-from std import ffi.python.*
 
 main() {
     // chain

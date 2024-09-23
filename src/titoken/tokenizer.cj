@@ -1,14 +1,9 @@
 package titoken
 
-from std import collection.*
-from encoding import json.*
-from std import fs.*
-from std import convert.*
-from std  import unicode.*
-from std  import  os.posix.*
-
 import onnx.*
 
+from std import collection.*, convert.*, fs.*, os.posix.*, unicode.*
+from encoding import json.*
 
 public class Tokenizer {
     private let tokensJsonPath:String

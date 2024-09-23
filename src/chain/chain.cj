@@ -1,7 +1,8 @@
 package chain
-from std import collection.*
 
 import schema.*
+
+from std import collection.*
 
 public abstract class Chain <: Runnable {
     let memory = None<BaseMemory> 

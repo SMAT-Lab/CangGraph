@@ -1,7 +1,9 @@
 package agent
+
+import llmapi.*
+
 from encoding import json.*
 from std import unicode.*
-import llmapi.*
 
 public class ReActPromptTemplate <: PromptTemplate {
     public override func format(input: Dict): String {
@@ -69,7 +71,7 @@ public class ReActAgent <: Agent & ActionExecutor {
         }
         input["tool_with_descriptions"] = toolWithDescriptions
 
-        var res: ResponseMessage = planner.invoke(input)
+        var res: ResponseMessage = agentChain.invoke(input)
         while(shouldContinue(res)) {
             let toolCalls = (res.serialize().toJson() as JsonObject).getOrThrow().get("tool_calls").getOrThrow().asArray()
             for (i in 0..toolCalls.size()) {
@@ -94,7 +96,7 @@ public class ReActAgent <: Agent & ActionExecutor {
                 messages.append(resultMessage)
             }
             println(messages.serialize().toJson())
-            res = planner.invoke(input, messages)
+            res = agentChain.invoke(input, messages)
         }
         return res
     }

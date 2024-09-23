@@ -1,4 +1,5 @@
 package schema
+
 from encoding import json.*
 
 public abstract class OutputParser<OutputType> {

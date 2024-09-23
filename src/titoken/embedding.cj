@@ -1,8 +1,8 @@
 package titoken
-from std import collection.*
-from std import math.*
 
 import onnx.*
+
+from std import collection.*, math.*
 
 public class Embedder{
     private let model:ONNXModel
