@@ -207,3 +207,18 @@ public class ResponseMessage <: Serializable<ResponseMessage> {
     }
     
 }
+
+public func getMessages(message_string: String): ArrayList<Message> {
+    let messages = JsonValue.fromStr(message_string).asArray()
+    let msgs = ArrayList<Message>()
+
+    for (msg in messages.getItems()) {
+        let message: JsonObject = msg.asObject()
+        let role = message.get("role").getOrThrow().asString().getValue()
+        let content = message.get("content").getOrThrow().asString().getValue()
+        let message1: Message = Message(role, content)
+        msgs.append(message1)
+    }
+    // let messages: ArrayList<Message> = input["messages"]
+    return msgs
+}

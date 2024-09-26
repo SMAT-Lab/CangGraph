@@ -29,7 +29,7 @@ main() {
       following workers: ${members}. Given the following user request,
       respond with the worker to act next. Each worker will perform a
       task and respond with their results and status. When finished,
-      respond with FINISH.
+      respond with FINISH. You must check the above conversation to decide who should act next or finish the conversation.
       Given the conversation above, who should act next?
       Or should we FINISH? Select one of: ${options}
       !!!You must call the tool 'RouteDecider' to help you make the decision. 
@@ -83,5 +83,6 @@ main() {
 
     let input3 = Dict()
     input3.put("text", "what is the weather like today in Guangzhou?")
-    graph.invoke(input3)
+    let res = graph.invoke(input3)
+    println(res)
 }

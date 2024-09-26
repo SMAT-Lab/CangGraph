@@ -50,6 +50,11 @@ public class create_openai_tools_agent <: Runnable {
         let args = input["text"]
         let req = JsonObject()
         req.put("input", JsonString(args))
+
+        if (input.contains("messages")) {
+            let msgs = getMessages(input["messages"])
+            return invoke(req, msgs)
+        }
         return invoke(req)
     }
     
