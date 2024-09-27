@@ -1,22 +1,9 @@
 {
     "terminal.integrated.env.linux": {
-        "CANGJIE_HOME": "/home/cangjie-0.51.4/cangjie",
-        "PATH": "${config:terminal.integrated.env.linux.CANGJIE_PATH}:/home/cangjie/bin:/home/cangjie/tools/bin:/home/cangjie/debugger/bin:${env:PATH}",
-        "LD_LIBRARY_PATH": "${config:terminal.integrated.env.linux.CANGJIE_LD_LIBRARY_PATH}:/home/cangjie/runtime/lib/linux_x86_64_llvm:${env:LD_LIBRARY_PATH}",
-        "CANGJIE_PATH": "/home/cangjie-0.51.4/cangjie/bin:/home/cangjie-0.51.4/cangjie/tools/bin:/home/cangjie-0.51.4/cangjie/debugger/bin:",
-        "CANGJIE_LD_LIBRARY_PATH": "/home/cangjie-0.51.4/cangjie/runtime/lib/linux_x86_64_llvm:"
-    },
-    "editor.gotoLocation.alternativeDeclarationCommand": "editor.action.revealDefinition",
-    "editor.gotoLocation.alternativeDefinitionCommand": "editor.action.revealDefinition",
-    "editor.gotoLocation.alternativeTypeDefinitionCommand": "editor.action.revealDefinition",
-    "editor.selectionHighlight": false,
-    "files.autoSave": "onFocusChange",
-    "editor.suggest.snippetsPreventQuickSuggestions": false,
-    "editor.quickSuggestions": {
-        "other": "on",
-        "comments": "off",
-        "strings": "on"
-    },
-    "CangjieSdkPath.CJNativeBackend": "/home/cangjie-0.51.4/cangjie",
-    "CangjieSdkPath.CJVMBackend": "/home/cangjie-0.51.4/cangjie"
+        "CANGJIE_HOME": "/home/cangjie",
+        "CANGJIE_PATH": "/home/cangjie/bin:/home/cangjie/tools/bin:/home/cangjie/debugger/bin:",
+        "CANGJIE_LD_LIBRARY_PATH": "/home/cangjie/runtime/lib/linux_x86_64_llvm:/home/cangjie/tools/lib:",
+        "LD_LIBRARY_PATH": "${config:terminal.integrated.env.linux.CANGJIE_LD_LIBRARY_PATH}:${env:LD_LIBRARY_PATH}",
+        "PATH": "${config:terminal.integrated.env.linux.CANGJIE_PATH}:${env:PATH}"
+    }
 }

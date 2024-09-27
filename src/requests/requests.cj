@@ -1,11 +1,9 @@
 package requests
 
-from std import collection.*
-from std import os.*
-from std import os.posix.*
 import titoken.*
-from net import http.*
-from net import tls.*
+
+from net import http.*, tls.*
+from std import collection.*, os.*
 from serialization import serialization.*
 from encoding import json.*
 

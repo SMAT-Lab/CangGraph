@@ -1,8 +1,10 @@
 package chain
+
 import schema.*
 import tool.*
-from encoding import json.*
 import llmapi.*
+
+from encoding import json.*
 
 
 public open class LLMChain <: Chain {

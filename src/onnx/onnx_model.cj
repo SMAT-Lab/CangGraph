@@ -1,6 +1,6 @@
 package onnx
-from std import collection.*
-from std  import  os.posix.*
+
+from std import collection.*, os.posix.*
 
 foreign func c_load_model(path: CString,option: CString): CPointer<Unit>
 foreign func c_free_model(modelPtr: CPointer<Unit>) : Unit

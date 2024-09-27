@@ -1,4 +1,5 @@
 package util
+
 from serialization import serialization.*
 from encoding import json.*
 
@@ -61,6 +62,40 @@ public class ToolCallMessage <: Serializable<ToolCallMessage>{
         return result
     }
 
+}
+
+public class AgentCallMessage <: Serializable<AgentCallMessage> {
+    public var id: String = "1"
+    public var function: FunctionInfo
+    public var function_type: String = "function"
+
+    public init(id: String, function: FunctionInfo) {
+        this.id = id
+        this.function = function
+    }
+
+    public init(id: String, function: FunctionInfo, function_type: String) {
+        this.id = id
+        this.function = function
+        this.function_type = function_type
+    }
+
+    public func serialize(): DataModel {
+        let dms = DataModelStruct()
+        dms.add(field<String>("id", id))
+        dms.add(field<FunctionInfo>("function", function))
+        dms.add(field<String>("type", function_type))
+        return dms
+    }
+
+    public static func deserialize(dm: DataModel): AgentCallMessage {
+        let dms = match (dm) {
+            case data: DataModelStruct => data
+            case _ => throw Exception("this data is not DataModelStruct")
+        }
+        let result = AgentCallMessage(String.deserialize(dms.get("id")), FunctionInfo.deserialize(dms.get("function")), String.deserialize(dms.get("type")))
+        return result
+    }
 }
 
 public class Message <: Serializable<Message> {

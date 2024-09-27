@@ -1,11 +1,13 @@
 package graph
-from std import collection.*, log.*
-from encoding import json.*
+
 import schema.*
 import agent.*
 import tool.*
 import util.*
 import chain.*
+
+from std import collection.*,log.*
+from encoding import json.*
 
 public class State  {
     // the messages of the graph

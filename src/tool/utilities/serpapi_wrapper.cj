@@ -1,11 +1,9 @@
 package tool.utilities
 
-from std import os.*
-from encoding import json.*
-from std import socket.*
-from encoding import url.*
 import schema.*
-from std import collection.*
+
+from std import collection.*, os.*, socket.*
+from encoding import json.*, url.*
 
 foreign func serpapi_search(url: CString,  reponse: CPointer<UInt8>, bufferSize: UIntNative) : CString
 

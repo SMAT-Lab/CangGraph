@@ -9,7 +9,6 @@ import temp.*
 from std import fs.*
 from std import collection.*
 from encoding import json.*
-from std import ffi.python.*
 
 from net import http.*
 from std import time.*

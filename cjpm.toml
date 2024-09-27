@@ -17,7 +17,7 @@
   compile-option = ""
   description = "nothing here"
   link-option = ""
-  name = "cangchain"
+  name = "canggraph"
   output-type = "executable"
   src-dir = "src"
   target-dir = ""

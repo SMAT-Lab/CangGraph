@@ -1,6 +1,7 @@
 package tool
 
 import tool.utilities.*
+
 from std import fs.*
 
 public class FileReader <: BaseTool {

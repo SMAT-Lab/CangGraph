@@ -1,14 +1,12 @@
 package util
 
-from std import collection.*
-from std import os.*
-from std import os.posix.*
 import titoken.*
-from net import http.*
-from net import tls.*
+import requests.*
+
+from net import http.*, tls.*
+from std import collection.*, os.*, os.posix.*
 from serialization import serialization.*
 from encoding import json.*
-import requests.*
 
 public class Vector <: Serializable<Vector> {
     var id: String

@@ -1,4 +1,5 @@
 package graph
+
 from std import collection.*
 from std import reflect.*
 

@@ -1,8 +1,10 @@
 package tool
-from encoding import json.*
-from std import collection.*
+
 import schema.*
 import util.*
+
+from std import collection.*
+from encoding import json.*
 
 public struct Args {
     public var name: String

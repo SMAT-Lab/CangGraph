@@ -1,9 +1,11 @@
 package agent
-from std import collection.*
+
 import chain.*
 import schema.*
 import tool.*
 import util.*
+
+from std import collection.*
 from serialization import serialization.*
 from encoding import json.*
 
@@ -48,12 +50,16 @@ public struct StepResult {
 }
 
 public abstract class Agent <: LLMChain {
-    public let planner: Chain
+    public let agentChain: Chain
+    public let agentName: String
+    public let agentDescription: String
     // public let outputParser: OutputParser<ResponseMessage>
     // public let tools = ArrayList<BaseTool>()
     
-    public init(planner: Chain, tools: ArrayList<BaseTool>) {
-        this.planner = planner
+    public init(agentChain: Chain, tools: ArrayList<BaseTool>, name!: String = "", description!: String = "") {
+        this.agentChain = agentChain
+        this.agentName = name
+        this.agentDescription = description
         // this.outputParser = outputParser
         this.tools.appendAll(tools)
     }
