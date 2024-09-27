@@ -209,7 +209,7 @@ public class Graph {
                 nowNode = nowNode.edges.get(state.next).getOrThrow().end
                 continue
             }
-            let input = Dict()
+            var input = Dict()
             input["text"] = nowInPut
             input["messages"] = state.messages.serialize().toJson().toString()
             let res: ResponseMessage = nowNode.runnable.getOrThrow().invoke(input)
@@ -248,13 +248,22 @@ public class Graph {
                 let content = obj.get("content").getOrThrow().asString().getValue()
                 state.next = nowNode.getOnlyEdge().end.nodeName
                 state.messages.append(Message("assistant", content))
+                state.messages.append(Message("user", "Now, decide who should act next or finish the conversation."))
             }
 
             if  (state.next == "FINISH") {
                 break
             }
             nowNode = nowNode.edges.get(state.next).getOrThrow().end
+            println(state.messages.serialize().toJson())
         }
-        return state.messages.serialize().toJson()
+        // final answer:
+        state.messages.append(Message("user", "Now, summarize the conversation and give the final answer. When summarize, try to talk in a tone like: \"In order to find the weather in Guangzhou, I use get_weather tool to get the answer. it is 72 degrees Fahrenheit with clear skies. \", The final answer should contain the important middle results and the final result."))
+        input["text"] = nowInPut
+        input["messages"] = state.messages.serialize().toJson().toString()
+        let res: ResponseMessage = nowNode.runnable.getOrThrow().invoke(input)
+        println(res.serialize().toJson())
+
+        return res.serialize().toJson()
     }
 }

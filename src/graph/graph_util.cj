@@ -346,6 +346,4 @@ public class EdgeData <: Serializable<EdgeData> {
 
         return result
     }
-
-
 }
