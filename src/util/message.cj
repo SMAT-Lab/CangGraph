@@ -159,6 +159,13 @@ public class Message <: Serializable<Message> {
 
         return result
     }
+
+    public func toString() {
+        return """
+            Role: ${role}
+            Content: ${content}
+        """
+    }
 }
 
 

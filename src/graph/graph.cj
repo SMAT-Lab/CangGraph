@@ -5,6 +5,7 @@ import agent.*
 import tool.*
 import util.*
 import chain.*
+import llmapi.*
 
 from std import collection.*,log.*
 from encoding import json.*
@@ -38,11 +39,28 @@ public class Edge {
     }
 }
 
+public class BranchEdge {
+    let nodeName: String
+    let branchName: String
+    var branches: HashMap<String, Node> = HashMap<String, Node>()
+    
+    public init(node: Node, branchName: String, branches: HashMap<String, Node>) {
+        this.nodeName = node.nodeName
+        this.branchName = branchName
+        for ((k, v) in branches) {
+            this.branches.put(k, v)
+            node.addEdge(v)
+        }
+        node.setBranches(branches)
+    }
+}
+
 public class Node {
     let nodeName: String
     let nodeType: String
     var edges: HashMap<String, Edge> = HashMap<String, Edge>()
     var runnable: Option<Runnable> = None
+    var branches: HashMap<String, String> = HashMap<String, String>()
 
     public init(nodeName: String, nodeType: String) {
         this.nodeName = nodeName
@@ -74,7 +92,7 @@ public class Node {
 
     func getOnlyEdge(): Edge {
         if (edges.size != 1) {
-            println("Node ${nodeName} has more than one edge")
+            // println("Node ${nodeName} has more than one edge")
             return Edge(this, this)
         }
         for ((k, v) in edges) {
@@ -109,6 +127,12 @@ public class Node {
                 else {
                     return ResponseMessage()
                 }
+        }
+    }
+
+    func setBranches(branches: HashMap<String, Node>) {
+        for ((k, v) in branches) {
+            this.branches.put(k, v.nodeName)
         }
     }
 }
@@ -214,7 +238,9 @@ public class Graph {
             var input = Dict()
             input["text"] = nowInPut
             input["messages"] = state.messages.serialize().toJson().toString()
+            println("Graph Input: ${input.toString()}")
             let res: ResponseMessage = nowNode.runnable.getOrThrow().invoke(input)
+            println(res.serialize().toJson().asObject().get("content").getOrThrow())
 
             let obj: JsonObject = (res.serialize().toJson() as JsonObject).getOrThrow()
             
@@ -248,23 +274,39 @@ public class Graph {
                 }
             } else {
                 let content = obj.get("content").getOrThrow().asString().getValue()
-                state.next = nowNode.getOnlyEdge().end.nodeName
+                // state.next = nowNode.getOnlyEdge().end.nodeName
                 state.messages.append(Message("assistant", content))
                 state.messages.append(Message("user", "Now, decide who should act next or finish the conversation."))
             }
 
+            if (nowNode.branches.size <= 1) {
+                state.next = nowNode.getOnlyEdge().end.nodeName
+            } else {
+                println("State Message: ${state.messages.serialize().toJson().toString()}")
+                // input["messages"] = state.messages.serialize().toJson().toString()
+                // input["choices"] = nowNode.choices.toString()
+                let llm_OpenAI = (getLLMInstance(LLMType.OPEN_AI, model: "gpt-4o-mini") as OpenAI).getOrThrow()
+                var planner = Planner(llm_OpenAI)
+                planner.invoke(input)
+            }
+            
+
             if  (state.next == "FINISH") {
                 break
             }
+            if (nowNode.edges.get(state.next).getOrThrow().end == endNode) {
+                break
+            }
             nowNode = nowNode.edges.get(state.next).getOrThrow().end
-            println(state.messages.serialize().toJson())
         }
         // final answer:
         state.messages.append(Message("user", "Now, summarize the conversation and give the final answer. When summarize, try to talk in a tone like: \"In order to find the weather in Guangzhou, I use get_weather tool to get the answer. it is 72 degrees Fahrenheit with clear skies. \", The final answer should contain the important middle results and the final result."))
         input["text"] = nowInPut
         input["messages"] = state.messages.serialize().toJson().toString()
         let res: ResponseMessage = nowNode.runnable.getOrThrow().invoke(input)
-        println(res.serialize().toJson())
+        // println(res.serialize().toJson().asObject())
+        // println(res.serialize().toJson().asObject().get("content"))
+        println(res.serialize().toJson().asObject().get("contet").getOrThrow())
 
         return res.serialize().toJson()
     }
