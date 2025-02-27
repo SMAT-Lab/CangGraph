@@ -7,6 +7,12 @@ from net import http.*
 from serialization import serialization.*
 from encoding import json.*
 
+public abstract class ToJsonAbstract <: ToJson {
+    public static redef func fromJson(jv: JsonValue): DataModel {
+        return DataModel.fromJson(jv)
+    }
+}
+
 public class OpenAI <: LargeModel {
     public var model_name: String = "arktsLLM"
     public var base_url: String = "http://127.0.0.1:13434/v1"
@@ -77,6 +83,36 @@ public class OpenAI <: LargeModel {
         body.add(field<Array<Message>>("messages", messages))
         body.add(field<Float64>("temperature", 0.0))
         body.add(field<Array<Tool>>("tools", tools))
+        
+        let content = HashMap<String, String>([("type", "string"), ("description", "The main content of the response.")])
+        let schema = DataModelSeq()
+        //let schema = DataModelStruct()
+        schema.add(DataModelStruct().add(field<String>("type", "object"))
+                                .add(field<HashMap<String, HashMap<String, String>>>("properties", HashMap<String, HashMap<String, String>>([("content", content)])))
+                                .add(field<Array<String>>("required", ["content"]))
+                                .add(field<Bool>("additionalProperties", false)))
+
+        // let json_schema = DataModelStruct().add(field<String>("name", "simple_response"))
+        //                         .add(field<Bool>("strict", true))
+        //                         .add(field<ArrayList<Field>>("schema", schema.getItems()))
+        // let responseFormat = [
+        //                         "type": "json_schema",
+        //                         "json_schema": [
+        //                             "name": "simple_response",
+        //                             "strict": true,
+        //                             "schema": [
+        //                                 "type": "object",
+        //                                 "properties": [
+        //                                     "content": [
+        //                                         "type": "string",
+        //                                         "description": "The main content of the response."
+        //                                     ]
+        //                                 ],
+        //                                 "required": ["content"],
+        //                                 "additionalProperties": false
+        //                             ]
+        //                         ]
+        //                     ]
 
         if (!tools.isEmpty()) {
             body.add(field<String>("tool_choice", "auto"))
@@ -146,5 +182,168 @@ public class OpenAI <: LargeModel {
         messages.append(sys_msg)
         messages.append(user_msg)
         return query(messages.toArray())
+    }
+}
+
+public class LLMResponseFormat <: ToJsonAbstract & Serializable<LLMResponseFormat> {
+    public var formatType: String
+    public var jsonSchema: ArrayList<LLMResponseJsonSchema>
+
+    public init(formatType!: String = "json_schema", jsonSchema!: ArrayList<LLMResponseJsonSchema> = ArrayList<LLMResponseJsonSchema>(LLMResponseJsonSchema())) {
+        this.formatType = formatType
+        this.jsonSchema = jsonSchema
+    }
+
+    public override func serialize(): DataModel {
+        return DataModelStruct()
+            .add(field<String>("type", formatType))
+            .add(field<ArrayList<LLMResponseJsonSchema>>("json_schema", jsonSchema))
+    }
+
+    public static redef func deserialize(dm: DataModel): LLMResponseFormat {
+        let dms = match (dm) {
+            case data: DataModelStruct => data
+            case _ => throw Exception("this data is not DataModelStruct")
+        }
+        LLMResponseFormat(
+            formatType: String.deserialize(dms.get("type")),
+            jsonSchema: ArrayList<LLMResponseJsonSchema>.deserialize(dms.get("json_schema"))
+        )
+    }
+
+    public override func toJson(): JsonValue {
+        this.serialize().toJson()
+    }
+}
+
+public class LLMResponseJsonSchema <: ToJsonAbstract & Serializable<LLMResponseJsonSchema> {
+    public var name: String
+    public var strict: Bool
+    public var schema: ArrayList<LLMResponseSchema>
+
+    public init(name!: String = "simple_response", strict!: Bool = true, schema!: ArrayList<LLMResponseSchema> = ArrayList<LLMResponseSchema>(LLMResponseSchema())) {
+        this.name = name
+        this.strict = strict
+        this.schema = schema
+    }
+
+    public override func serialize(): DataModel {
+        return DataModelStruct()
+            .add(field<String>("name", name))
+            .add(field<Bool>("strict", strict))
+            .add(field<ArrayList<LLMResponseSchema>>("schema", schema))
+    }
+
+    public static redef func deserialize(dm: DataModel): LLMResponseJsonSchema {
+        let dms = match (dm) {
+            case data: DataModelStruct => data
+            case _ => throw Exception("this data is not DataModelStruct")
+        }
+        LLMResponseJsonSchema(
+            name: String.deserialize(dms.get("name")),
+            strict: Bool.deserialize(dms.get("strict")),
+            schema: ArrayList<LLMResponseSchema>.deserialize(dms.get("schema"))
+        )
+    }
+
+    public override func toJson(): JsonValue {
+        this.serialize().toJson()
+    }
+}
+
+public class LLMResponseSchema <: ToJsonAbstract & Serializable<LLMResponseSchema> {
+    public var schemaType: String
+    public var properties: ArrayList<LLMResponseProperties>
+    public var required: ArrayList<String>
+    public var additionalProperties: Bool
+
+    public init(schemaType!: String = "object", properties!: ArrayList<LLMResponseProperties> = ArrayList<LLMResponseProperties>(LLMResponseProperties()), required!: ArrayList<String> = ArrayList<String>(["content"]), additionalProperties!: Bool = false) {
+        this.schemaType = schemaType
+        this.properties = properties
+        this.required = required
+        this.additionalProperties = additionalProperties
+    }
+
+    public override func serialize(): DataModel {
+        return DataModelStruct()
+            .add(field<String>("type", schemaType))
+            .add(field<ArrayList<LLMResponseProperties>>("properties", properties))
+            .add(field<ArrayList<String>>("required", required))
+            .add(field<Bool>("additionalProperties", additionalProperties))
+    }
+
+    public static redef func deserialize(dm: DataModel): LLMResponseSchema {
+        let dms = match (dm) {
+            case data: DataModelStruct => data
+            case _ => throw Exception("this data is not DataModelStruct")
+        }
+        LLMResponseSchema(
+            schemaType: String.deserialize(dms.get("type")),
+            properties: ArrayList<LLMResponseProperties>.deserialize(dms.get("properties")),
+            required: ArrayList<String>.deserialize(dms.get("required")),
+            additionalProperties: Bool.deserialize(dms.get("additionalProperties"))
+        )
+    }
+
+    public override func toJson(): JsonValue {
+        this.serialize().toJson()
+    }
+}
+
+public class LLMResponseProperties <: ToJsonAbstract & Serializable<LLMResponseProperties> {
+    public var content: ArrayList<LLMResponseContent>
+
+    public init(content!: ArrayList<LLMResponseContent> = ArrayList<LLMResponseContent>(LLMResponseContent())) {
+        this.content = content
+    }
+
+    public override func serialize(): DataModel {
+        return DataModelStruct()
+            .add(field<ArrayList<LLMResponseContent>>("content", content))
+    }
+
+    public static redef func deserialize(dm: DataModel): LLMResponseProperties {
+        let dms = match (dm) {
+            case data: DataModelStruct => data
+            case _ => throw Exception("this data is not DataModelStruct")
+        }
+        LLMResponseProperties(
+            content: ArrayList<LLMResponseContent>.deserialize(dms.get("content"))
+        )
+    }
+
+    public override func toJson(): JsonValue {
+        this.serialize().toJson()
+    }
+}
+
+public class LLMResponseContent <: ToJsonAbstract & Serializable<LLMResponseContent> {
+    public var contentType: String
+    public var description: String
+
+    public init(contentType!: String = "string", description!: String = "The main content of the response.") {
+        this.contentType = contentType
+        this.description = description
+    }
+
+    public override func serialize(): DataModel {
+        return DataModelStruct()
+            .add(field<String>("type", contentType))
+            .add(field<String>("description", description))
+    }
+
+    public static redef func deserialize(dm: DataModel): LLMResponseContent {
+        let dms = match (dm) {
+            case data: DataModelStruct => data
+            case _ => throw Exception("this data is not DataModelStruct")
+        }
+        LLMResponseContent(
+            contentType: String.deserialize(dms.get("type")),
+            description: String.deserialize(dms.get("description"))
+        )
+    }
+
+    public override func toJson(): JsonValue {
+        this.serialize().toJson()
     }
 }
