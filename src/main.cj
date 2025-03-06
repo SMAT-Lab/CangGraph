@@ -74,7 +74,29 @@ main() {
     // def minus(b1, b2):
     //     ...
     // """)
-    promptgraph()
+
+    let url = "https://api.deepseek.com/v1/chat/completions"
+    let api_key = "sk-8dd8324c6ad344eea0be1316bdf720c4"
+
+    var header: HttpHeaders = HttpHeaders()
+    header.add("Content-Type", "application/json")
+    header.add("Authorization", "Bearer ${api_key}")
+
+    var messages = ArrayList<JsonValue>()
+    var message = JsonObject()
+    message.put("role", JsonString("user"))
+    message.put("role", JsonString("user"))
+    messages.append(message)
+
+    var body = JsonObject()
+    body.put("model", JsonString("deepseek-chat"))
+    body.put("messages", message)
+    body.put("temperature", JsonFloat(0.7))
+
+    println(body)
+
+    
+    // promptgraph()
     return 0
 }
 
