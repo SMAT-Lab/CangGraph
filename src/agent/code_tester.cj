@@ -1,7 +1,7 @@
-package agent
+package canggraph.agent
 
-import chain.*
-import llmapi.*
+import canggraph.chain.*
+import canggraph.llmapi.*
 
 public class CodeTesterTemplate <: PromptTemplate {
     public override func format(input: Dict): String {

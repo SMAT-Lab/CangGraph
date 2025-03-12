@@ -1,4 +1,4 @@
-package onnx
+package canggraph.onnx
 
 public interface XCtype {
     static func size(): Int64

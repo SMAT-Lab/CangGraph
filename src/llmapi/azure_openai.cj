@@ -1,13 +1,13 @@
 // /*
 //    Ref： https://platform.openai.com/docs/api-reference/images/create
 //  */
-package llmapi
+package canggraph.llmapi
 
 // from std import os.envVars
 // from std import collection.*
 // from encoding import json.*
 // from std import fs.File
-// import tool.*
+// import canggraph.tool.*
 // from std import reflect.*
 
 // foreign func send_llm_request(auth_header: CString, url: CString, response: CPointer<UInt8>, buffer_size: UIntNative,  data_content: CString): CString

@@ -1,12 +1,12 @@
-package util
+package canggraph.util
 
-import titoken.*
-import requests.*
+import canggraph.titoken.*
+import canggraph.requests.*
 
-from net import http.*, tls.*
-from std import collection.*, os.*, os.posix.*
-from serialization import serialization.*
-from encoding import json.*
+import net.{http.*, tls.*}
+import std.{collection.*, os.*, os.posix.*}
+import serialization.serialization.*
+import encoding.json.*
 
 public class Vector <: Serializable<Vector> {
     var id: String

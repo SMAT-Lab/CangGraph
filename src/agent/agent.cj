@@ -1,13 +1,13 @@
-package agent
+package canggraph.agent
 
-import chain.*
-import schema.*
-import tool.*
-import util.*
+import canggraph.chain.*
+import canggraph.schema.*
+import canggraph.tool.*
+import canggraph.util.*
 
-from std import collection.*
-from serialization import serialization.*
-from encoding import json.*
+import serialization.serialization.*
+import std.collection.*
+import encoding.json.*
 
 public interface ActionExecutor {
     func executeAction(action: AgentAction): String

@@ -1,7 +1,7 @@
-package graph
+package canggraph.graph
 
-from serialization import serialization.*
-from encoding import json.*
+import serialization.serialization.*
+import encoding.json.*
 
 public class GraphData <: Serializable<GraphData> {
     var nodes: Array<NodeData>

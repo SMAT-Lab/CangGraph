@@ -1,7 +1,7 @@
-package tool.utilities
+package canggraph.tool.utilities
 
-from std import os.*, socket.*
-from encoding import json.*, url.*
+import std.{os.*, socket.*}
+import encoding.{json.*, url.*}
 
 foreign func search(url: CString,  reponse: CPointer<UInt8>, bufferSize: UIntNative) : CString
 

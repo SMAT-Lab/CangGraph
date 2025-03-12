@@ -1,4 +1,4 @@
-package agent
+package canggraph.agent
 from std import unittest.*
 
 public var selfDifinedPrompts: HashMap<String, String> = HashMap<String, String>(

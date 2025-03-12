@@ -1,4 +1,4 @@
-package onnx
+package canggraph.onnx
 
 @C
 struct CXDArray {

@@ -1,10 +1,10 @@
-package tool
+package canggraph.tool
 
-import schema.*
-import util.*
+import canggraph.schema.*
+import canggraph.util.*
 
-from std import collection.*
-from encoding import json.*
+import std.collection.*
+import encoding.json.*
 
 public struct Args {
     public var name: String

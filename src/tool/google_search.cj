@@ -1,6 +1,6 @@
-package tool
+package canggraph.tool
 
-import tool.utilities.GoogleSearchAPIWrapper
+import canggraph.tool.utilities.GoogleSearchAPIWrapper
 
 
 /**

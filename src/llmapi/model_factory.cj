@@ -1,6 +1,6 @@
-package llmapi
+package canggraph.llmapi
 
-from std import collection.*
+import std.collection.*
 
 public enum LLMType {
     | OPEN_AI

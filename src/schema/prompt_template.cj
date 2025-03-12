@@ -1,4 +1,4 @@
-package schema
+package canggraph.schema
 
 public abstract class PromptTemplate {
     public open func format(input: Dict): String

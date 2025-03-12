@@ -1,8 +1,8 @@
-package chain
+package canggraph.chain
 
-import schema.*
+import canggraph.schema.*
 
-from std import collection.*
+import std.collection.*
 
 public abstract class Chain <: Runnable {
     let memory = None<BaseMemory> 

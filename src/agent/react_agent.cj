@@ -1,9 +1,9 @@
-package agent
+package canggraph.agent
 
-import llmapi.*
+import canggraph.llmapi.*
 
-from encoding import json.*
-from std import unicode.*
+import encoding.json.*
+import std.unicode.*
 
 public class ReActPromptTemplate <: PromptTemplate {
     public override func format(input: Dict): String {

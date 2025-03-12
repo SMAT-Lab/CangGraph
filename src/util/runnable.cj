@@ -1,4 +1,4 @@
-package util
+package canggraph.util
 
 public interface Runnable {
     func invoke(input: HashMap<String, String>): ResponseMessage

@@ -1,11 +1,11 @@
 ### 基础用法——大模型的交互
 ```cj
-import llmapi.*
-import graph.*
-import tool.*
-import agent.*
-import schema.*
-import chain.*
+import canggraph.llmapi.*
+import canggraph.graph.*
+import canggraph.tool.*
+import canggraph.agent.*
+import canggraph.schema.*
+import canggraph.chain.*
 from std import collection.*
 from encoding import json.*
 
@@ -22,15 +22,15 @@ main() {
 from std import collection.*
 from std import os.*
 from std import os.posix.*
-import titoken.*
+import canggraph.titoken.*
 from net import http.*
 from net import tls.*
 from serialization import serialization.*
 from encoding import json.*
-import requests.*
-import llmapi.*
-import util.*
-import tool.*
+import canggraph.requests.*
+import canggraph.llmapi.*
+import canggraph.util.*
+import canggraph.tool.*
 
 main(): Int64 {
 
@@ -54,15 +54,15 @@ main(): Int64 {
 
 ### ReAct
 ```cangjie
-import llmapi.*
-import graph.*
-import tool.*
-import agent.*
-import schema.*
-import chain.*
+import canggraph.llmapi.*
+import canggraph.graph.*
+import canggraph.tool.*
+import canggraph.agent.*
+import canggraph.schema.*
+import canggraph.chain.*
 from std import collection.*
 from encoding import json.*
-import util.*
+import canggraph.util.*
 
 main() {
     let llm = getLLMInstance(LLMType.OPEN_AI)
@@ -78,15 +78,15 @@ main() {
 
 ### Tool
 ```cj
-import llmapi.*
-import graph.*
-import tool.*
-import agent.*
-import schema.*
-import chain.*
+import canggraph.llmapi.*
+import canggraph.graph.*
+import canggraph.tool.*
+import canggraph.agent.*
+import canggraph.schema.*
+import canggraph.chain.*
 from std import collection.*
 from encoding import json.*
-import util.*
+import canggraph.util.*
 
 main() {
     let llm = getLLMInstance(LLMType.OPEN_AI)
@@ -102,12 +102,12 @@ main() {
 
 ### 工具执行agent
 ```cj
-import llmapi.*
-import graph.*
-import tool.*
-import agent.*
-import schema.*
-import chain.*
+import canggraph.llmapi.*
+import canggraph.graph.*
+import canggraph.tool.*
+import canggraph.agent.*
+import canggraph.schema.*
+import canggraph.chain.*
 from std import collection.*
 from encoding import json.*
 
@@ -125,15 +125,15 @@ main() {
 
 ### 自定义chain
 ```cj
-import llmapi.*
-import graph.*
-import tool.*
-import agent.*
-import schema.*
-import chain.*
+import canggraph.llmapi.*
+import canggraph.graph.*
+import canggraph.tool.*
+import canggraph.agent.*
+import canggraph.schema.*
+import canggraph.chain.*
 from std import collection.*
 from encoding import json.*
-import util.*
+import canggraph.util.*
 
 main() {
     let llm = getLLMInstance(LLMType.OPEN_AI)
@@ -169,12 +169,12 @@ main() {
 
 ## Graph
 ```cangjie
-import llmapi.*
-import graph.*
-import tool.*
-import agent.*
-import schema.*
-import chain.*
+import canggraph.llmapi.*
+import canggraph.graph.*
+import canggraph.tool.*
+import canggraph.agent.*
+import canggraph.schema.*
+import canggraph.chain.*
 from std import collection.*
 from encoding import json.*
 from std import ffi.python.*
@@ -263,7 +263,7 @@ main() {
 from std import collection.*
 from std import os.*
 from std import os.posix.*
-import titoken.*
+import canggraph.titoken.*
 
 main(): Int64 {
     var sentences:Array<String> =  ["苍穹是什么","苍穹"]
@@ -283,14 +283,14 @@ main(): Int64 {
 from std import collection.*
 from std import os.*
 from std import os.posix.*
-import titoken.*
+import canggraph.titoken.*
 from net import http.*
 from net import tls.*
 from serialization import serialization.*
 from encoding import json.*
-import requests.*
-import llmapi.*
-import util.*
+import canggraph.requests.*
+import canggraph.llmapi.*
+import canggraph.util.*
 
 main(): Int64 {
 

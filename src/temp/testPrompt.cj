@@ -1,3 +1,5 @@
+package canggraph.temp
+
 func promptgraph() {
     let llm_OpenAI = (getLLMInstance(LLMType.OPEN_AI, model: "gpt-4o-mini") as OpenAI).getOrThrow()
 	let agent_simple_prompt = simple_prompt(llm_OpenAI, selfDifinedPrompt: selfDifinedPrompts["assistant"])

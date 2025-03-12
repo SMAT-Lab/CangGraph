@@ -1,7 +1,7 @@
-package util
+package canggraph.util
 
-from std import fs.*
-from csv4cj import csv4cj.*
+import std.fs.*
+import csv4cj.csv4cj.*
 
 //Json格式输出
 public func read_from_csv(fileName: String, header!: Bool = false): ArrayList<JsonValue> {

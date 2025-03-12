@@ -1,15 +1,15 @@
-package multi
+package canggraph.multi
 
-import llmapi.*
-import schema.*
-import chain.*
-import tool.*
-import agent.*
-import util.*
+import canggraph.llmapi.*
+import canggraph.schema.*
+import canggraph.chain.*
+import canggraph.tool.*
+import canggraph.agent.*
+import canggraph.util.*
 
-from std import unicode.*, collection.*
-from encoding import json.*
-from serialization import serialization.*
+import std.{unicode.*, collection.*}
+import encoding.json.* 
+import serialization.serialization.*
 
 public class PlannerPromptTemplate <: PromptTemplate {
     public override func format(input: Dict): String {

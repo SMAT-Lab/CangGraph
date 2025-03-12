@@ -1,6 +1,6 @@
-package schema
+package canggraph.schema
 
-from encoding import json.*
+import encoding.json.*
 
 public abstract class OutputParser<OutputType> {
     public open func parse(output: Dict): OutputType 

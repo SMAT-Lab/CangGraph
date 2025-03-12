@@ -1,10 +1,10 @@
-package chain
+package canggraph.chain
 
-import schema.*
-import tool.*
-import llmapi.*
+import canggraph.schema.*
+import canggraph.tool.*
+import canggraph.llmapi.*
 
-from encoding import json.*
+import encoding.json.*
 
 
 public open class LLMChain <: Chain {

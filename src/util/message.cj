@@ -1,7 +1,7 @@
-package util
+package canggraph.util
 
-from serialization import serialization.*
-from encoding import json.*
+import serialization.serialization.*
+import encoding.json.*
 
 public class FunctionInfo <: Serializable<FunctionInfo> {
     public var name: String

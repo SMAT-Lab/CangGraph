@@ -1,9 +1,9 @@
-package titoken
+package canggraph.titoken
 
-import onnx.*
+import canggraph.onnx.*
 
-from std import collection.*, convert.*, fs.*, os.posix.*, unicode.*
-from encoding import json.*
+import std.{collection.*, convert.*, fs.*, os.posix.*, unicode.*}
+import encoding.json.*
 
 public class Tokenizer {
     private let tokensJsonPath:String

@@ -1,18 +1,19 @@
-import llmapi.*
-import graph.*
-import tool.*
-import agent.*
-import schema.*
-import chain.*
-import util.*
-import temp.*
-from std import fs.*
-from std import collection.*
-from encoding import json.*
+package canggraph
 
-from net import http.*
-from std import time.*
-from std import sync.*
+import canggraph.multi.*
+
+/*
+import canggraph.graph.*
+import canggraph.tool.*
+import canggraph.agent.*
+import canggraph.schema.*
+import canggraph.chain.*
+import canggraph.util.*
+import temp.*
+*/
+import std.{fs.*, collection.*, time.*, sync.*}
+import encoding.json.*
+import net.http.*
 
 func startServer(): Unit {
     // 1. 构建 Server 实例

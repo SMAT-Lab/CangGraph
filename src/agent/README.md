@@ -66,9 +66,9 @@ main() {
 
 multi-agent:
 ```
-import llmapi.*
-import agent.*
-import tool.*
+import canggraph.llmapi.*
+import canggraph.agent.*
+import canggraph.tool.*
 from std import collection.*
 from encoding import json.*
 

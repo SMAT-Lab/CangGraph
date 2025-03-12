@@ -1,14 +1,14 @@
-package graph
+package canggraph.graph
 
-import schema.*
-import agent.*
-import tool.*
-import util.*
-import chain.*
-import llmapi.*
+import canggraph.schema.*
+import canggraph.agent.*
+import canggraph.tool.*
+import canggraph.util.*
+import canggraph.chain.*
+import canggraph.llmapi.*
 
-from std import collection.*,log.*
-from encoding import json.*
+import std.{collection.*,log.*}
+import encoding.json.*
 
 public class State  {
     // the messages of the graph

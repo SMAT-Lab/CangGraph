@@ -74,7 +74,7 @@ cjc -p ../../src/llmapi --output-type=staticlib -o ../../libs/ && cjc testcase00
 ## LLM调用示例
 调用chatGPT（假设以下文件保存于“testcase0001.cj”）
 ```
-import llmapi.*
+import canggraph.llmapi.*
 main() {
  let llm = getLLMInstance(LLMType.AZURE_OPEN_AI)
  println(llm.query("who are you?"))

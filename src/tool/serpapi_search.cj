@@ -1,6 +1,6 @@
-package tool
+package canggraph.tool
 
-import tool.utilities.*
+import canggraph.tool.utilities.*
 
 /**
   the google search tool

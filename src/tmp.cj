@@ -1,3 +1,5 @@
+package canggraph
+
 func agraph() {
     // chain
     let llm = (getLLMInstance(LLMType.OPEN_AI, model: "gpt-4o-mini") as OpenAI).getOrThrow()

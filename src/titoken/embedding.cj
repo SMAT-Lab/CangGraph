@@ -1,8 +1,8 @@
-package titoken
+package canggraph.titoken
 
-import onnx.*
+import canggraph.onnx.*
 
-from std import collection.*, math.*
+import std.{collection.*, math.*}
 
 public class Embedder{
     private let model:ONNXModel

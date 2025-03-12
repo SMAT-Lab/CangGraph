@@ -1,8 +1,8 @@
-package tool
+package canggraph.tool
 
-import tool.utilities.*
+import canggraph.tool.utilities.*
 
-from std import fs.*
+import std.fs.*
 
 public class FileSaver <: BaseTool {
 

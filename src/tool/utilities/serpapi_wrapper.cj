@@ -1,9 +1,9 @@
-package tool.utilities
+package canggraph.tool.utilities
 
-import schema.*
+import canggraph.schema.*
 
-from std import collection.*, os.*, socket.*
-from encoding import json.*, url.*
+import std.{collection.*, os.*, socket.*}
+import encoding.{json.*, url.*}
 
 foreign func serpapi_search(url: CString,  reponse: CPointer<UInt8>, bufferSize: UIntNative) : CString
 

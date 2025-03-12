@@ -1,11 +1,11 @@
-package requests
+package canggraph.requests
 
-import titoken.*
+import canggraph.titoken.*
 
-from net import http.*, tls.*
-from std import collection.*, os.*
-from serialization import serialization.*
-from encoding import json.*
+import net.{http.*, tls.*}
+import std.{collection.*, os.*}
+import serialization.serialization.*
+import encoding.json.*
 
 public func getDefaultHeader(): HttpHeaders {
     var defaultHeader: HttpHeaders = HttpHeaders()

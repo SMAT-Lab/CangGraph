@@ -1,4 +1,4 @@
-package agent
+package canggraph.agent
 
 public class BranchPromptTemplate <: PromptTemplate {
     public override func format(input: Dict): String {

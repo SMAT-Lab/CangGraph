@@ -5,9 +5,9 @@
 
 
 
-package chain
+package canggraph.chain
 
-import llmapi.*
+import canggraph.llmapi.*
 
 public class SimpleQAPromptTemplate <: PromptTemplate {
     public override func format(input: Dict): String {

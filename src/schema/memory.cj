@@ -1,6 +1,6 @@
-package schema
+package canggraph.schema
 
-from std import collection.*
+import std.collection.*
 
 public type Dict = HashMap<String, String>
 public abstract class BaseMemory {

@@ -1,4 +1,4 @@
-package util
+package canggraph.util
 
 public func string2JsonObject(response: String):JsonObject{
     let data: JsonObject

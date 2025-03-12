@@ -1,3 +1,5 @@
+package canggraph
+
 func graph() {
     let llm_OpenAI = (getLLMInstance(LLMType.OPEN_AI, model: "gpt-4o-mini") as OpenAI).getOrThrow()
 	let tool_GetWeather = GetWeather()

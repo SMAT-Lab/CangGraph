@@ -1,6 +1,6 @@
-package onnx
+package canggraph.onnx
 
-from std import math.*
+import std.math.*
 
 foreign {
     func malloc(size: UIntNative): CPointer<Unit>

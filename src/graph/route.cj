@@ -1,4 +1,4 @@
-package graph
+package canggraph.graph
 
 public class RouteDecider {
     public var name: String = "RouteDecider"

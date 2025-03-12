@@ -1,4 +1,4 @@
-package util
+package canggraph.util
 
 public class ToolProperties <: Serializable<ToolProperties> {
     var propertiy_type: String

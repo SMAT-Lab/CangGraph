@@ -1,11 +1,11 @@
-package llmapi
+package canggraph.llmapi
 
-import requests.*
-import util.*
+import canggraph.requests.*
+import canggraph.util.*
 
-from net import http.*
-from serialization import serialization.*
-from encoding import json.*
+import net.http.*
+import serialization.serialization.*
+import encoding.json.*
 
 public abstract class ToJsonAbstract <: ToJson {
     public static redef func fromJson(jv: JsonValue): DataModel {

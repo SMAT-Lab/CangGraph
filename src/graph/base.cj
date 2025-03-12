@@ -1,7 +1,6 @@
-package graph
+package canggraph.graph
 
-from std import collection.*
-from std import reflect.*
+import std.{collection.*, reflect.*}
 
 public class RunnableLike<Input, Output> {
     public var input: Option<Input>
