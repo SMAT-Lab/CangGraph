@@ -11,9 +11,9 @@
         "strings": "on"
     },
     "terminal.integrated.env.linux": {
-        "CANGJIE_HOME": "/home/home/cangjieSDK/cangjie5313",
-        "CANGJIE_PATH": "/home/home/cangjieSDK/cangjie5313/bin:/home/home/cangjieSDK/cangjie5313/tools/bin:/home/home/cangjieSDK/cangjie5313/debugger/bin:",
-        "CANGJIE_LD_LIBRARY_PATH": "/home/home/cangjieSDK/cangjie5313/runtime/lib/linux_x86_64_llvm:/home/home/cangjieSDK/cangjie5313/tools/lib:",
+        "CANGJIE_HOME": "/home/home/cangjieSDK/cangjie5318",
+        "CANGJIE_PATH": "/home/home/cangjieSDK/cangjie5318/bin:/home/home/cangjieSDK/cangjie5318/tools/bin:/home/home/cangjieSDK/cangjie5318/debugger/bin:",
+        "CANGJIE_LD_LIBRARY_PATH": "/home/home/cangjieSDK/cangjie5318/runtime/lib/linux_x86_64_llvm:/home/home/cangjieSDK/cangjie5318/tools/lib:",
         "LD_LIBRARY_PATH": "${config:terminal.integrated.env.linux.CANGJIE_LD_LIBRARY_PATH}:${env:LD_LIBRARY_PATH}",
         "PATH": "${config:terminal.integrated.env.linux.CANGJIE_PATH}:${env:PATH}"
     }
