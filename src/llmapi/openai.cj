@@ -1,10 +1,11 @@
 package canggraph.llmapi
 
-import canggraph.requests.*
-import canggraph.util.*
+import canggraph.requests.Requests
+import canggraph.util.{Tool, ToolCall, ResponseMessage, Message, string2JsonObject, parseString}
 
 import net.http.*
 import serialization.serialization.*
+import std.collection.*
 import encoding.json.*
 
 public abstract class ToJsonAbstract <: ToJson {
@@ -16,7 +17,7 @@ public abstract class ToJsonAbstract <: ToJson {
 public class OpenAI <: LargeModel {
     public var model_name: String = "arktsLLM"
     public var base_url: String = "http://127.0.0.1:13434/v1"
-    public var api_key: String = "sk-123"
+    public var api_gikey: String = "sk-123"
     public var messages: ArrayList<Message> = ArrayList<Message>()
     public var history: Bool = false
     public var stream: Bool = false
@@ -33,6 +34,7 @@ public class OpenAI <: LargeModel {
     public func call_llm(header: HttpHeaders, body: DataModelStruct): ResponseMessage {
         let url = "${base_url}/chat/completions"
         let client = Requests()
+        
         // println(body.toJson())
         let response = client.post(url, header: header, body: body.toJson().toJsonString())
         // println(response)

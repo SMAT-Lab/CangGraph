@@ -1,7 +1,12 @@
 package canggraph.agent
 
+import canggraph.schema.*
 import canggraph.chain.*
 import canggraph.llmapi.*
+import canggraph.util.{Message, Runnable, ResponseMessage, getMessages}
+
+import encoding.json.*
+import std.collection.*
 
 public class CodeWriterTemplate <: PromptTemplate {
     public override func format(input: Dict): String {

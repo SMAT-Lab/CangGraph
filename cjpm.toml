@@ -1,4 +1,15 @@
 [dependencies]
+  # uuid4cj ={git = "https://gitcode.com/Cangjie-TPC/uuid4cj.git", branch = "cjc_0.53.13"}
+  uuid4cj = { path = "./uuid4cj"}
+
+  # charset4cj ={git = "https://gitcode.com/Cangjie-TPC/charset4cj.git", branch = "cjc_0.53.13"}
+  charset4cj = { path = "./charset4cj"}
+
+  # csv4cj ={git = "https://gitcode.com/Cangjie-TPC/csv4cj.git", branch = "cjc_0.53.13"}
+  csv4cj = { path = "./csv4cj"}
+
+  # crypto4cj ={git = "https://gitcode.com/Cangjie-TPC/crypto4cj.git", tag = "v_0.53.13"}
+  crypto4cj = { path = "./crypto4cj"}
 
 [ffi]
   [ffi.c]
@@ -13,7 +24,7 @@
 
 
 [package]
-  cjc-version = "0.53.18"
+  cjc-version = "0.53.13"
   compile-option = ""
   description = "nothing here"
   link-option = ""
@@ -24,9 +35,4 @@
   version = "1.0.0"
   package-configuration = {}
 
-[target]
-  [target.x86_64-unknown-linux-gnu]
-    [target.x86_64-unknown-linux-gnu.bin-dependencies]
-      path-option = ["./lib/uuid4cj", "./lib/crypto4cj", "./lib/charset", "./lib/csv4cj"]
-      package-option = {}
 

@@ -1,5 +1,7 @@
 package canggraph.llmapi
 
+import canggraph.util.{Tool, ResponseMessage, Message}
+
 import std.collection.*
 
 public enum LLMType {

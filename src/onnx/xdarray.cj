@@ -1,5 +1,8 @@
 package canggraph.onnx
 
+import std.collection.*
+import std.math.max
+
 @C
 struct CXDArray {
     var data: CPointer<Unit> = CPointer<Unit>()
@@ -243,7 +246,7 @@ public class XDArray<T> <: IDArray where T <: CType & XCtype & ToString {
     private func rstrip(s: String): String {
         var leftmost = s.size
         for (i in leftmost-1..-1:-1) {
-            if (Char(s[i]) == ' ' || Char(s[i]) == '\t') {
+            if (Rune(s[i]) == r' ' || Rune(s[i]) == r'\t') {
                 leftmost = leftmost - 1
             } else {
                 break

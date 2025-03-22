@@ -2,6 +2,7 @@ package canggraph.graph
 
 import serialization.serialization.*
 import encoding.json.*
+import std.collection.*
 
 public class GraphData <: Serializable<GraphData> {
     var nodes: Array<NodeData>

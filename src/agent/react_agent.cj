@@ -1,9 +1,14 @@
 package canggraph.agent
 
+import canggraph.schema.*
+import canggraph.chain.{LLMChain}
 import canggraph.llmapi.*
+import canggraph.tool.BaseTool
+import canggraph.util.{FunctionInfo, Message, Runnable, ResponseMessage, ToolCallMessage, getMessages}
 
 import encoding.json.*
-import std.unicode.*
+import std.{collection.*, unicode.*}
+import serialization.serialization.*
 
 public class ReActPromptTemplate <: PromptTemplate {
     public override func format(input: Dict): String {
@@ -104,7 +109,7 @@ public class ReActAgent <: Agent & ActionExecutor {
     public func executeAction(action: AgentAction): String {
         for (tool in tools) {
             if (tool.name == action.toolName) {
-                let res: ResponseMessage = tool.invoke(action.toolArgs)
+                let res: ResponseMessage = tool.invoke(action.toolArgs.toString())
                 return res.serialize().toJson().asObject().get("content").getOrThrow().asString().getValue()
             }
         }

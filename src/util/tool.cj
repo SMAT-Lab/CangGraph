@@ -1,5 +1,10 @@
 package canggraph.util
 
+import serialization.serialization.*
+
+import std.collection.*
+import encoding.json.*
+
 public class ToolProperties <: Serializable<ToolProperties> {
     var propertiy_type: String
     var description: String

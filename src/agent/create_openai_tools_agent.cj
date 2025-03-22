@@ -1,7 +1,13 @@
 package canggraph.agent
 
 import canggraph.chain.*
+import canggraph.schema.*
 import canggraph.llmapi.*
+import canggraph.tool.BaseTool
+import canggraph.util.*
+
+import encoding.json.*
+import std.collection.*
 
 public class CallToolsPromptTemplate <: PromptTemplate {
     public override func format(input: Dict): String {
@@ -98,7 +104,7 @@ public class create_openai_tools_agent <: Runnable {
             for (i in 0..functions.size()) {
                 let function = functions[i].asObject()
                 let toolName = function["name"].asString().getValue()
-                let toolInput = function["arguments"].asObject()
+                let toolInput = function["arguments"].asObject().toString()
                 for (tool in tools) {
                     if (tool.name == toolName) {
                         let tool_res: ResponseMessage = tool.invoke(toolInput)
@@ -144,7 +150,7 @@ public class create_openai_tools_agent <: Runnable {
             for (i in 0..functions.size()) {
                 let function = functions[i].asObject()
                 let toolName = function["name"].asString().getValue()
-                let toolInput = function["arguments"].asObject()
+                let toolInput = function["arguments"].asObject().toString()
                 for (tool in tools) {
                     if (tool.name == toolName) {
                         let tool_res: ResponseMessage = tool.invoke(toolInput)

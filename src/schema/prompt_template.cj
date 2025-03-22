@@ -1,5 +1,7 @@
 package canggraph.schema
 
+import encoding.json.*
+
 public abstract class PromptTemplate {
     public open func format(input: Dict): String
 }

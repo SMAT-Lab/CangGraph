@@ -1,11 +1,15 @@
 package canggraph.tool
 
-import canggraph.tool.utilities.*
-
 import std.fs.*
 
-public class GetWeather <: BaseTool {
+import canggraph.util.ResponseMessage
+import canggraph.util.Message
+import canggraph.util.ToolCall
 
+import std.collection.*
+import encoding.json.*
+
+public class GetWeather <: BaseTool {
     public init() {
         // name 
         this.name = "get_weather"

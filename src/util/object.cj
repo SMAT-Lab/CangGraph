@@ -1,5 +1,7 @@
 package canggraph.util
 
+import encoding.json.*
+
 public func string2JsonObject(response: String):JsonObject{
     let data: JsonObject
     try {

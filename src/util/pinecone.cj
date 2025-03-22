@@ -1,7 +1,7 @@
 package canggraph.util
 
 import canggraph.titoken.*
-import canggraph.requests.*
+import canggraph.requests.Requests
 
 import net.{http.*, tls.*}
 import std.{collection.*, os.*, os.posix.*}

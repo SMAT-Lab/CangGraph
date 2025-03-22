@@ -1,6 +1,6 @@
 package canggraph
-
-func graph() {
+/*
+public func graph() {
     let llm_OpenAI = (getLLMInstance(LLMType.OPEN_AI, model: "gpt-4o-mini") as OpenAI).getOrThrow()
 	let tool_GetWeather = GetWeather()
 	let agent1_create_openai_tools_agent = simple_prompt(llm_OpenAI)
@@ -27,4 +27,4 @@ func graph() {
 
 	graph.invoke(input)
 	// return res.asObject().get("content").getOrThrow().asString().getValue()
-}
+}*/

@@ -9,6 +9,7 @@ import canggraph.llmapi.*
 
 import std.{collection.*,log.*}
 import encoding.json.*
+import serialization.serialization.*
 
 public class State  {
     // the messages of the graph

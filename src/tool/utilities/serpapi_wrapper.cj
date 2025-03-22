@@ -1,6 +1,5 @@
 package canggraph.tool.utilities
 
-import canggraph.schema.*
 
 import std.{collection.*, os.*, socket.*}
 import encoding.{json.*, url.*}

@@ -2,9 +2,11 @@ package canggraph.chain
 
 import canggraph.schema.*
 import canggraph.tool.*
-import canggraph.llmapi.*
+import canggraph.llmapi.{OpenAI, LargeModel, getLLMInstance, LLMType}
+import canggraph.util.{Tool, Message, ResponseMessage, getMessages}
 
 import encoding.json.*
+import std.collection.*
 
 
 public open class LLMChain <: Chain {

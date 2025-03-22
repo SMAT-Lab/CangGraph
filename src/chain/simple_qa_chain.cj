@@ -1,6 +1,7 @@
 package canggraph.chain
 
 import canggraph.llmapi.*
+import canggraph.schema.*
 
 public class SimpleQAPromptTemplate <: PromptTemplate {
     public override func format(input: Dict): String {

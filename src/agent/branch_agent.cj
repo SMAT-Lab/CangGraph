@@ -1,5 +1,12 @@
 package canggraph.agent
 
+import canggraph.chain.*
+import canggraph.schema.*
+import canggraph.llmapi.*
+import canggraph.util.*
+
+import encoding.json.*
+
 public class BranchPromptTemplate <: PromptTemplate {
     public override func format(input: Dict): String {
         let PREFIX = """
@@ -27,59 +34,59 @@ public class BranchPromptTemplate <: PromptTemplate {
     }
 }
 
-public class BranchAgent /*<: Runnable*/ {
-    public var llm: OpenAI
-    public var promptTemplate = BranchPromptTemplate()
+// public class BranchAgent /*<: Runnable*/ {
+//     public var llm: OpenAI
+//     public var promptTemplate = BranchPromptTemplate()
 
-    public init(llm: OpenAI) {
-        this.llm = llm
-    }
+//     public init(llm: OpenAI) {
+//         this.llm = llm
+//     }
 
-    public func invoke(input: Dict): ResponseMessage {
-        let args = input["text"]
-        let branches = input["branches"]
-        let req = JsonObject()
-        req.put("input", JsonString(args))
-        req.put("branches", JsonString(branches))
+//     public func invoke(input: Dict): ResponseMessage {
+//         let args = input["text"]
+//         let branches = input["branches"]
+//         let req = JsonObject()
+//         req.put("input", JsonString(args))
+//         req.put("branches", JsonString(branches))
 
-        if (input.contains("messages")) {
-            let msgs = getMessages(input["messages"])
-            return invoke(req, msgs)
-        }
-        return invoke(req)
-    }
+//         if (input.contains("messages")) {
+//             let msgs = getMessages(input["messages"])
+//             return invoke(req, msgs)
+//         }
+//         return invoke(req)
+//     }
 
 
-    public func invoke(args: JsonObject, messages: ArrayList<Message>): ResponseMessage {
-        println(args)
-        let prompt: String = args.get("input").getOrThrow().asString().getValue()
-        let branches: String = args.get("branches").getOrThrow().asString().getValue()
-        var branch_agent_chain = LLMChain(llm, BranchPromptTemplate())
+//     public func invoke(args: JsonObject, messages: ArrayList<Message>): ResponseMessage {
+//         println(args)
+//         let prompt: String = args.get("input").getOrThrow().asString().getValue()
+//         let branches: String = args.get("branches").getOrThrow().asString().getValue()
+//         var branch_agent_chain = LLMChain(llm, BranchPromptTemplate())
 
-        let input = Dict()
-        input["text"] = prompt
-        input["branches"] = branches
+//         let input = Dict()
+//         input["text"] = prompt
+//         input["branches"] = branches
  
-        let input_string = promptTemplate.format(input)
+//         let input_string = promptTemplate.format(input)
 
-        var response = branch_agent_chain.invoke(input_string, messages)
-        return response
-    }
+//         var response = branch_agent_chain.invoke(input_string, messages)
+//         return response
+//     }
 
-    public func invoke(args: JsonObject): ResponseMessage {
-        // println("HERE?")
-        // println("HEREargs: ${args}")
-        let prompt: String = args.get("input").getOrThrow().asString().getValue()
-        let branches: String = args.get("branches").getOrThrow().asString().getValue()
-        var branch_agent_chain = LLMChain(llm, BranchPromptTemplate())
+//     public func invoke(args: JsonObject): ResponseMessage {
+//         // println("HERE?")
+//         // println("HEREargs: ${args}")
+//         let prompt: String = args.get("input").getOrThrow().asString().getValue()
+//         let branches: String = args.get("branches").getOrThrow().asString().getValue()
+//         var branch_agent_chain = LLMChain(llm, BranchPromptTemplate())
 
-        let input = Dict()
-        input["text"] = prompt
-        input["branches"] = branches
+//         let input = Dict()
+//         input["text"] = prompt
+//         input["branches"] = branches
 
-        let input_string = promptTemplate.format(input)
+//         let input_string = promptTemplate.format(input)
 
-        var response = branch_agent_chain.invoke(input_string)
-        return response
-    }
-}
+//         var response = branch_agent_chain.invoke(input_string)
+//         return response
+//     }
+// }

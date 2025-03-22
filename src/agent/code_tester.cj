@@ -1,7 +1,12 @@
 package canggraph.agent
 
+import canggraph.schema.*
 import canggraph.chain.*
 import canggraph.llmapi.*
+import canggraph.util.{Message, Runnable, ResponseMessage, getMessages}
+
+import encoding.json.*
+import std.collection.*
 
 public class CodeTesterTemplate <: PromptTemplate {
     public override func format(input: Dict): String {
@@ -27,7 +32,7 @@ public class CodeTesterTemplate <: PromptTemplate {
 
 public class CodeTester <: Runnable {
     public var llm: OpenAI
-    public var promptTemplate = CodeWriterTemplate() 
+    public var promptTemplate = CodeTesterTemplate() 
 
     public init(llm: OpenAI) {
         this.llm = llm

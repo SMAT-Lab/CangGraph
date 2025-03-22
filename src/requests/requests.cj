@@ -6,6 +6,7 @@ import net.{http.*, tls.*}
 import std.{collection.*, os.*}
 import serialization.serialization.*
 import encoding.json.*
+import std.time.Duration
 
 public func getDefaultHeader(): HttpHeaders {
     var defaultHeader: HttpHeaders = HttpHeaders()
@@ -15,10 +16,14 @@ public func getDefaultHeader(): HttpHeaders {
 }
 
 public class Requests {
-    let client: Client = ClientBuilder().tlsConfig(TlsClientConfig()).build() 
+    var tlsConfig = TlsClientConfig()
+    let client: Client
     var requestBuilder = HttpRequestBuilder()
+  
+   
     public init() {
-
+        tlsConfig.verifyMode = CertificateVerifyMode.TrustAll
+        client = ClientBuilder().tlsConfig(tlsConfig).build()
     }
 
     public func get(url: String, max_length!: Int64 = 4096, header!: HttpHeaders = getDefaultHeader()): String {  
@@ -27,7 +32,7 @@ public class Requests {
                     .url(url)
                     .addHeaders(header)
                     .build()
-        
+        requestBuilder.readTimeout(Duration.minute * 3)
         let rsp = client.send(req)
         let buf = Array<UInt8>(max_length, item: 0)
         let len = rsp.body.read(buf)
@@ -45,6 +50,8 @@ public class Requests {
         let rsp: HttpResponse = client.send(req)
         let buf = Array<UInt8>(10000000, item: 0)
         let len = rsp.body.read(buf)
-        return String.fromUtf8(buf.slice(0, len))
+        let testStr = String.fromUtf8(buf.slice(0, len))
+        println(testStr)
+        return testStr
     }
 }

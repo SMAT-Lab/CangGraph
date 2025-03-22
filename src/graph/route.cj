@@ -1,5 +1,7 @@
 package canggraph.graph
 
+import encoding.json.*
+
 public class RouteDecider {
     public var name: String = "RouteDecider"
     public func selectNext(input: JsonObject): String {

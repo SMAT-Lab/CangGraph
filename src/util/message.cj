@@ -2,6 +2,7 @@ package canggraph.util
 
 import serialization.serialization.*
 import encoding.json.*
+import std.collection.*
 
 public class FunctionInfo <: Serializable<FunctionInfo> {
     public var name: String

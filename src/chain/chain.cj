@@ -1,8 +1,10 @@
 package canggraph.chain
 
 import canggraph.schema.*
+import canggraph.util.{Message, ResponseMessage, Runnable}
 
 import std.collection.*
+import encoding.json.*
 
 public abstract class Chain <: Runnable {
     let memory = None<BaseMemory> 

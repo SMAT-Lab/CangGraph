@@ -90,7 +90,7 @@ extend Bool <: XCtype {
     }
 }
 
-extend Array<T> where T <: CType & XCtype {
+extend<T> Array<T> where T <: CType & XCtype {
     func toCPointer() : CPointer<T> {
         unsafe {
             let valuePtr = acquireArrayRawData(this)

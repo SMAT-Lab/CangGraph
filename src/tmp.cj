@@ -1,5 +1,5 @@
 package canggraph
-
+/*
 func agraph() {
     // chain
     let llm = (getLLMInstance(LLMType.OPEN_AI, model: "gpt-4o-mini") as OpenAI).getOrThrow()
@@ -76,4 +76,4 @@ func agraph() {
     let input3 = Dict()
     input3.put("text", "what is the weather like today in Guangzhou?")
     graph.invoke(input3)
-}
+}*/

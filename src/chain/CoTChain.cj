@@ -1,6 +1,12 @@
 package canggraph.chain
 
+import canggraph.llmapi.LargeModel
+import canggraph.schema.SelfDefinePromptTemplate
+import canggraph.tool.{BaseFunction, BaseTool}
 import canggraph.util.*
+
+import std.collection.*
+
 // 我想有一个chain，可以自定义SystemPrompt， 以及tools（或者function，其实是一样的），outputparser,然后可以接收输入，然后可以运行
 public class CoTChain <: LLMChain & Runnable {
 

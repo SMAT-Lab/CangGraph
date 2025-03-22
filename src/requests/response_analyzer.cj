@@ -1,6 +1,13 @@
 package canggraph.requests
 
+
+/*
+
+
+// import canggraph.llmapi.ToJsonAbstract
+
 import serialization.serialization.*
+import std.collection.*
 import encoding.json.*
 
 public enum DeepSeekFinishReson {
@@ -9,6 +16,12 @@ public enum DeepSeekFinishReson {
     | content_filter
     | tool_calls
     | insufficient_system_resource
+}
+
+abstract class ToJsonAbstract <: ToJson {
+    public static redef func fromJson(jv: JsonValue): DataModel {
+        return DataModel.fromJson(jv)
+    }
 }
 
 public class DeepSeekResponseSchema <: ToJsonAbstract & Serializable<DeepSeekResponseSchema> {
@@ -38,10 +51,10 @@ public class DeepSeekResponseSchema <: ToJsonAbstract & Serializable<DeepSeekRes
             case _ => throw Exception("this data is not DataModelStruct")
         }
         DeepSeekResponseSchema(
-            id: String.deserialize(dms.get("id")),
-            choices: ArrayList<DeepSeekResponseChoice>.deserialize(dms.get("choices")),
-            created: Int64.deserialize(dms.get("created")),
-            model: String.deserialize(dms.get("model"))
+            String.deserialize(dms.get("id")),
+            ArrayList<DeepSeekResponseChoice>.deserialize(dms.get("choices")),
+            Int64.deserialize(dms.get("created")),
+            String.deserialize(dms.get("model"))
         )
     }
 
@@ -77,10 +90,10 @@ public class DeepSeekResponseChoice <: ToJsonAbstract & Serializable<DeepSeekRes
             case _ => throw Exception("this data is not DataModelStruct")
         }
         DeepSeekResponseChoice(
-            index: Int64.deserialize(dms.get("index")),
-            finishReason: DeepSeekFinishReson.deserialize(dms.get("finish_reason")),
-            message: DeepSeekResponseMessage.deserialize(dms.get("message")),
-            logprobs: field<Option<DeepSeekResponseLogProbs>>.deserialize(dms.get("logprobs"))
+             Int64.deserialize(dms.get("index")),
+            DeepSeekFinishReson.deserialize(dms.get("finish_reason")),
+            DeepSeekResponseMessage.deserialize(dms.get("message")),
+            field<Option<DeepSeekResponseLogProbs>>.deserialize(dms.get("logprobs"))
         )
     }
 
@@ -143,10 +156,10 @@ public class DeepSeekResponseLogProbContent <: ToJsonAbstract & Serializable<Dee
             case _ => throw Exception("this data is not DataModelStruct")
         }
         DeepSeekResponseLogProbContent(
-            token: String.deserialize(dms.get("token")),
-            logprob: Float64.deserialize(dms.get("logprob")),
-            bytes: Option<Array<Int64>>.deserialize(dms.get("bytes")),
-            topLogProbs: Option<ArrayList<DeepSeekResponseTopLogProb>>.deserialize(dms.get("top_logprobs"))
+            String.deserialize(dms.get("token")),
+           Float64.deserialize(dms.get("logprob")),
+           Option<Array<Int64>>.deserialize(dms.get("bytes")),
+             Option<ArrayList<DeepSeekResponseTopLogProb>>.deserialize(dms.get("top_logprobs"))
         )
     }
 
@@ -179,9 +192,9 @@ public class DeepSeekResponseTopLogProb <: ToJsonAbstract & Serializable<DeepSee
             case _ => throw Exception("this data is not DataModelStruct")
         }
         DeepSeekResponseTopLogProb(
-            token: String.deserialize(dms.get("token")),
-            logprob: Float64.deserialize(dms.get("logprob")),
-            bytes: Option<Array<Int64>>.deserialize(dms.get("bytes"))
+            String.deserialize(dms.get("token")),
+            Float64.deserialize(dms.get("logprob")),
+            Option<Array<Int64>>.deserialize(dms.get("bytes"))
         )
     }
 
@@ -192,8 +205,8 @@ public class DeepSeekResponseTopLogProb <: ToJsonAbstract & Serializable<DeepSee
 
 public class DeepSeekResponseMessage <: ToJsonAbstract & Serializable<DeepSeekResponseMessage> {
     public var role: String
-    public var ?reasoningContent: String
-    public var ?content: String
+    public var reasoningContent: ?String
+    public var content: ?String
 
     public init(role: String, content: Option<String>, reasoningContent: Option<String>) {
         this.role = role
@@ -214,9 +227,9 @@ public class DeepSeekResponseMessage <: ToJsonAbstract & Serializable<DeepSeekRe
             case _ => throw Exception("this data is not DataModelStruct")
         }
         DeepSeekResponseMessage(
-            role: String.deserialize(dms.get("role")),
-            content: Option<String>.deserialize(dms.get("content"))
-            reasoningContent: Option<String>.deserialize(dms.get("reasoning_content"))
+            String.deserialize(dms.get("role")),
+            Option<String>.deserialize(dms.get("content")),
+            Option<String>.deserialize(dms.get("reasoning_content"))
         )
     }
 
@@ -224,3 +237,5 @@ public class DeepSeekResponseMessage <: ToJsonAbstract & Serializable<DeepSeekRe
         this.serialize().toJson()
     }
 }
+
+*/

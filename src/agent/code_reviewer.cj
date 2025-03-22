@@ -1,7 +1,12 @@
 package canggraph.agent
 
 import canggraph.chain.*
-import canggraph.llmapi.*
+import canggraph.schema.*
+import canggraph.llmapi.OpenAI
+import canggraph.util.*
+
+import encoding.json.*
+import std.collection.*
 
 public class CodeReviewerTemplate <: PromptTemplate {
     public override func format(input: Dict): String {

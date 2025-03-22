@@ -1,7 +1,13 @@
 package canggraph.tool
 
 import canggraph.schema.*
-import canggraph.util.*
+import canggraph.util.Runnable
+import canggraph.util.Tool
+import canggraph.util.ResponseMessage
+import canggraph.util.Message
+import canggraph.util.ToolProperties
+import canggraph.util.ToolParameters
+import canggraph.util.ToolArgs
 
 import std.collection.*
 import encoding.json.*

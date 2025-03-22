@@ -1,8 +1,11 @@
 package canggraph.tool
 
-import canggraph.tool.utilities.*
+import canggraph.util.*
 
 import std.fs.*
+import std.collection.*
+import encoding.json.*
+
 
 public class FileReader <: BaseTool {
 

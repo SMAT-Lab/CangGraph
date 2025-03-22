@@ -1,7 +1,12 @@
 package canggraph.tool
 
 import canggraph.tool.utilities.GoogleSearchAPIWrapper
+import canggraph.util.ResponseMessage
+import canggraph.util.Message
+import canggraph.util.ToolCall
 
+import std.collection.*
+import encoding.json.*
 
 /**
   the google search tool

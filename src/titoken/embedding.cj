@@ -2,7 +2,9 @@ package canggraph.titoken
 
 import canggraph.onnx.*
 
-import std.{collection.*, math.*}
+import std.collection.*
+import std.math.*
+import std.os.posix.*
 
 public class Embedder{
     private let model:ONNXModel
@@ -110,14 +112,14 @@ public class Embedder{
     public func  normalize(average_data:ArrayList<ArrayList<Float32>>):ArrayList<ArrayList<Float32>>{
         var sentence_embeddings:ArrayList<ArrayList<Float32>>  =  ArrayList<ArrayList<Float32>>() 
         //循环求平方和
-        for(data in average_data ){
+        for(data in average_data){
                 var sentence_embedding:ArrayList<Float32> = ArrayList<Float32>()
                 var example:Float32 = 1e-12
                 var sum:Float32 = 0.0
                 for(d in data){
                     sum = sum + d*d
                 }
-                example = math.sqrt(sum)
+                example = sqrt(sum)
                 for(d in data){
                     sentence_embedding.append(d/example)
                 }
