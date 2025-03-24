@@ -11,6 +11,6 @@ public class SimpleQAPromptTemplate <: PromptTemplate {
 
 public class SimpleQAChain <: LLMChain {
     public init() {
-        super(getLLMInstance(LLMType.OPEN_AI, model:"gpt-4o-mini"), SimpleQAPromptTemplate())
+        super(getLLMInstance(LLMType.DeepSeek, model:"deepseek-chat"), SimpleQAPromptTemplate())
     }
 }

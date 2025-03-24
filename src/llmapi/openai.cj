@@ -17,7 +17,7 @@ public abstract class ToJsonAbstract <: ToJson {
 public class OpenAI <: LargeModel {
     public var model_name: String = "arktsLLM"
     public var base_url: String = "http://127.0.0.1:13434/v1"
-    public var api_gikey: String = "sk-123"
+    public var api_key: String = "sk-123"
     public var messages: ArrayList<Message> = ArrayList<Message>()
     public var history: Bool = false
     public var stream: Bool = false
@@ -35,10 +35,11 @@ public class OpenAI <: LargeModel {
         let url = "${base_url}/chat/completions"
         let client = Requests()
         
-        // println(body.toJson())
+        // println("request body: ${body.toJson()}")
         let response = client.post(url, header: header, body: body.toJson().toJsonString())
-        // println(response)
+        // println("response: ${response}")
         let obj: JsonObject = string2JsonObject(response)
+        // println("obj: ${obj}")
         let msg = obj["choices"].asArray()[0].asObject()["message"].asObject()
         var content: String
         try {
@@ -47,7 +48,8 @@ public class OpenAI <: LargeModel {
         catch (e: Exception) {
             content = msg["content"].asNull().toString()
         }
-        if (content == "null") {
+        if (content == "") {
+            // println("---No Content")
             let functions = msg["tool_calls"].asArray()
             var response: ResponseMessage
             var called_tools = ArrayList<ToolCall>()
@@ -56,6 +58,7 @@ public class OpenAI <: LargeModel {
                 let function = functions[i].asObject()["function"].asObject()
                 let function_name = function["name"].asString().getValue()
                 let function_args = function["arguments"].toJsonString()
+                // println("arguments: ${function_args}")
                 let parse_args = parseString(function_args)
                 let parse_args_obj = string2JsonObject(parse_args)
 
@@ -159,7 +162,7 @@ public class OpenAI <: LargeModel {
         body.add(field<String>("model", model_name))
         body.add(field<Array<Message>>("messages", messages))
         body.add(field<Float64>("temperature", temperature))
-        body.add(field<Array<Tool>>("tools", tools))
+        // body.add(field<Array<Tool>>("tools", tools))
 
         return call_llm(header, body)
     }

@@ -11,6 +11,8 @@
   # crypto4cj ={git = "https://gitcode.com/Cangjie-TPC/crypto4cj.git", tag = "v_0.53.13"}
   crypto4cj = { path = "./crypto4cj"}
 
+  # CJson = {git = "https://gitcode.com/Cangjie-TPC/CJson.git", branch = "master"}
+
 [ffi]
   [ffi.c]
     apirequest = {path = "./lib"}

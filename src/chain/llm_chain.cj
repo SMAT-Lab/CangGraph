@@ -17,7 +17,7 @@ public open class LLMChain <: Chain {
     public var openai_tools: ArrayList<Tool> = ArrayList<Tool>()
 
     public init() {
-        this.llm = getLLMInstance(LLMType.OPEN_AI, model:"gpt-4o-mini")
+        this.llm = getLLMInstance(LLMType.DeepSeek, model:"deepseek-chat")
         this.promptTemplate = SelfDefinePromptTemplate()
         this.openai_tools = ArrayList<Tool>()
     }
@@ -87,7 +87,7 @@ public open class LLMChain <: Chain {
 
     public func invoke(input: JsonObject): ResponseMessage {
         let messages = input["input"].toString()
-        let tools = input["tools"]
+        // let tools = input["tools"]
 
         return invoke(messages)
     }

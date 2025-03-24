@@ -127,7 +127,7 @@ public class PineCone {
         body.add(field<ArrayList<Vector>>("vectors", vectors))
         body.add(field<String>("namespace", namespace))
 
-        let response = client.post(url, body: body.toJson().toJsonString(), header: header)
+        client.post(url, body: body.toJson().toJsonString(), header: header)
     }
 
     public func query(query: String, rule!: Option<String> = None, top_k!: Int64 = 3) {

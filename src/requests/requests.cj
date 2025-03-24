@@ -51,7 +51,7 @@ public class Requests {
         let buf = Array<UInt8>(10000000, item: 0)
         let len = rsp.body.read(buf)
         let testStr = String.fromUtf8(buf.slice(0, len))
-        println(testStr)
+        // println("testStr: ${testStr}")
         return testStr
     }
 }

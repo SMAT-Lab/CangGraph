@@ -98,7 +98,7 @@ public class Planner <: Agent & ActionExecutor {
             let agentCalls = (res.serialize().toJson() as JsonObject).getOrThrow().get("agent_calls").getOrThrow().asArray()
             for (i in 0..agentCalls.size()) {
                 let agentCall = agentCalls[i].asObject()
-                let agentName: String = agentCall.get("name").getOrThrow().asString().getValue()
+                /*let agentName: String = */agentCall.get("name").getOrThrow().asString().getValue()
             }
             
             println(messages.serialize().toJson())

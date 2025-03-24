@@ -199,4 +199,12 @@ public class ToolCall <: Serializable<ToolCall> {
 
         return result
     }
+
+    public func toString() {
+        return """
+            id: ${id}
+            name: ${name}
+            arguments: ${arguments.toString()}
+        """
+    }
 }

@@ -8,10 +8,10 @@ import canggraph.tool.*
 import std.collection.*
 
 func promptgraph() {
-    let llm_OpenAI = (getLLMInstance(LLMType.DeepSeek, model: "deepseek-chat") as OpenAI).getOrThrow()
-	let agent_simple_prompt = simple_prompt(llm_OpenAI, selfDifinedPrompt: selfDifinedPrompts["assistant"])
+    let llm = (getLLMInstance(LLMType.DeepSeek, model: "deepseek-chat") as OpenAI).getOrThrow()
+	let agent_simple_prompt = simple_prompt(llm, selfDifinedPrompt: selfDifinedPrompts["assistant"])
 	let node1 = Node("agent1", "agent", agent_simple_prompt)
-    let calculater_prompt = simple_prompt(llm_OpenAI, selfDifinedPrompt: selfDifinedPrompts["calculater"])
+    let calculater_prompt = simple_prompt(llm, selfDifinedPrompt: selfDifinedPrompts["calculater"])
     let node2 = Node("calculater", "agent", calculater_prompt)
     // let tool_GetWeather = GetWeather()
     // let agent1_create_openai_tools_agent = create_openai_tools_agent(llm_OpenAI, ArrayList<BaseTool>([GetWeather()]))

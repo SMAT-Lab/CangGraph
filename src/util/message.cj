@@ -213,7 +213,17 @@ public class ResponseMessage <: Serializable<ResponseMessage> {
 
         return result
     }
-    
+
+    public func getContent(): String {
+        return this.content
+    }
+
+    public func getToolCalls(): String {
+        // for (call in tool_calls) {
+        //     println(call.toString())
+        // }
+        return this.tool_calls[0].toString()
+    }
 }
 
 public func getMessages(message_string: String): ArrayList<Message> {

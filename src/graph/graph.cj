@@ -79,7 +79,7 @@ public class Node {
         edges.put(end.nodeName, edge)
     }
 
-    func addEdge(end: Node, condition: Bool) {
+    /*func addEdge(end: Node, condition: Bool) {
         let edge: Edge = Edge(this, end, condition)
         edges.put(end.nodeName, edge)
     }
@@ -89,7 +89,7 @@ public class Node {
         for((k, v) in edges) {
             v.printEdge()
         }
-    }
+    }*/
 
     func getOnlyEdge(): Edge {
         if (edges.size != 1) {
