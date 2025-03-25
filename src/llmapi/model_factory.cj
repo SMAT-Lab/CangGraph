@@ -22,7 +22,7 @@ let OLLAMA_API_KEY = "sk-123"
 let GPTGod_API_KEY = "sk-fs4JlNVh75fbxMrU1UsfXvIfVcEMVeqsDediEQk2pKPbns9F"
 let DeepSeek_API_KEY = "sk-8dd8324c6ad344eea0be1316bdf720c4"
 
-public func getLLMInstance(modelType: LLMType, model !: String = "gpt-4o-mini"/*, chatUrl !: Option<String> = None*/): LargeModel {
+public func getLLMInstance(modelType: LLMType, model !: String = "deepseek-chat"/*, chatUrl !: Option<String> = None*/): LargeModel {
     return match (modelType) {
         case OPEN_AI => OpenAI(model:model, base_url:OPENAI_API_BASE, api_key:OPENAI_API_KEY)
         // case AZURE_OPEN_AI => OpenAI(model:model, isAzureOpenAI:true)

@@ -35,7 +35,7 @@ public class OpenAI <: LargeModel {
         let url = "${base_url}/chat/completions"
         let client = Requests()
         
-        // println("request body: ${body.toJson()}")
+        println("request body: ${body.toJson()}")
         let response = client.post(url, header: header, body: body.toJson().toJsonString())
         // println("response: ${response}")
         let obj: JsonObject = string2JsonObject(response)

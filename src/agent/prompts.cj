@@ -1,6 +1,6 @@
 package canggraph.agent
 
-import std.{unittest.*, collection.*}
+import std.{unittest.*, collection.*, fs.*}
 
 public var selfDifinedPrompts: HashMap<String, String> = HashMap<String, String>(
     [
@@ -42,4 +42,8 @@ public func showPromptList() {
     }
 
     return promptList
+}
+
+public func getPromptFromFile(path: String) {
+    return String.fromUtf8(File.readFrom(path))
 }
