@@ -3,3 +3,4 @@ target/
 .vscode/
 resource/
 lib/libonnxruntime_providers_cuda.so
+data/
