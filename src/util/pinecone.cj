@@ -107,10 +107,10 @@ public class PineCone {
     var namespace: String = "canggraph"
 
     //分词
-    let tokenizer = Tokenizer(tokensFilePath: getcwd()+"/resource/tokenizer.json")
-    let embedder = Embedder(modelPath: getcwd()+"/resource/embedding_model.onnx", tokensFilePath:getcwd()+"/resource/tokenizer.json")
+    let tokenizer = Tokenizer(tokensFilePath: getcwd()+"/src/titoken/tokenizer.json")
+    let embedder = Embedder(modelPath: getcwd()+"/src/titoken/model.onnx", tokensFilePath:getcwd()+"/src/titoken/tokenizer.json")
 
-    public init(api_key!: String = "40075f49-8396-4571-924a-4b6d342cc81d", index_host!: String = "https://canggraph-5e309b3.svc.aped-4627-b74a.pinecone.io", namespace!: String = "canggraph") {
+    public init(api_key!: String = /*"40075f49-8396-4571-924a-4b6d342cc81d"*/"pcsk_7FJ53n_A2REvKqbYS5A2mqnXi2m97NT4dVCi4oLN5VEdyp1NFBPhshic7b8fkNT6BJSEkX", index_host!: String = /*"https://canggraph-5e309b3.svc.aped-4627-b74a.pinecone.io"*/"https://python-defects-wntyabm.svc.aped-4627-b74a.pinecone.io", namespace!: String = "") {
         this.api_key = api_key
         this.index_host = index_host
         this.namespace = namespace
@@ -141,9 +141,9 @@ public class PineCone {
 
         let vector: ArrayList<Float32> = embedder(query)[0]
         body.add(field<ArrayList<Float32>>("vector", vector))
-        body.add(field<Int64>("top_k", top_k))
+        body.add(field<Int64>("top_k", 1))
         body.add(field<String>("namespace", namespace))
-        body.add(field<Bool>("include_metadata", true))
+        body.add(field<Bool>("includeMetadata", true))
 
         if (rule.isSome()) {
             // filter={"rule": test[i]["rule"]}
@@ -153,8 +153,9 @@ public class PineCone {
 
         let response = client.post(url, body: body.toJson().toJsonString(), header: header)
         println(response)
-        let res_obj = JsonValue.fromStr(response).asObject()
-        return res_obj
+        // let res_obj = JsonValue.fromStr(response).asObject()
+        // return res_obj
+        return response
     }
 
     public func get_vector(id: String, obj: JsonObject, embedding!: Option<ArrayList<Float32>> = None): Vector {

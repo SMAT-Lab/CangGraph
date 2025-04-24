@@ -17,8 +17,8 @@ public class Embedder{
         this.embedding_dim = embedding_dim
     }
 
-    public init(modelPath!:String = getcwd()+"/resource/embedding_model.onnx",
-                tokensFilePath!:String = getcwd()+"/resource/tokenizer.json",
+    public init(modelPath!:String = getcwd()+"/src/titoken/model.onnx",
+                tokensFilePath!:String = getcwd()+"/src/titoken/tokenizer.json",
                 embedding_dim!:Int32 = 768){
         this.model = ONNXModel(path: modelPath)
         this.tokenizer = Tokenizer(tokensFilePath:tokensFilePath)
@@ -109,7 +109,7 @@ public class Embedder{
 *将数组平方的总和除以平均
 */
 
-    public func  normalize(average_data:ArrayList<ArrayList<Float32>>):ArrayList<ArrayList<Float32>>{
+    public func normalize(average_data:ArrayList<ArrayList<Float32>>):ArrayList<ArrayList<Float32>>{
         var sentence_embeddings:ArrayList<ArrayList<Float32>>  =  ArrayList<ArrayList<Float32>>() 
         //循环求平方和
         for(data in average_data){

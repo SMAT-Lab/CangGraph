@@ -9,6 +9,7 @@ import encoding.json.*
 public func llmCall() {
     let llm = getLLMInstance(LLMType.DeepSeek, model: "deepseek-chat")
 
+    println("response:")
     println(llm.query("who are you?").getContent())
     return 0
 }

@@ -1,0 +1,1494 @@
+before_merge,after_merge,url,bug type,bug description,bug filename,bug function_name,bug lines,full_traceback,traceback_type,path_to_snippet_before_merge,path_to_snippet_after_merge
+"def remove_lb_backend_address_pool_address(cmd, resource_group_name, load_balancer_name,
+                                           backend_address_pool_name, address_name):
+    client = network_client_factory(cmd.cli_ctx).load_balancer_backend_address_pools
+    address_pool = client.get(resource_group_name, load_balancer_name, backend_address_pool_name)
+    lb_addresses = [addr for addr in address_pool.load_balancer_backend_addresses if addr.name != address_name]
+    address_pool.load_balancer_backend_addresses = lb_addresses
+    return client.create_or_update(resource_group_name, load_balancer_name, backend_address_pool_name, address_pool)
+","def remove_lb_backend_address_pool_address(cmd, resource_group_name, load_balancer_name,
+                                           backend_address_pool_name, address_name):
+    client = network_client_factory(cmd.cli_ctx).load_balancer_backend_address_pools
+    address_pool = client.get(resource_group_name, load_balancer_name, backend_address_pool_name)
+    if address_pool.load_balancer_backend_addresses is None:
+        address_pool.load_balancer_backend_addresses = []
+    lb_addresses = [addr for addr in address_pool.load_balancer_backend_addresses if addr.name != address_name]
+    address_pool.load_balancer_backend_addresses = lb_addresses
+    return client.create_or_update(resource_group_name, load_balancer_name, backend_address_pool_name, address_pool)
+",https://github.com/Azure/azure-cli/issues/14342,CWE-248: Uncaught Exception,Uncaught Exception when adding an address to a load balancer backend pool and that load balancer backend pool is None,src/azure-cli/azure/cli/command_modules/network/custom.py,remove_lb_backend_address_pool_address,[5],"john@Azure:~$ az network lb address-pool address add --lb-name myLB2 --pool-name myLB2bepool --resource-group myResourceGroup -n ""address-name"" --vnet virtualNetwork1 --ip-address 10.0.1.8
+Command group 'network lb address-pool address' is in preview. It may be changed/removed in a future release.
+The command failed with an unexpected error. Here is the traceback:
+
+'NoneType' object has no attribute 'append'
+Traceback (most recent call last):
+File ""/opt/az/lib/python3.6/site-packages/knack/cli.py"", line 215, in invoke
+cmd_result = self.invocation.execute(args)
+File ""/opt/az/lib/python3.6/site-packages/azure/cli/core/commands/__init__.py"", line 654, in execute
+raise ex
+File ""/opt/az/lib/python3.6/site-packages/azure/cli/core/commands/__init__.py"", line 718, in _run_jobs_serially
+results.append(self._run_job(expanded_arg, cmd_copy))
+File ""/opt/az/lib/python3.6/site-packages/azure/cli/core/commands/__init__.py"", line 711, in _run_job
+six.reraise(*sys.exc_info())
+File ""/opt/az/lib/python3.6/site-packages/six.py"", line 703, in reraise
+raise value
+File ""/opt/az/lib/python3.6/site-packages/azure/cli/core/commands/__init__.py"", line 688, in _run_job
+result = cmd_copy(params)
+File ""/opt/az/lib/python3.6/site-packages/azure/cli/core/commands/__init__.py"", line 325, in __call__
+return self.handler(*args, **kwargs)
+File ""/opt/az/lib/python3.6/site-packages/azure/cli/core/__init__.py"", line 545, in default_command_handler
+return op(**command_args)
+File ""/opt/az/lib/python3.6/site-packages/azure/cli/command_modules/network/custom.py"", line 2989, in add_lb_backend_address_pool_address
+address_pool.load_balancer_backend_addresses.append(new_address)
+AttributeError: 'NoneType' object has no attribute 'append'",AttributeError,buggy_snippets_files/3bb7f7f09145626ed3e4ae2d9cd0e7aaf19ece09f8bd1ce16c29558b1c6d5248_before_merge.py,buggy_snippets_files/3bb7f7f09145626ed3e4ae2d9cd0e7aaf19ece09f8bd1ce16c29558b1c6d5248_after_merge.py
+"    def split_action(arguments):
+        class SplitAction(argparse.Action): #pylint: disable=too-few-public-methods
+
+            def __call__(self, parser, namespace, values, option_string=None):
+                ''' The SplitAction will take the given ID parameter and spread the parsed
+                parts of the id into the individual backing fields.
+
+                Since the id value is expected to be of type `IterateValue`, all the backing
+                (dest) fields will also be of type `IterateValue`
+                '''
+                try:
+                    for value in [values] if isinstance(values, str) else values:
+                        parts = parse_resource_id(value)
+                        for arg in [arg for arg in arguments.values() if arg.id_part]:
+                            existing_values = getattr(namespace, arg.name, None)
+                            if existing_values is None:
+                                existing_values = IterateValue()
+                            existing_values.append(parts[arg.id_part])
+                            setattr(namespace, arg.name, existing_values)
+                except Exception as ex:
+                    raise ValueError(ex)
+
+        return SplitAction
+","    def split_action(arguments):
+        class SplitAction(argparse.Action): #pylint: disable=too-few-public-methods
+
+            def __call__(self, parser, namespace, values, option_string=None):
+                ''' The SplitAction will take the given ID parameter and spread the parsed
+                parts of the id into the individual backing fields.
+
+                Since the id value is expected to be of type `IterateValue`, all the backing
+                (dest) fields will also be of type `IterateValue`
+                '''
+                try:
+                    for value in [values] if isinstance(values, str) else values:
+                        parts = parse_resource_id(value)
+                        for arg in [arg for arg in arguments.values() if arg.id_part]:
+                            existing_values = getattr(namespace, arg.name, None)
+                            if existing_values is None:
+                                existing_values = IterateValue()
+                                existing_values.append(parts[arg.id_part])
+                            elif isinstance(existing_values, str):
+                                logger.warning(
+                                    ""Property '%s=%s' being overriden by value '%s' from IDs parameter."", # pylint: disable=line-too-long
+                                    arg.name, existing_values, parts[arg.id_part]
+                                )
+                                existing_values = IterateValue()
+                                existing_values.append(parts[arg.id_part])
+                            setattr(namespace, arg.name, existing_values)
+                except Exception as ex:
+                    raise ValueError(ex)
+
+        return SplitAction
+",https://github.com/Azure/azure-cli/issues/793,CWE-754: Improper Check for Unusual or Exceptional Conditions,"Attribute `arg.name` of `namespace` can be a string, but there is only one check if this attribute is None",src/azure-cli-core/azure/cli/core/commands/arm.py,add_id_parameters.split_action,[16],"'str' object has no attribute 'append'
+Traceback (most recent call last):
+File ""c:\users\trpresco\documents\github\azure-cli\src\azure\cli\commands\arm.py"", line 110, in __call__
+existing_values.append(parts[arg.id_part])
+AttributeError: 'str' object has no attribute 'append'",AttributeError,buggy_snippets_files/25709cdb193f8c883c904614aeeb0bad790585b490a77263c7925d83fdb5ae9c_before_merge.py,buggy_snippets_files/25709cdb193f8c883c904614aeeb0bad790585b490a77263c7925d83fdb5ae9c_after_merge.py
+"    def parse_series(self, data, **kwargs):
+        log.debug('Parsing series: `%s` [options: %s]', data, kwargs)
+        guessit_options = self._guessit_options(kwargs)
+        valid = True
+        if kwargs.get('name'):
+            expected_titles = [kwargs['name']]
+            if kwargs.get('alternate_names'):
+                expected_titles.extend(kwargs['alternate_names'])
+            # apostrophe support
+            expected_titles = [title.replace('\'', '(?:\'|\\\'|\\\\\'|-|)?') for title in expected_titles]
+            guessit_options['expected_title'] = ['re:' + title for title in expected_titles]
+        if kwargs.get('id_regexps'):
+            guessit_options['id_regexps'] = kwargs.get('id_regexps')
+        start = preferred_clock()
+        # If no series name is provided, we don't tell guessit what kind of match we are looking for
+        # This prevents guessit from determining that too general of matches are series
+        parse_type = 'episode' if kwargs.get('name') else None
+        if parse_type:
+            guessit_options['type'] = parse_type
+
+        # NOTE: Guessit expects str on PY3 and unicode on PY2 hence the use of future.utils.native
+        try:
+            guess_result = guessit_api.guessit(native(data), options=guessit_options)
+        except GuessitException:
+            log.warning('Parsing %s with guessit failed. Most likely a unicode error.', data)
+            guess_result = {}
+
+        if guess_result.get('type') != 'episode':
+            valid = False
+
+        name = kwargs.get('name')
+        country = guess_result.get('country')
+        if not name:
+            name = guess_result.get('title')
+            if country and hasattr(country, 'alpha2'):
+                name += ' (%s)' % country.alpha2
+        elif guess_result.matches['title']:
+            # Make sure the name match is up to FlexGet standards
+            # Check there is no unmatched cruft before the matched name
+            title_start = guess_result.matches['title'][0].start
+            title_end = guess_result.matches['title'][0].end
+            if title_start != 0:
+                try:
+                    pre_title = max((match[0].end for match in guess_result.matches.values() if
+                                     match[0].end <= title_start))
+                except ValueError:
+                    pre_title = 0
+                for char in reversed(data[pre_title:title_start]):
+                    if char.isalnum() or char.isdigit():
+                        return SeriesParseResult(data=data, valid=False)
+                    if char.isspace() or char in '._':
+                        continue
+                    else:
+                        break
+            # Check the name doesn't end mid-word (guessit might put the border before or after the space after title)
+            if data[title_end - 1].isalnum() and len(data) <= title_end or \
+                    not self._is_valid_name(data, guessit_options=guessit_options):
+                valid = False
+            # If we are in exact mode, make sure there is nothing after the title
+            if kwargs.get('strict_name'):
+                post_title = sys.maxsize
+                for match_type, matches in guess_result.matches.items():
+                    if match_type in ['season', 'episode', 'date', 'regexpId']:
+                        if matches[0].start < title_end:
+                            continue
+                        post_title = min(post_title, matches[0].start)
+                        if matches[0].parent:
+                            post_title = min(post_title, matches[0].parent.start)
+                for char in data[title_end:post_title]:
+                    if char.isalnum() or char.isdigit():
+                        valid = False
+        else:
+            valid = False
+        season = guess_result.get('season')
+        episode = guess_result.get('episode')
+        if episode is None and 'part' in guess_result:
+            episode = guess_result['part']
+        if isinstance(episode, list):
+            # guessit >=2.1.4 returns a list for multi-packs, but we just want the first one and the number of eps
+            episode = episode[0]
+        date = guess_result.get('date')
+        quality = self._quality(guess_result)
+        proper_count = self._proper_count(guess_result)
+        group = guess_result.get('release_group')
+        # Validate group with from_group
+        if not self._is_valid_groups(group, guessit_options.get('allow_groups', [])):
+            valid = False
+        # Validate country, TODO: LEGACY
+        if country and name.endswith(')'):
+            p_start = name.rfind('(')
+            if p_start != -1:
+                parenthetical = re.escape(name[p_start + 1:-1])
+                if parenthetical and parenthetical.lower() != str(country).lower():
+                    valid = False
+        special = guess_result.get('episode_details', '').lower() == 'special'
+        if 'episode' not in guess_result.values_list:
+            episodes = len(guess_result.values_list.get('part', []))
+        else:
+            episodes = len(guess_result.values_list['episode'])
+        if episodes > 3:
+            valid = False
+        identified_by = kwargs.get('identified_by', 'auto')
+        identifier_type, identifier = None, None
+        if identified_by in ['date', 'auto']:
+            if date:
+                identifier_type = 'date'
+                identifier = date
+        if not identifier_type and identified_by in ['ep', 'auto']:
+            if episode is not None:
+                if season is None and kwargs.get('allow_seasonless', True):
+                    if 'part' in guess_result:
+                        season = 1
+                    else:
+                        episode_raw = guess_result.matches['episode'][0].initiator.raw
+                        if episode_raw and any(c.isalpha() and c.lower() != 'v' for c in episode_raw):
+                            season = 1
+                if season is not None:
+                    identifier_type = 'ep'
+                    identifier = (season, episode)
+
+        if not identifier_type and identified_by in ['id', 'auto']:
+            if guess_result.matches['regexpId']:
+                identifier_type = 'id'
+                identifier = '-'.join(match.value for match in guess_result.matches['regexpId'])
+        if not identifier_type and identified_by in ['sequence', 'auto']:
+            if episode is not None:
+                identifier_type = 'sequence'
+                identifier = episode
+        if (not identifier_type or guessit_options.get('prefer_specials')) and (special or
+                                                                        guessit_options.get('assume_special')):
+            identifier_type = 'special'
+            identifier = guess_result.get('episode_title', 'special')
+        if not identifier_type:
+            valid = False
+        # TODO: Legacy - Complete == invalid
+        if 'complete' in normalize_component(guess_result.get('other')):
+            valid = False
+
+        parsed = SeriesParseResult(
+            data=data,
+            name=name,
+            episodes=episodes,
+            identified_by=identified_by,
+            id=identifier,
+            id_type=identifier_type,
+            quality=quality,
+            proper_count=proper_count,
+            special=special,
+            group=group,
+            valid=valid
+        )
+
+        log.debug('Parsing result: %s (in %s ms)', parsed, (preferred_clock() - start) * 1000)
+        return parsed
+","    def parse_series(self, data, **kwargs):
+        log.debug('Parsing series: `%s` [options: %s]', data, kwargs)
+        guessit_options = self._guessit_options(kwargs)
+        valid = True
+        if kwargs.get('name'):
+            expected_titles = [kwargs['name']]
+            if kwargs.get('alternate_names'):
+                expected_titles.extend(kwargs['alternate_names'])
+            # apostrophe support
+            expected_titles = [title.replace('\'', '(?:\'|\\\'|\\\\\'|-|)?') for title in expected_titles]
+            guessit_options['expected_title'] = ['re:' + title for title in expected_titles]
+        if kwargs.get('id_regexps'):
+            guessit_options['id_regexps'] = kwargs.get('id_regexps')
+        start = preferred_clock()
+        # If no series name is provided, we don't tell guessit what kind of match we are looking for
+        # This prevents guessit from determining that too general of matches are series
+        parse_type = 'episode' if kwargs.get('name') else None
+        if parse_type:
+            guessit_options['type'] = parse_type
+
+        # NOTE: Guessit expects str on PY3 and unicode on PY2 hence the use of future.utils.native
+        try:
+            guess_result = guessit_api.guessit(native(data), options=guessit_options)
+        except GuessitException:
+            log.warning('Parsing %s with guessit failed. Most likely a unicode error.', data)
+            guess_result = {}
+
+        if guess_result.get('type') != 'episode':
+            valid = False
+
+        name = kwargs.get('name')
+        country = guess_result.get('country')
+        if not name:
+            name = guess_result.get('title')
+            if not name:
+                valid = False
+            elif country and hasattr(country, 'alpha2'):
+                name += ' (%s)' % country.alpha2
+        elif guess_result.matches['title']:
+            # Make sure the name match is up to FlexGet standards
+            # Check there is no unmatched cruft before the matched name
+            title_start = guess_result.matches['title'][0].start
+            title_end = guess_result.matches['title'][0].end
+            if title_start != 0:
+                try:
+                    pre_title = max((match[0].end for match in guess_result.matches.values() if
+                                     match[0].end <= title_start))
+                except ValueError:
+                    pre_title = 0
+                for char in reversed(data[pre_title:title_start]):
+                    if char.isalnum() or char.isdigit():
+                        return SeriesParseResult(data=data, valid=False)
+                    if char.isspace() or char in '._':
+                        continue
+                    else:
+                        break
+            # Check the name doesn't end mid-word (guessit might put the border before or after the space after title)
+            if data[title_end - 1].isalnum() and len(data) <= title_end or \
+                    not self._is_valid_name(data, guessit_options=guessit_options):
+                valid = False
+            # If we are in exact mode, make sure there is nothing after the title
+            if kwargs.get('strict_name'):
+                post_title = sys.maxsize
+                for match_type, matches in guess_result.matches.items():
+                    if match_type in ['season', 'episode', 'date', 'regexpId']:
+                        if matches[0].start < title_end:
+                            continue
+                        post_title = min(post_title, matches[0].start)
+                        if matches[0].parent:
+                            post_title = min(post_title, matches[0].parent.start)
+                for char in data[title_end:post_title]:
+                    if char.isalnum() or char.isdigit():
+                        valid = False
+        else:
+            valid = False
+        season = guess_result.get('season')
+        episode = guess_result.get('episode')
+        if episode is None and 'part' in guess_result:
+            episode = guess_result['part']
+        if isinstance(episode, list):
+            # guessit >=2.1.4 returns a list for multi-packs, but we just want the first one and the number of eps
+            episode = episode[0]
+        date = guess_result.get('date')
+        quality = self._quality(guess_result)
+        proper_count = self._proper_count(guess_result)
+        group = guess_result.get('release_group')
+        # Validate group with from_group
+        if not self._is_valid_groups(group, guessit_options.get('allow_groups', [])):
+            valid = False
+        # Validate country, TODO: LEGACY
+        if country and name.endswith(')'):
+            p_start = name.rfind('(')
+            if p_start != -1:
+                parenthetical = re.escape(name[p_start + 1:-1])
+                if parenthetical and parenthetical.lower() != str(country).lower():
+                    valid = False
+        special = guess_result.get('episode_details', '').lower() == 'special'
+        if 'episode' not in guess_result.values_list:
+            episodes = len(guess_result.values_list.get('part', []))
+        else:
+            episodes = len(guess_result.values_list['episode'])
+        if episodes > 3:
+            valid = False
+        identified_by = kwargs.get('identified_by', 'auto')
+        identifier_type, identifier = None, None
+        if identified_by in ['date', 'auto']:
+            if date:
+                identifier_type = 'date'
+                identifier = date
+        if not identifier_type and identified_by in ['ep', 'auto']:
+            if episode is not None:
+                if season is None and kwargs.get('allow_seasonless', True):
+                    if 'part' in guess_result:
+                        season = 1
+                    else:
+                        episode_raw = guess_result.matches['episode'][0].initiator.raw
+                        if episode_raw and any(c.isalpha() and c.lower() != 'v' for c in episode_raw):
+                            season = 1
+                if season is not None:
+                    identifier_type = 'ep'
+                    identifier = (season, episode)
+
+        if not identifier_type and identified_by in ['id', 'auto']:
+            if guess_result.matches['regexpId']:
+                identifier_type = 'id'
+                identifier = '-'.join(match.value for match in guess_result.matches['regexpId'])
+        if not identifier_type and identified_by in ['sequence', 'auto']:
+            if episode is not None:
+                identifier_type = 'sequence'
+                identifier = episode
+        if (not identifier_type or guessit_options.get('prefer_specials')) and (special or
+                                                                        guessit_options.get('assume_special')):
+            identifier_type = 'special'
+            identifier = guess_result.get('episode_title', 'special')
+        if not identifier_type:
+            valid = False
+        # TODO: Legacy - Complete == invalid
+        if 'complete' in normalize_component(guess_result.get('other')):
+            valid = False
+
+        parsed = SeriesParseResult(
+            data=data,
+            name=name,
+            episodes=episodes,
+            identified_by=identified_by,
+            id=identifier,
+            id_type=identifier_type,
+            quality=quality,
+            proper_count=proper_count,
+            special=special,
+            group=group,
+            valid=valid
+        )
+
+        log.debug('Parsing result: %s (in %s ms)', parsed, (preferred_clock() - start) * 1000)
+        return parsed
+",https://github.com/Flexget/Flexget/issues/2276,CWE-754: Improper Check for Unusual or Exceptional Conditions,"`guess_result.get('title')` can return None, then `valid` must be `False`",flexget/plugins/parsers/parser_guessit.py,ParserGuessit.parse_series,,"2018-12-10 19:39 DEBUG    parser_guessit moving_anime    Parsing series: `Ep 02` [options: {'name': None, 'identified_by': 'auto', 'allow_seasonless': False}]
+2018-12-10 19:39 DEBUG    parser_guessit moving_anime    Parsing result: <SeriesParseResult(data=Ep 02,name=None,id=2,season=0,season_pack=False,episode=2,quality=unknown,pro
+per=0,special=False,status=OK)> (in 31.31600000006074 ms)
+2018-12-10 19:39 CRITICAL task          moving_anime    BUG: Unhandled error in plugin metainfo_series: 'NoneType' object has no attribute 'split'
+2018-12-10 19:39 CRITICAL manager       moving_anime    An unexpected crash has occurred. Writing crash report to /config/crash_report.2018.12.10.193956695553.log. Please ver
+ify you are running the latest version of flexget by using ""flexget -V"" from CLI or by using version_checker plugin at http://flexget.com/wiki/Plugins/version_checker. You ar
+e currently using version 2.17.18
+2018-12-10 19:39 DEBUG    manager       moving_anime    Traceback:
+Traceback (most recent call last):
+File ""/usr/lib/python3.6/site-packages/flexget/task.py"", line 486, in __run_plugin
+return method(*args, **kwargs)
+File ""/usr/lib/python3.6/site-packages/flexget/event.py"", line 23, in __call__
+return self.func(*args, **kwargs)
+File ""/usr/lib/python3.6/site-packages/flexget/plugins/metainfo/series.py"", line 32, in on_task_metainfo
+self.guess_entry(entry)
+File ""/usr/lib/python3.6/site-packages/flexget/plugins/metainfo/series.py"", line 49, in guess_entry
+parsed.name = normalize_name(remove_dirt(parsed.name))
+File ""/usr/lib/python3.6/site-packages/flexget/plugins/parsers/parser_common.py"", line 103, in normalize_name
+name = capwords(name)
+File ""/usr/lib/python3.6/string.py"", line 48, in capwords
+return (sep or ' ').join(x.capitalize() for x in s.split(sep))
+AttributeError: 'NoneType' object has no attribute 'split'
+2018-12-10 19:39 WARNING  task          moving_anime    Aborting task (plugin: metainfo_series)",AttributeError,buggy_snippets_files/f652403f87adbfe2ca2690e2d0db03e6edbb70094bb3bc2d900b9f74bb3b22d6_before_merge.py,buggy_snippets_files/f652403f87adbfe2ca2690e2d0db03e6edbb70094bb3bc2d900b9f74bb3b22d6_after_merge.py
+"    def __init__(self, **kwargs):
+        # Save values so that we can revert to their initial values
+        self.old_defaults = {}
+        with Session() as lib:
+            for key in kwargs:
+                self.old_defaults[key] = lib.get_default(key)
+
+        # call gmt set to change GMT defaults
+        arg_str = "" "".join(
+            [""{}={}"".format(key, value) for key, value in kwargs.items()]
+        )
+        with Session() as lib:
+            lib.call_module(""set"", arg_str)
+","    def __init__(self, **kwargs):
+        # Save values so that we can revert to their initial values
+        self.old_defaults = {}
+        self.special_params = {
+            ""FONT"": [
+                ""FONT_ANNOT_PRIMARY"",
+                ""FONT_ANNOT_SECONDARY"",
+                ""FONT_HEADING"",
+                ""FONT_LABEL"",
+                ""FONT_TAG"",
+                ""FONT_TITLE"",
+            ],
+            ""FONT_ANNOT"": [""FONT_ANNOT_PRIMARY"", ""FONT_ANNOT_SECONDARY""],
+            ""FORMAT_TIME_MAP"": [""FORMAT_TIME_PRIMARY_MAP"", ""FORMAT_TIME_SECONDARY_MAP""],
+            ""MAP_ANNOT_OFFSET"": [
+                ""MAP_ANNOT_OFFSET_PRIMARY"",
+                ""MAP_ANNOT_OFFSET_SECONDARY"",
+            ],
+            ""MAP_GRID_CROSS_SIZE"": [
+                ""MAP_GRID_CROSS_SIZE_PRIMARY"",
+                ""MAP_GRID_CROSS_SIZE_SECONDARY"",
+            ],
+            ""MAP_GRID_PEN"": [""MAP_GRID_PEN_PRIMARY"", ""MAP_GRID_PEN_SECONDARY""],
+            ""MAP_TICK_LENGTH"": [""MAP_TICK_LENGTH_PRIMARY"", ""MAP_TICK_LENGTH_SECONDARY""],
+            ""MAP_TICK_PEN"": [""MAP_TICK_PEN_PRIMARY"", ""MAP_TICK_PEN_SECONDARY""],
+        }
+        with Session() as lib:
+            for key in kwargs:
+                if key in self.special_params:
+                    for k in self.special_params[key]:
+                        self.old_defaults[k] = lib.get_default(k)
+                else:
+                    self.old_defaults[key] = lib.get_default(key)
+
+        # call gmt set to change GMT defaults
+        arg_str = "" "".join(
+            [""{}={}"".format(key, value) for key, value in kwargs.items()]
+        )
+        with Session() as lib:
+            lib.call_module(""set"", arg_str)
+",https://github.com/GenericMappingTools/pygmt/issues/409,CWE-754: Improper Check for Unusual or Exceptional Conditions,There can be no value for key in default. No check for it,pygmt/modules.py,config.__init__,[6],"pygmt-session [ERROR]: Syntax error: Unrecognized keyword FONT
+Traceback (most recent call last):
+File ""/opt/miniconda3/envs/liam/lib/python3.7/site-packages/IPython/core/interactiveshell.py"", line 3326, in run_code
+exec(code_obj, self.user_global_ns, self.user_ns)
+File ""<ipython-input-19-8e431d18430a>"", line 1, in <module>
+pygmt.config(FONT='8p')
+File ""/opt/miniconda3/envs/liam/lib/python3.7/site-packages/pygmt/modules.py"", line 168, in __init__
+self.old_defaults[key] = lib.get_default(key)
+File ""/opt/miniconda3/envs/liam/lib/python3.7/site-packages/pygmt/clib/session.py"", line 458, in get_default
+name, status
+pygmt.exceptions.GMTCLibError: Error getting default value for 'FONT' (error code 67).",pygmt.exceptions.GMTCLibError,buggy_snippets_files/db65c0082d70560caaba4022d944a79a61c6b46392261d530a8290c3da9acf3b_before_merge.py,buggy_snippets_files/db65c0082d70560caaba4022d944a79a61c6b46392261d530a8290c3da9acf3b_after_merge.py
+"    def dump_checkpoint(self, weights_only: bool = False) -> dict:
+        """"""Creating model checkpoint.
+
+        Args:
+            weights_only: saving model weights only
+
+        Return:
+             structured dictionary
+        """"""
+        checkpoint = {
+            'epoch': self.current_epoch + 1,
+            'global_step': self.global_step + 1,
+            'pytorch-lightning_version': pytorch_lightning.__version__,
+        }
+
+        if not weights_only:
+
+            # TODO support more generic way for callbacks to persist a state_dict in a checkpoint
+            checkpoint_callbacks = [c for c in self.callbacks if isinstance(c, ModelCheckpoint)]
+            early_stopping_callbacks = [c for c in self.callbacks if isinstance(c, EarlyStopping)]
+
+            if checkpoint_callbacks:
+                # we add the official checkpoint callback to the end of the list
+                # extra user provided callbacks will not be persisted yet
+                checkpoint[ModelCheckpoint.CHECKPOINT_STATE_BEST_SCORE] = self.checkpoint_callback.best_model_score
+                checkpoint[ModelCheckpoint.CHECKPOINT_STATE_BEST_PATH] = self.checkpoint_callback.best_model_path
+
+            if early_stopping_callbacks and checkpoint_callbacks:
+                # we add the official early stopping callback to the end of the list
+                # extra user provided callbacks will not be persisted yet
+                checkpoint['early_stop_callback_state_dict'] = early_stopping_callbacks[-1].state_dict()
+
+            # save optimizers
+            optimizer_states = []
+            for i, optimizer in enumerate(self.optimizers):
+                optimizer_states.append(optimizer.state_dict())
+            checkpoint['optimizer_states'] = optimizer_states
+
+            # save lr schedulers
+            lr_schedulers = []
+            for scheduler in self.lr_schedulers:
+                lr_schedulers.append(scheduler['scheduler'].state_dict())
+            checkpoint['lr_schedulers'] = lr_schedulers
+
+            # save native amp scaling
+            if self.amp_backend == AMPType.NATIVE and not self.use_tpu:
+                checkpoint['native_amp_scaling_state'] = self.scaler.state_dict()
+            elif self.amp_backend == AMPType.APEX:
+                checkpoint['amp_scaling_state'] = amp.state_dict()
+
+        # add the module_arguments and state_dict from the model
+        model = self.get_model()
+
+        checkpoint['state_dict'] = model.state_dict()
+
+        if model.hparams:
+            if hasattr(model, '_hparams_name'):
+                checkpoint[LightningModule.CHECKPOINT_HYPER_PARAMS_NAME] = model._hparams_name
+            # add arguments to the checkpoint
+            checkpoint[LightningModule.CHECKPOINT_HYPER_PARAMS_KEY] = model.hparams
+            if OMEGACONF_AVAILABLE:
+                if isinstance(model.hparams, Container):
+                    checkpoint[LightningModule.CHECKPOINT_HYPER_PARAMS_TYPE] = type(model.hparams)
+
+        # give the model a chance to add a few things
+        model.on_save_checkpoint(checkpoint)
+
+        return checkpoint
+","    def dump_checkpoint(self, weights_only: bool = False) -> dict:
+        """"""Creating model checkpoint.
+
+        Args:
+            weights_only: saving model weights only
+
+        Return:
+             structured dictionary
+        """"""
+        checkpoint = {
+            'epoch': self.current_epoch + 1,
+            'global_step': self.global_step + 1,
+            'pytorch-lightning_version': pytorch_lightning.__version__,
+        }
+
+        if not weights_only:
+
+            # TODO support more generic way for callbacks to persist a state_dict in a checkpoint
+            checkpoint_callbacks = [c for c in self.callbacks if isinstance(c, ModelCheckpoint)]
+            early_stopping_callbacks = [c for c in self.callbacks if isinstance(c, EarlyStopping)]
+
+            if checkpoint_callbacks:
+                # we add the official checkpoint callback to the end of the list
+                # extra user provided callbacks will not be persisted yet
+                checkpoint[ModelCheckpoint.CHECKPOINT_STATE_BEST_SCORE] = self.checkpoint_callback.best_model_score
+                checkpoint[ModelCheckpoint.CHECKPOINT_STATE_BEST_PATH] = self.checkpoint_callback.best_model_path
+
+            if early_stopping_callbacks and checkpoint_callbacks:
+                # we add the official early stopping callback to the end of the list
+                # extra user provided callbacks will not be persisted yet
+                checkpoint['early_stop_callback_state_dict'] = early_stopping_callbacks[-1].state_dict()
+
+            # save optimizers
+            optimizer_states = []
+            for i, optimizer in enumerate(self.optimizers):
+                optimizer_states.append(optimizer.state_dict())
+            checkpoint['optimizer_states'] = optimizer_states
+
+            # save lr schedulers
+            lr_schedulers = []
+            for scheduler in self.lr_schedulers:
+                lr_schedulers.append(scheduler['scheduler'].state_dict())
+            checkpoint['lr_schedulers'] = lr_schedulers
+
+            # save native amp scaling
+            if self.amp_backend == AMPType.NATIVE and not self.use_tpu and self.scaler is not None:
+                checkpoint['native_amp_scaling_state'] = self.scaler.state_dict()
+            elif self.amp_backend == AMPType.APEX:
+                checkpoint['amp_scaling_state'] = amp.state_dict()
+
+        # add the module_arguments and state_dict from the model
+        model = self.get_model()
+
+        checkpoint['state_dict'] = model.state_dict()
+
+        if model.hparams:
+            if hasattr(model, '_hparams_name'):
+                checkpoint[LightningModule.CHECKPOINT_HYPER_PARAMS_NAME] = model._hparams_name
+            # add arguments to the checkpoint
+            checkpoint[LightningModule.CHECKPOINT_HYPER_PARAMS_KEY] = model.hparams
+            if OMEGACONF_AVAILABLE:
+                if isinstance(model.hparams, Container):
+                    checkpoint[LightningModule.CHECKPOINT_HYPER_PARAMS_TYPE] = type(model.hparams)
+
+        # give the model a chance to add a few things
+        model.on_save_checkpoint(checkpoint)
+
+        return checkpoint
+",https://github.com/PyTorchLightning/pytorch-lightning/issues/2655,CWE-754: Improper Check for Unusual or Exceptional Conditions,There is no check if scaler is None,pytorch_lightning/trainer/training_io.py,TrainerIOMixin.dump_checkpoint,[46],"Running command:
+python pipe/train_cnn.py
+/home/gianluca/git/kaggle/siim-isic-melanoma-classification/.venv/lib/python3.7/site-packages/pytorch_lightning/utilities/distributed.py:25: UserWarning: Checkpoint directory /home/gianluca/git/kaggle/siim-isic-melanoma-classification/models exists and is not empty with save_top_k != 0.All files in this directory will be deleted when
+a checkpoint is saved!
+warnings.warn(*args, **kwargs)
+Using cache found in /home/gianluca/.cache/torch/hub/facebookresearch_WSL-Images_master
+GPU available: True, used: True
+TPU available: False, using: 0 TPU cores
+CUDA_VISIBLE_DEVICES: [0]
+Using native 16bit precision.
+Traceback (most recent call last):
+File ""pipe/train_cnn.py"", line 237, in <module>
+main(create_submission=True)
+File ""pipe/train_cnn.py"", line 48, in main
+preds, weight_fpath = train(fold_number=fold_number, folds=folds)
+File ""pipe/train_cnn.py"", line 120, in train
+trainer.fit(model)
+File ""/home/gianluca/git/kaggle/siim-isic-melanoma-classification/.venv/lib/python3.7/site-packages/pytorch_lightning/trainer/trainer.py"", line 956, in fit
+self._run_lr_finder_internally(model)
+File ""/home/gianluca/git/kaggle/siim-isic-melanoma-classification/.venv/lib/python3.7/site-packages/pytorch_lightning/trainer/lr_finder.py"", line 58, in _run_lr_finder_internally
+lr_finder = self.lr_find(model)
+File ""/home/gianluca/git/kaggle/siim-isic-melanoma-classification/.venv/lib/python3.7/site-packages/pytorch_lightning/trainer/lr_finder.py"", line 180, in lr_find
+self.save_checkpoint(str(save_path))
+File ""/home/gianluca/git/kaggle/siim-isic-melanoma-classification/.venv/lib/python3.7/site-packages/pytorch_lightning/trainer/training_io.py"", line 268, in save_checkpoint
+checkpoint = self.dump_checkpoint(weights_only)
+File ""/home/gianluca/git/kaggle/siim-isic-melanoma-classification/.venv/lib/python3.7/site-packages/pytorch_lightning/trainer/training_io.py"", line 362, in dump_checkpoint
+checkpoint['native_amp_scaling_state'] = self.scaler.state_dict()
+AttributeError: 'NoneType' object has no attribute 'state_dict'
+ERROR: failed to reproduce 'train_cnn.dvc': stage: 'train_cnn.dvc' cmd 'python pipe/train_cnn.py' failed",AttributeError,buggy_snippets_files/9e8ea084968f1648a3f76bc45672796335a0cdfe7bbb94ec909aa1d154e0e289_before_merge.py,buggy_snippets_files/9e8ea084968f1648a3f76bc45672796335a0cdfe7bbb94ec909aa1d154e0e289_after_merge.py
+"    @classmethod
+    def _load_model_state(cls, checkpoint: Dict[str, Any], *cls_args, **cls_kwargs):
+        cls_spec = inspect.getfullargspec(cls.__init__)
+        cls_init_args_name = inspect.signature(cls).parameters.keys()
+        # pass in the values we saved automatically
+        if cls.CHECKPOINT_HYPER_PARAMS_KEY in checkpoint:
+            model_args = {}
+
+            # add some back compatibility, the actual one shall be last
+            for hparam_key in CHECKPOINT_PAST_HPARAMS_KEYS + (cls.CHECKPOINT_HYPER_PARAMS_KEY,):
+                if hparam_key in checkpoint:
+                    model_args.update(checkpoint[hparam_key])
+
+            model_args = _convert_loaded_hparams(model_args, checkpoint.get(cls.CHECKPOINT_HYPER_PARAMS_TYPE))
+
+            args_name = checkpoint.get(cls.CHECKPOINT_HYPER_PARAMS_NAME)
+
+            if args_name == 'kwargs':
+                # in case the class cannot take any extra argument filter only the possible
+                cls_kwargs.update(**model_args)
+            elif args_name:
+                if args_name in cls_init_args_name:
+                    cls_kwargs.update({args_name: model_args})
+            else:
+                cls_args = (model_args,) + cls_args
+
+        if not cls_spec.varkw:
+            # filter kwargs according to class init unless it allows any argument via kwargs
+            cls_kwargs = {k: v for k, v in cls_kwargs.items() if k in cls_init_args_name}
+
+        # prevent passing positional arguments if class does not accept any
+        if len(cls_spec.args) <= 1 and not cls_spec.kwonlyargs:
+            cls_args, cls_kwargs = [], {}
+        model = cls(*cls_args, **cls_kwargs)
+        # load the state_dict on the model automatically
+        model.load_state_dict(checkpoint['state_dict'])
+
+        # give model a chance to load something
+        model.on_load_checkpoint(checkpoint)
+
+        return model
+","    @classmethod
+    def _load_model_state(cls, checkpoint: Dict[str, Any], *cls_args, **cls_kwargs):
+        cls_spec = inspect.getfullargspec(cls.__init__)
+        cls_init_args_name = inspect.signature(cls).parameters.keys()
+        # pass in the values we saved automatically
+        if cls.CHECKPOINT_HYPER_PARAMS_KEY in checkpoint:
+            model_args = {}
+
+            # add some back compatibility, the actual one shall be last
+            for hparam_key in CHECKPOINT_PAST_HPARAMS_KEYS + (cls.CHECKPOINT_HYPER_PARAMS_KEY,):
+                if hparam_key in checkpoint:
+                    model_args.update(checkpoint[hparam_key])
+
+            model_args = _convert_loaded_hparams(model_args, checkpoint.get(cls.CHECKPOINT_HYPER_PARAMS_TYPE))
+
+            args_name = checkpoint.get(cls.CHECKPOINT_HYPER_PARAMS_NAME)
+
+            if args_name == 'kwargs':
+                # in case the class cannot take any extra argument filter only the possible
+                cls_kwargs.update(**model_args)
+            elif args_name:
+                if args_name in cls_init_args_name:
+                    cls_kwargs.update({args_name: model_args})
+            else:
+                cls_args = (model_args,) + cls_args
+
+        if not cls_spec.varkw:
+            # filter kwargs according to class init unless it allows any argument via kwargs
+            cls_kwargs = {k: v for k, v in cls_kwargs.items() if k in cls_init_args_name}
+
+        # prevent passing positional arguments if class does not accept any
+        if len(cls_spec.args) <= 1 and not cls_spec.varargs and not cls_spec.kwonlyargs:
+            cls_args, cls_kwargs = [], {}
+
+        model = cls(*cls_args, **cls_kwargs)
+        # load the state_dict on the model automatically
+        model.load_state_dict(checkpoint['state_dict'])
+
+        # give model a chance to load something
+        model.on_load_checkpoint(checkpoint)
+
+        return model
+",https://github.com/PyTorchLightning/pytorch-lightning/issues/2909,CWE-754: Improper Check for Unusual or Exceptional Conditions,No check if attribute varargs is None,pytorch_lightning/core/saving.py,ModelIO._load_model_state,[32],"Traceback (most recent call last):
+File ""main.py"", line 64, in <module>
+model = LitModel.load_from_checkpoint(hparams.checkpoint)
+File ""/home/siahuat0727/.local/lib/python3.8/site-packages/pytorch_lightning/core/saving.py"", line 138, in load_from_checkpoint
+model = cls._load_model_state(checkpoint, *args, **kwargs)
+File ""/home/siahuat0727/.local/lib/python3.8/site-packages/pytorch_lightning/core/saving.py"", line 174, in _load_model_state
+model = cls(*cls_args, **cls_kwargs)
+File ""main.py"", line 46, in __init__
+super().__init__(*args, **kwargs)
+TypeError: __init__() missing 1 required positional argument: 'hparams'",TypeError,buggy_snippets_files/c057c0020bce902c0edfea386ead3bd98879012694be5e7467f919b5d7ee999d_before_merge.py,buggy_snippets_files/c057c0020bce902c0edfea386ead3bd98879012694be5e7467f919b5d7ee999d_after_merge.py
+"    def __init__(self, text: base.String,
+                 request_contact: base.Boolean = None,
+                 request_location: base.Boolean = None,
+                 request_poll: KeyboardButtonPollType = None):
+        super(KeyboardButton, self).__init__(text=text,
+                                             request_contact=request_contact,
+                                             request_location=request_location,
+                                             request_poll=request_poll)
+","    def __init__(self, text: base.String,
+                 request_contact: base.Boolean = None,
+                 request_location: base.Boolean = None,
+                 request_poll: KeyboardButtonPollType = None,
+                 **kwargs):
+        super(KeyboardButton, self).__init__(text=text,
+                                             request_contact=request_contact,
+                                             request_location=request_location,
+                                             request_poll=request_poll,
+                                             **kwargs)
+",https://github.com/aiogram/aiogram/issues/343,?,Method does not support field from parent object. Adding **kwargs solve that issue,aiogram/types/reply_keyboard.py,KeyboardButton.__init__,[4;8],"Traceback (most recent call last):
+File ""<stdin>"", line 1, in <module>
+File ""/usr/lib/python3.8/site-packages/aiogram/types/base.py"", line 145, in to_object
+return cls(**data)
+File ""/usr/lib/python3.8/site-packages/aiogram/types/reply_keyboard.py"", line 35, in __init__
+super(ReplyKeyboardMarkup, self).__init__(keyboard=keyboard, resize_keyboard=resize_keyboard,
+File ""/usr/lib/python3.8/site-packages/aiogram/types/base.py"", line 91, in __init__
+self.props[key].set_value(self, value, parent=self)
+File ""/usr/lib/python3.8/site-packages/aiogram/types/fields.py"", line 56, in set_value
+value = self.deserialize(value, parent)
+File ""/usr/lib/python3.8/site-packages/aiogram/types/fields.py"", line 161, in deserialize
+row_result.append(deserialize(item, parent=parent))
+File ""/usr/lib/python3.8/site-packages/aiogram/types/fields.py"", line 112, in deserialize
+return self.base_object(conf={'parent': parent}, **value)
+TypeError: __init__() got an unexpected keyword argument 'conf'",TypeError,buggy_snippets_files/d5a8ce20a1579fbc69a6e6dbf46c1770d7e2bb0c62f331a76fe83228d209929d_before_merge.py,buggy_snippets_files/d5a8ce20a1579fbc69a6e6dbf46c1770d7e2bb0c62f331a76fe83228d209929d_after_merge.py
+"    def get_vars(self, play=None, host=None, task=None, include_hostvars=True, include_delegate_to=True, use_cache=True):
+        '''
+        Returns the variables, with optional ""context"" given via the parameters
+        for the play, host, and task (which could possibly result in different
+        sets of variables being returned due to the additional context).
+
+        The order of precedence is:
+        - play->roles->get_default_vars (if there is a play context)
+        - group_vars_files[host] (if there is a host context)
+        - host_vars_files[host] (if there is a host context)
+        - host->get_vars (if there is a host context)
+        - fact_cache[host] (if there is a host context)
+        - play vars (if there is a play context)
+        - play vars_files (if there's no host context, ignore
+          file names that cannot be templated)
+        - task->get_vars (if there is a task context)
+        - vars_cache[host] (if there is a host context)
+        - extra vars
+        '''
+
+        display.debug(""in VariableManager get_vars()"")
+
+        all_vars = dict()
+        magic_variables = self._get_magic_variables(
+            play=play,
+            host=host,
+            task=task,
+            include_hostvars=include_hostvars,
+            include_delegate_to=include_delegate_to,
+        )
+
+        # default for all cases
+        basedirs = [self._loader.get_basedir()]
+
+        if play:
+            # first we compile any vars specified in defaults/main.yml
+            # for all roles within the specified play
+            for role in play.get_roles():
+                all_vars = combine_vars(all_vars, role.get_default_vars())
+
+        if task:
+            # set basedirs
+            if C.PLAYBOOK_VARS_ROOT == 'all':  # should be default
+                basedirs = task.get_search_path()
+            elif C.PLAYBOOK_VARS_ROOT in ('bottom', 'playbook_dir'):  # only option in 2.4.0
+                basedirs = [task.get_search_path()[0]]
+            elif C.PLAYBOOK_VARS_ROOT != 'top':
+                # preserves default basedirs, only option pre 2.3
+                raise AnsibleError('Unkown playbook vars logic: %s' % C.PLAYBOOK_VARS_ROOT)
+
+            # if we have a task in this context, and that task has a role, make
+            # sure it sees its defaults above any other roles, as we previously
+            # (v1) made sure each task had a copy of its roles default vars
+            if task._role is not None and (play or task.action == 'include_role'):
+                all_vars = combine_vars(all_vars, task._role.get_default_vars(dep_chain=task.get_dep_chain()))
+
+        if host:
+            # THE 'all' group and the rest of groups for a host, used below
+            all_group = self._inventory.groups.get('all')
+            host_groups = sort_groups([g for g in host.get_groups() if g.name not in ['all']])
+
+            def _get_plugin_vars(plugin, path, entities):
+                data = {}
+                try:
+                    data = plugin.get_vars(self._loader, path, entities)
+                except AttributeError:
+                    try:
+                        for entity in entities:
+                            if isinstance(entity, Host):
+                                data.update(plugin.get_host_vars(entity.name))
+                            else:
+                                data.update(plugin.get_group_vars(entity.name))
+                    except AttributeError:
+                        if hasattr(plugin, 'run'):
+                            raise AnsibleError(""Cannot use v1 type vars plugin %s from %s"" % (plugin._load_name, plugin._original_path))
+                        else:
+                            raise AnsibleError(""Invalid vars plugin %s from %s"" % (plugin._load_name, plugin._original_path))
+                return data
+
+            # internal fuctions that actually do the work
+            def _plugins_inventory(entities):
+                ''' merges all entities by inventory source '''
+                data = {}
+                for inventory_dir in self._inventory._sources:
+                    if ',' in inventory_dir and not os.path.exists(inventory_dir):  # skip host lists
+                        continue
+                    elif not os.path.isdir(inventory_dir):  # always pass 'inventory directory'
+                        inventory_dir = os.path.dirname(inventory_dir)
+
+                    for plugin in vars_loader.all():
+
+                        data = combine_vars(data, _get_plugin_vars(plugin, inventory_dir, entities))
+                return data
+
+            def _plugins_play(entities):
+                ''' merges all entities adjacent to play '''
+                data = {}
+                for plugin in vars_loader.all():
+
+                    for path in basedirs:
+                        data = combine_vars(data, _get_plugin_vars(plugin, path, entities))
+                return data
+
+            # configurable functions that are sortable via config, rememer to add to _ALLOWED if expanding this list
+            def all_inventory():
+                return all_group.get_vars()
+
+            def all_plugins_inventory():
+                return _plugins_inventory([all_group])
+
+            def all_plugins_play():
+                return _plugins_play([all_group])
+
+            def groups_inventory():
+                ''' gets group vars from inventory '''
+                return get_group_vars(host_groups)
+
+            def groups_plugins_inventory():
+                ''' gets plugin sources from inventory for groups '''
+                return _plugins_inventory(host_groups)
+
+            def groups_plugins_play():
+                ''' gets plugin sources from play for groups '''
+                return _plugins_play(host_groups)
+
+            def plugins_by_groups():
+                '''
+                    merges all plugin sources by group,
+                    This should be used instead, NOT in combination with the other groups_plugins* functions
+                '''
+                data = {}
+                for group in host_groups:
+                    data[group] = combine_vars(data[group], _plugins_inventory(group))
+                    data[group] = combine_vars(data[group], _plugins_play(group))
+                return data
+
+            # Merge groups as per precedence config
+            # only allow to call the functions we want exposed
+            for entry in C.VARIABLE_PRECEDENCE:
+                if entry in self._ALLOWED:
+                    display.debug('Calling %s to load vars for %s' % (entry, host.name))
+                    all_vars = combine_vars(all_vars, locals()[entry]())
+                else:
+                    display.warning('Ignoring unknown variable precedence entry: %s' % (entry))
+
+            # host vars, from inventory, inventory adjacent and play adjacent via plugins
+            all_vars = combine_vars(all_vars, host.get_vars())
+            all_vars = combine_vars(all_vars, _plugins_inventory([host]))
+            all_vars = combine_vars(all_vars, _plugins_play([host]))
+
+            # finally, the facts caches for this host, if it exists
+            try:
+                facts = self._fact_cache.get(host.name, {})
+                all_vars.update(namespace_facts(facts))
+
+                # push facts to main namespace
+                if C.INJECT_FACTS_AS_VARS:
+                    all_vars = combine_vars(all_vars, wrap_var(facts))
+                else:
+                    # always 'promote' ansible_local
+                    all_vars = combine_vars(all_vars, wrap_var({'ansible_local': facts.get('ansible_local', {})}))
+            except KeyError:
+                pass
+
+        if play:
+            all_vars = combine_vars(all_vars, play.get_vars())
+
+            vars_files = play.get_vars_files()
+            try:
+                for vars_file_item in vars_files:
+                    # create a set of temporary vars here, which incorporate the extra
+                    # and magic vars so we can properly template the vars_files entries
+                    temp_vars = combine_vars(all_vars, self._extra_vars)
+                    temp_vars = combine_vars(temp_vars, magic_variables)
+                    templar = Templar(loader=self._loader, variables=temp_vars)
+
+                    # we assume each item in the list is itself a list, as we
+                    # support ""conditional includes"" for vars_files, which mimics
+                    # the with_first_found mechanism.
+                    vars_file_list = vars_file_item
+                    if not isinstance(vars_file_list, list):
+                        vars_file_list = [vars_file_list]
+
+                    # now we iterate through the (potential) files, and break out
+                    # as soon as we read one from the list. If none are found, we
+                    # raise an error, which is silently ignored at this point.
+                    try:
+                        for vars_file in vars_file_list:
+                            vars_file = templar.template(vars_file)
+                            try:
+                                data = preprocess_vars(self._loader.load_from_file(vars_file, unsafe=True))
+                                if data is not None:
+                                    for item in data:
+                                        all_vars = combine_vars(all_vars, item)
+                                break
+                            except AnsibleFileNotFound:
+                                # we continue on loader failures
+                                continue
+                            except AnsibleParserError:
+                                raise
+                        else:
+                            # if include_delegate_to is set to False, we ignore the missing
+                            # vars file here because we're working on a delegated host
+                            if include_delegate_to:
+                                raise AnsibleFileNotFound(""vars file %s was not found"" % vars_file_item)
+                    except (UndefinedError, AnsibleUndefinedVariable):
+                        if host is not None and self._fact_cache.get(host.name, dict()).get('module_setup') and task is not None:
+                            raise AnsibleUndefinedVariable(""an undefined variable was found when attempting to template the vars_files item '%s'""
+                                                           % vars_file_item, obj=vars_file_item)
+                        else:
+                            # we do not have a full context here, and the missing variable could be because of that
+                            # so just show a warning and continue
+                            display.vvv(""skipping vars_file '%s' due to an undefined variable"" % vars_file_item)
+                            continue
+
+                    display.vvv(""Read vars_file '%s'"" % vars_file_item)
+            except TypeError:
+                raise AnsibleParserError(""Error while reading vars files - please supply a list of file names. ""
+                                         ""Got '%s' of type %s"" % (vars_files, type(vars_files)))
+
+            # By default, we now merge in all vars from all roles in the play,
+            # unless the user has disabled this via a config option
+            if not C.DEFAULT_PRIVATE_ROLE_VARS:
+                for role in play.get_roles():
+                    all_vars = combine_vars(all_vars, role.get_vars(include_params=False))
+
+        # next, we merge in the vars from the role, which will specifically
+        # follow the role dependency chain, and then we merge in the tasks
+        # vars (which will look at parent blocks/task includes)
+        if task:
+            if task._role:
+                all_vars = combine_vars(all_vars, task._role.get_vars(task.get_dep_chain(), include_params=False))
+            all_vars = combine_vars(all_vars, task.get_vars())
+
+        # next, we merge in the vars cache (include vars) and nonpersistent
+        # facts cache (set_fact/register), in that order
+        if host:
+            # include_vars non-persistent cache
+            all_vars = combine_vars(all_vars, self._vars_cache.get(host.get_name(), dict()))
+            # fact non-persistent cache
+            all_vars = combine_vars(all_vars, self._nonpersistent_fact_cache.get(host.name, dict()))
+
+        # next, we merge in role params and task include params
+        if task:
+            if task._role:
+                all_vars = combine_vars(all_vars, task._role.get_role_params(task.get_dep_chain()))
+
+            # special case for include tasks, where the include params
+            # may be specified in the vars field for the task, which should
+            # have higher precedence than the vars/np facts above
+            all_vars = combine_vars(all_vars, task.get_include_params())
+
+        # extra vars
+        all_vars = combine_vars(all_vars, self._extra_vars)
+
+        # magic variables
+        all_vars = combine_vars(all_vars, magic_variables)
+
+        # special case for the 'environment' magic variable, as someone
+        # may have set it as a variable and we don't want to stomp on it
+        if task:
+            all_vars['environment'] = task.environment
+
+        # if we have a task and we're delegating to another host, figure out the
+        # variables for that host now so we don't have to rely on hostvars later
+        if task and task.delegate_to is not None and include_delegate_to:
+            all_vars['ansible_delegated_vars'] = self._get_delegated_vars(play, task, all_vars)
+
+        # 'vars' magic var
+        if task or play:
+            # has to be copy, otherwise recursive ref
+            all_vars['vars'] = all_vars.copy()
+
+        display.debug(""done with get_vars()"")
+        return all_vars
+","    def get_vars(self, play=None, host=None, task=None, include_hostvars=True, include_delegate_to=True, use_cache=True):
+        '''
+        Returns the variables, with optional ""context"" given via the parameters
+        for the play, host, and task (which could possibly result in different
+        sets of variables being returned due to the additional context).
+
+        The order of precedence is:
+        - play->roles->get_default_vars (if there is a play context)
+        - group_vars_files[host] (if there is a host context)
+        - host_vars_files[host] (if there is a host context)
+        - host->get_vars (if there is a host context)
+        - fact_cache[host] (if there is a host context)
+        - play vars (if there is a play context)
+        - play vars_files (if there's no host context, ignore
+          file names that cannot be templated)
+        - task->get_vars (if there is a task context)
+        - vars_cache[host] (if there is a host context)
+        - extra vars
+        '''
+
+        display.debug(""in VariableManager get_vars()"")
+
+        all_vars = dict()
+        magic_variables = self._get_magic_variables(
+            play=play,
+            host=host,
+            task=task,
+            include_hostvars=include_hostvars,
+            include_delegate_to=include_delegate_to,
+        )
+
+        # default for all cases
+        basedirs = [self._loader.get_basedir()]
+
+        if play:
+            # first we compile any vars specified in defaults/main.yml
+            # for all roles within the specified play
+            for role in play.get_roles():
+                all_vars = combine_vars(all_vars, role.get_default_vars())
+
+        if task:
+            # set basedirs
+            if C.PLAYBOOK_VARS_ROOT == 'all':  # should be default
+                basedirs = task.get_search_path()
+            elif C.PLAYBOOK_VARS_ROOT in ('bottom', 'playbook_dir'):  # only option in 2.4.0
+                basedirs = [task.get_search_path()[0]]
+            elif C.PLAYBOOK_VARS_ROOT != 'top':
+                # preserves default basedirs, only option pre 2.3
+                raise AnsibleError('Unkown playbook vars logic: %s' % C.PLAYBOOK_VARS_ROOT)
+
+            # if we have a task in this context, and that task has a role, make
+            # sure it sees its defaults above any other roles, as we previously
+            # (v1) made sure each task had a copy of its roles default vars
+            if task._role is not None and (play or task.action == 'include_role'):
+                all_vars = combine_vars(all_vars, task._role.get_default_vars(dep_chain=task.get_dep_chain()))
+
+        if host:
+            # THE 'all' group and the rest of groups for a host, used below
+            all_group = self._inventory.groups.get('all')
+            host_groups = sort_groups([g for g in host.get_groups() if g.name not in ['all']])
+
+            def _get_plugin_vars(plugin, path, entities):
+                data = {}
+                try:
+                    data = plugin.get_vars(self._loader, path, entities)
+                except AttributeError:
+                    try:
+                        for entity in entities:
+                            if isinstance(entity, Host):
+                                data.update(plugin.get_host_vars(entity.name))
+                            else:
+                                data.update(plugin.get_group_vars(entity.name))
+                    except AttributeError:
+                        if hasattr(plugin, 'run'):
+                            raise AnsibleError(""Cannot use v1 type vars plugin %s from %s"" % (plugin._load_name, plugin._original_path))
+                        else:
+                            raise AnsibleError(""Invalid vars plugin %s from %s"" % (plugin._load_name, plugin._original_path))
+                return data
+
+            # internal fuctions that actually do the work
+            def _plugins_inventory(entities):
+                ''' merges all entities by inventory source '''
+                data = {}
+                for inventory_dir in self._inventory._sources:
+                    if ',' in inventory_dir and not os.path.exists(inventory_dir):  # skip host lists
+                        continue
+                    elif not os.path.isdir(inventory_dir):  # always pass 'inventory directory'
+                        inventory_dir = os.path.dirname(inventory_dir)
+
+                    for plugin in vars_loader.all():
+
+                        data = combine_vars(data, _get_plugin_vars(plugin, inventory_dir, entities))
+                return data
+
+            def _plugins_play(entities):
+                ''' merges all entities adjacent to play '''
+                data = {}
+                for plugin in vars_loader.all():
+
+                    for path in basedirs:
+                        data = combine_vars(data, _get_plugin_vars(plugin, path, entities))
+                return data
+
+            # configurable functions that are sortable via config, rememer to add to _ALLOWED if expanding this list
+            def all_inventory():
+                return all_group.get_vars()
+
+            def all_plugins_inventory():
+                return _plugins_inventory([all_group])
+
+            def all_plugins_play():
+                return _plugins_play([all_group])
+
+            def groups_inventory():
+                ''' gets group vars from inventory '''
+                return get_group_vars(host_groups)
+
+            def groups_plugins_inventory():
+                ''' gets plugin sources from inventory for groups '''
+                return _plugins_inventory(host_groups)
+
+            def groups_plugins_play():
+                ''' gets plugin sources from play for groups '''
+                return _plugins_play(host_groups)
+
+            def plugins_by_groups():
+                '''
+                    merges all plugin sources by group,
+                    This should be used instead, NOT in combination with the other groups_plugins* functions
+                '''
+                data = {}
+                for group in host_groups:
+                    data[group] = combine_vars(data[group], _plugins_inventory(group))
+                    data[group] = combine_vars(data[group], _plugins_play(group))
+                return data
+
+            # Merge groups as per precedence config
+            # only allow to call the functions we want exposed
+            for entry in C.VARIABLE_PRECEDENCE:
+                if entry in self._ALLOWED:
+                    display.debug('Calling %s to load vars for %s' % (entry, host.name))
+                    all_vars = combine_vars(all_vars, locals()[entry]())
+                else:
+                    display.warning('Ignoring unknown variable precedence entry: %s' % (entry))
+
+            # host vars, from inventory, inventory adjacent and play adjacent via plugins
+            all_vars = combine_vars(all_vars, host.get_vars())
+            all_vars = combine_vars(all_vars, _plugins_inventory([host]))
+            all_vars = combine_vars(all_vars, _plugins_play([host]))
+
+            # finally, the facts caches for this host, if it exists
+            try:
+                facts = self._fact_cache.get(host.name, {})
+                all_vars.update(namespace_facts(facts))
+
+                # push facts to main namespace
+                if C.INJECT_FACTS_AS_VARS:
+                    all_vars = combine_vars(all_vars, wrap_var(facts))
+                else:
+                    # always 'promote' ansible_local
+                    all_vars = combine_vars(all_vars, wrap_var({'ansible_local': facts.get('ansible_local', {})}))
+            except KeyError:
+                pass
+
+        if play:
+            all_vars = combine_vars(all_vars, play.get_vars())
+
+            vars_files = play.get_vars_files()
+            try:
+                for vars_file_item in vars_files:
+                    # create a set of temporary vars here, which incorporate the extra
+                    # and magic vars so we can properly template the vars_files entries
+                    temp_vars = combine_vars(all_vars, self._extra_vars)
+                    temp_vars = combine_vars(temp_vars, magic_variables)
+                    templar = Templar(loader=self._loader, variables=temp_vars)
+
+                    # we assume each item in the list is itself a list, as we
+                    # support ""conditional includes"" for vars_files, which mimics
+                    # the with_first_found mechanism.
+                    vars_file_list = vars_file_item
+                    if not isinstance(vars_file_list, list):
+                        vars_file_list = [vars_file_list]
+
+                    # now we iterate through the (potential) files, and break out
+                    # as soon as we read one from the list. If none are found, we
+                    # raise an error, which is silently ignored at this point.
+                    try:
+                        for vars_file in vars_file_list:
+                            vars_file = templar.template(vars_file)
+                            if not (isinstance(vars_file, Sequence)):
+                                raise AnsibleError(
+                                    ""Invalid vars_files entry found: %r\n""
+                                    ""vars_files entries should be either a string type or ""
+                                    ""a list of string types after template expansion"" % vars_file
+                                )
+                            try:
+                                data = preprocess_vars(self._loader.load_from_file(vars_file, unsafe=True))
+                                if data is not None:
+                                    for item in data:
+                                        all_vars = combine_vars(all_vars, item)
+                                break
+                            except AnsibleFileNotFound:
+                                # we continue on loader failures
+                                continue
+                            except AnsibleParserError:
+                                raise
+                        else:
+                            # if include_delegate_to is set to False, we ignore the missing
+                            # vars file here because we're working on a delegated host
+                            if include_delegate_to:
+                                raise AnsibleFileNotFound(""vars file %s was not found"" % vars_file_item)
+                    except (UndefinedError, AnsibleUndefinedVariable):
+                        if host is not None and self._fact_cache.get(host.name, dict()).get('module_setup') and task is not None:
+                            raise AnsibleUndefinedVariable(""an undefined variable was found when attempting to template the vars_files item '%s'""
+                                                           % vars_file_item, obj=vars_file_item)
+                        else:
+                            # we do not have a full context here, and the missing variable could be because of that
+                            # so just show a warning and continue
+                            display.vvv(""skipping vars_file '%s' due to an undefined variable"" % vars_file_item)
+                            continue
+
+                    display.vvv(""Read vars_file '%s'"" % vars_file_item)
+            except TypeError:
+                raise AnsibleParserError(""Error while reading vars files - please supply a list of file names. ""
+                                         ""Got '%s' of type %s"" % (vars_files, type(vars_files)))
+
+            # By default, we now merge in all vars from all roles in the play,
+            # unless the user has disabled this via a config option
+            if not C.DEFAULT_PRIVATE_ROLE_VARS:
+                for role in play.get_roles():
+                    all_vars = combine_vars(all_vars, role.get_vars(include_params=False))
+
+        # next, we merge in the vars from the role, which will specifically
+        # follow the role dependency chain, and then we merge in the tasks
+        # vars (which will look at parent blocks/task includes)
+        if task:
+            if task._role:
+                all_vars = combine_vars(all_vars, task._role.get_vars(task.get_dep_chain(), include_params=False))
+            all_vars = combine_vars(all_vars, task.get_vars())
+
+        # next, we merge in the vars cache (include vars) and nonpersistent
+        # facts cache (set_fact/register), in that order
+        if host:
+            # include_vars non-persistent cache
+            all_vars = combine_vars(all_vars, self._vars_cache.get(host.get_name(), dict()))
+            # fact non-persistent cache
+            all_vars = combine_vars(all_vars, self._nonpersistent_fact_cache.get(host.name, dict()))
+
+        # next, we merge in role params and task include params
+        if task:
+            if task._role:
+                all_vars = combine_vars(all_vars, task._role.get_role_params(task.get_dep_chain()))
+
+            # special case for include tasks, where the include params
+            # may be specified in the vars field for the task, which should
+            # have higher precedence than the vars/np facts above
+            all_vars = combine_vars(all_vars, task.get_include_params())
+
+        # extra vars
+        all_vars = combine_vars(all_vars, self._extra_vars)
+
+        # magic variables
+        all_vars = combine_vars(all_vars, magic_variables)
+
+        # special case for the 'environment' magic variable, as someone
+        # may have set it as a variable and we don't want to stomp on it
+        if task:
+            all_vars['environment'] = task.environment
+
+        # if we have a task and we're delegating to another host, figure out the
+        # variables for that host now so we don't have to rely on hostvars later
+        if task and task.delegate_to is not None and include_delegate_to:
+            all_vars['ansible_delegated_vars'] = self._get_delegated_vars(play, task, all_vars)
+
+        # 'vars' magic var
+        if task or play:
+            # has to be copy, otherwise recursive ref
+            all_vars['vars'] = all_vars.copy()
+
+        display.debug(""done with get_vars()"")
+        return all_vars
+",https://github.com/ansible/ansible/issues/17594,CWE-754: Improper Check for Unusual or Exceptional Conditions,No check if vars_file has a proper type,lib/ansible/vars/manager.py,VariableManager.get_vars,"[189, 190]","ansible-playbook -vvv --syntax-check jenkins_ssh.yml
+Using /home/lmadsen/src/github/leifmadsen/ansible-cira/ansible.cfg as config file
+1 plays in jenkins_ssh.yml
+ERROR! Unexpected Exception: 0
+the full traceback was:
+
+Traceback (most recent call last):
+File ""/usr/bin/ansible-playbook"", line 86, in <module>
+sys.exit(cli.run())
+File ""/home/lmadsen/.local/lib/python2.7/site-packages/ansible/cli/playbook.py"", line 154, in run
+results = pbex.run()
+File ""/home/lmadsen/.local/lib/python2.7/site-packages/ansible/executor/playbook_executor.py"", line 117, in run
+all_vars = self._variable_manager.get_vars(loader=self._loader, play=play)
+File ""/home/lmadsen/.local/lib/python2.7/site-packages/ansible/vars/__init__.py"", line 305, in get_vars
+data = preprocess_vars(loader.load_from_file(vars_file))
+File ""/home/lmadsen/.local/lib/python2.7/site-packages/ansible/parsing/dataloader.py"", line 105, in load_from_file
+file_name = self.path_dwim(file_name)
+File ""/home/lmadsen/.local/lib/python2.7/site-packages/ansible/parsing/dataloader.py"", line 212, in path_dwim
+given = unquote(given)
+File ""/home/lmadsen/.local/lib/python2.7/site-packages/ansible/parsing/quoting.py"", line 28, in unquote
+if is_quoted(data):
+File ""/home/lmadsen/.local/lib/python2.7/site-packages/ansible/parsing/quoting.py"", line 24, in is_quoted
+return len(data) > 1 and data[0] == data[-1] and data[0] in ('""', ""'"") and data[-2] != '\\'
+KeyError: 0",KeyError,buggy_snippets_files/59f64056f98ad35319de61d9ad7de24b9290add6708f6eacee2c5ac7a018ed4e_before_merge.py,buggy_snippets_files/59f64056f98ad35319de61d9ad7de24b9290add6708f6eacee2c5ac7a018ed4e_after_merge.py
+"    def _get_elb_info(self, elb):
+        elb_info = {
+            'name': elb.name,
+            'zones': elb.availability_zones,
+            'dns_name': elb.dns_name,
+            'canonical_hosted_zone_name': elb.canonical_hosted_zone_name,
+            'canonical_hosted_zone_name_id': elb.canonical_hosted_zone_name_id,
+            'hosted_zone_name': elb.canonical_hosted_zone_name,
+            'hosted_zone_id': elb.canonical_hosted_zone_name_id,
+            'instances': [instance.id for instance in elb.instances],
+            'listeners': self._get_elb_listeners(elb.listeners),
+            'scheme': elb.scheme,
+            'security_groups': elb.security_groups,
+            'health_check': self._get_health_check(elb.health_check),
+            'subnets': elb.subnets,
+            'instances_inservice': [],
+            'instances_inservice_count': 0,
+            'instances_outofservice': [],
+            'instances_outofservice_count': 0,
+            'instances_inservice_percent': 0.0,
+            'tags': self._get_tags(elb.name)
+        }
+
+        if elb.vpc_id:
+            elb_info['vpc_id'] = elb.vpc_id
+
+        if elb.instances:
+            try:
+                instance_health = self.connection.describe_instance_health(elb.name)
+            except BotoServerError as err:
+                self.module.fail_json(msg=err.message)
+            elb_info['instances_inservice'] = [inst.instance_id for inst in instance_health if inst.state == 'InService']
+            elb_info['instances_inservice_count'] = len(elb_info['instances_inservice'])
+            elb_info['instances_outofservice'] = [inst.instance_id for inst in instance_health if inst.state == 'OutOfService']
+            elb_info['instances_outofservice_count'] = len(elb_info['instances_outofservice'])
+            elb_info['instances_inservice_percent'] = float(elb_info['instances_inservice_count'])/(
+                float(elb_info['instances_inservice_count']) +
+                float(elb_info['instances_outofservice_count']))*100
+        return elb_info
+","    def _get_elb_info(self, elb):
+        elb_info = {
+            'name': elb.name,
+            'zones': elb.availability_zones,
+            'dns_name': elb.dns_name,
+            'canonical_hosted_zone_name': elb.canonical_hosted_zone_name,
+            'canonical_hosted_zone_name_id': elb.canonical_hosted_zone_name_id,
+            'hosted_zone_name': elb.canonical_hosted_zone_name,
+            'hosted_zone_id': elb.canonical_hosted_zone_name_id,
+            'instances': [instance.id for instance in elb.instances],
+            'listeners': self._get_elb_listeners(elb.listeners),
+            'scheme': elb.scheme,
+            'security_groups': elb.security_groups,
+            'health_check': self._get_health_check(elb.health_check),
+            'subnets': elb.subnets,
+            'instances_inservice': [],
+            'instances_inservice_count': 0,
+            'instances_outofservice': [],
+            'instances_outofservice_count': 0,
+            'instances_inservice_percent': 0.0,
+            'tags': self._get_tags(elb.name)
+        }
+
+        if elb.vpc_id:
+            elb_info['vpc_id'] = elb.vpc_id
+
+        if elb.instances:
+            try:
+                instance_health = self.connection.describe_instance_health(elb.name)
+            except BotoServerError as err:
+                self.module.fail_json(msg=err.message)
+            elb_info['instances_inservice'] = [inst.instance_id for inst in instance_health if inst.state == 'InService']
+            elb_info['instances_inservice_count'] = len(elb_info['instances_inservice'])
+            elb_info['instances_outofservice'] = [inst.instance_id for inst in instance_health if inst.state == 'OutOfService']
+            elb_info['instances_outofservice_count'] = len(elb_info['instances_outofservice'])
+            try:
+                elb_info['instances_inservice_percent'] = (
+                    float(elb_info['instances_inservice_count']) /
+                    float(elb_info['instances_inservice_count'] + elb_info['instances_outofservice_count'])
+                ) * 100.
+            except ZeroDivisionError:
+                elb_info['instances_inservice_percent'] = 0.
+        return elb_info
+",https://github.com/ansible/ansible/issues/22014,"CWE-369: Divide By Zero, CWE-754: Improper Check for Unusual or Exceptional Conditions",No zero dividing check,lib/ansible/modules/cloud/amazon/ec2_elb_facts.py,ElbInformation._get_elb_info,"[36, 38]","Traceback (most recent call last):
+File ""/tmp/ansible_mX7IN8/ansible_module_ec2_elb_facts.py"", line 248, in <module>
+main()
+File ""/tmp/ansible_mX7IN8/ansible_module_ec2_elb_facts.py"", line 240, in main
+elbs=elb_information.list_elbs())
+File ""/tmp/ansible_mX7IN8/ansible_module_ec2_elb_facts.py"", line 215, in list_elbs
+return list(map(self._get_elb_info, elb_array))
+File ""/tmp/ansible_mX7IN8/ansible_module_ec2_elb_facts.py"", line 195, in _get_elb_info
+float(elb_info['instances_outofservice_count']))*100
+ZeroDivisionError: float division by zero",ZeroDivisionError,buggy_snippets_files/cdc43509435ba2a47e8d59487185d645cb7d58db6c4a5aa00b11c7c46608f14a_before_merge.py,buggy_snippets_files/cdc43509435ba2a47e8d59487185d645cb7d58db6c4a5aa00b11c7c46608f14a_after_merge.py
+"    def disconnect_all_containers(self):
+        containers = self.client.inspect_network(self.parameters.network_name)['Containers']
+        for cont in containers.values():
+            self.disconnect_container(cont['Name'])
+","    def disconnect_all_containers(self):
+        containers = self.client.inspect_network(self.parameters.network_name)['Containers']
+        if not containers:
+            return
+        for cont in containers.values():
+            self.disconnect_container(cont['Name'])
+",https://github.com/ansible/ansible/issues/22530,CWE-754: Improper Check for Unusual or Exceptional Conditions,No checking if object `containers` is None,lib/ansible/modules/cloud/docker/docker_network.py,DockerNetworkManager.disconnect_all_containers,[3],"The full traceback is:
+Traceback (most recent call last):
+File ""/tmp/ansible_9Ntaqw/ansible_module_docker_network.py"", line 392, in <module>
+main()
+File ""/tmp/ansible_9Ntaqw/ansible_module_docker_network.py"", line 385, in main
+cm = DockerNetworkManager(client)
+File ""/tmp/ansible_9Ntaqw/ansible_module_docker_network.py"", line 218, in __init__
+self.present()
+File ""/tmp/ansible_9Ntaqw/ansible_module_docker_network.py"", line 352, in present
+self.disconnect_missing()
+File ""/tmp/ansible_9Ntaqw/ansible_module_docker_network.py"", line 323, in disconnect_missing
+for c in self.existing_network['Containers'].values():
+AttributeError: 'NoneType' object has no attribute 'values'
+
+failed: [192.168.1.120 -> 127.0.0.1] (item={u'driver': u'overlay', u'name': u'networks_default_1'}) => {
+""failed"": true,
+""item"": {
+""driver"": ""overlay"",
+""name"": ""networks_default_1""
+},
+""module_stderr"": ""Traceback (most recent call last):\n  File \""/tmp/ansible_9Ntaqw/ansible_module_docker_network.py\"", line 392, in <module>\n    main()\n  File \""/tmp/ansible_9Ntaqw/ansible_module_docker_network.py\"", line 385, in main\n    cm = DockerNetworkManager(client)\n  File \""/tmp/ansible_9Ntaqw/ansible_module_docker_network.py\"", line 218, in __init__\n    self.present()\n  File \""/tmp/ansible_9Ntaqw/ansible_module_docker_network.py\"", line 352, in present\n    self.disconnect_missing()\n  File \""/tmp/ansible_9Ntaqw/ansible_module_docker_network.py\"", line 323, in disconnect_missing\n    for c in self.existing_network['Containers'].values():\nAttributeError: 'NoneType' object has no attribute 'values'\n"",
+""module_stdout"": """",
+""msg"": ""MODULE FAILURE"",
+""rc"": 0",AttributeError,buggy_snippets_files/92d3f1527e623471fac40d7dff88891498f15bdd08bd1b5a8c5d30bfd17bd82d_before_merge.py,buggy_snippets_files/92d3f1527e623471fac40d7dff88891498f15bdd08bd1b5a8c5d30bfd17bd82d_after_merge.py

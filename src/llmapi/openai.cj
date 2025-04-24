@@ -37,7 +37,7 @@ public class OpenAI <: LargeModel {
         
         println("request body: ${body.toJson()}")
         let response = client.post(url, header: header, body: body.toJson().toJsonString())
-        // println("response: ${response}")
+        println("response: ${response}")
         let obj: JsonObject = string2JsonObject(response)
         // println("obj: ${obj}")
         let msg = obj["choices"].asArray()[0].asObject()["message"].asObject()
@@ -91,33 +91,10 @@ public class OpenAI <: LargeModel {
         
         let content = HashMap<String, String>([("type", "string"), ("description", "The main content of the response.")])
         let schema = DataModelSeq()
-        //let schema = DataModelStruct()
         schema.add(DataModelStruct().add(field<String>("type", "object"))
                                 .add(field<HashMap<String, HashMap<String, String>>>("properties", HashMap<String, HashMap<String, String>>([("content", content)])))
                                 .add(field<Array<String>>("required", ["content"]))
                                 .add(field<Bool>("additionalProperties", false)))
-
-        // let json_schema = DataModelStruct().add(field<String>("name", "simple_response"))
-        //                         .add(field<Bool>("strict", true))
-        //                         .add(field<ArrayList<Field>>("schema", schema.getItems()))
-        // let responseFormat = [
-        //                         "type": "json_schema",
-        //                         "json_schema": [
-        //                             "name": "simple_response",
-        //                             "strict": true,
-        //                             "schema": [
-        //                                 "type": "object",
-        //                                 "properties": [
-        //                                     "content": [
-        //                                         "type": "string",
-        //                                         "description": "The main content of the response."
-        //                                     ]
-        //                                 ],
-        //                                 "required": ["content"],
-        //                                 "additionalProperties": false
-        //                             ]
-        //                         ]
-        //                     ]
 
         if (!tools.isEmpty()) {
             body.add(field<String>("tool_choice", "auto"))
@@ -139,7 +116,7 @@ public class OpenAI <: LargeModel {
         return query(messages.toArray(), tools)
     }
 
-    public func query(messages: Array<Message>, options: HashMap<String, Any>): ResponseMessage {
+    public func query(messages: Array<Message>, options: HashMap<String, Any>/*, jsonOutPut!: Bool = false*/): ResponseMessage {
         var stop = false
         var tools = Array<Tool>()
         var temperature = 0.0
@@ -158,16 +135,20 @@ public class OpenAI <: LargeModel {
         header.add("Authorization", "Bearer " + api_key)
         header.add("Content-Type", "application/json")
 
-        let body: DataModelStruct = DataModelStruct()
+        var body: DataModelStruct = DataModelStruct()
         body.add(field<String>("model", model_name))
         body.add(field<Array<Message>>("messages", messages))
         body.add(field<Float64>("temperature", temperature))
         // body.add(field<Array<Tool>>("tools", tools))
-
+/*
+        if (jsonOutPut) {
+            body.add(field<HashMap<String, String>>("response_format", HashMap<String, String>([("type","json_object")])))
+        }
+*/
         return call_llm(header, body)
     }
 
-    public func query(content: String, options: HashMap<String, Any>): ResponseMessage {
+    public func query(content: String, options: HashMap<String, Any>/*, jsonOutPut!: Bool = false*/): ResponseMessage {
         let messages = ArrayList<Message>()
         let sys_msg = Message("system", "You are a helpful assistant.")
         let user_msg = Message("user", content)
@@ -176,11 +157,11 @@ public class OpenAI <: LargeModel {
         return query(messages.toArray(), options)
     }
 
-    public func query(messages: Array<Message>): ResponseMessage {
+    public func query(messages: Array<Message>/*, jsonOutPut!: Bool = false*/): ResponseMessage {
         return query(messages, HashMap<String, Any>())
     }
 
-    public func query(content: String): ResponseMessage {
+    public func query(content: String/*, jsonOutPut!: Bool = false*/): ResponseMessage {
         let messages = ArrayList<Message>()
         let sys_msg = Message("system", "You are a helpful assistant.")
         let user_msg = Message("user", content)

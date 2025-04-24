@@ -1,0 +1,497 @@
+﻿before_merge,after_merge,url,bug type,bug description,bug filename,bug function_name,bug lines,full_traceback,traceback_type,path_to_snippet_before_merge,path_to_snippet_after_merge
+"def remove_lb_backend_address_pool_address(cmd, resource_group_name, load_balancer_name,
+                                           backend_address_pool_name, address_name):
+    client = network_client_factory(cmd.cli_ctx).load_balancer_backend_address_pools
+    address_pool = client.get(resource_group_name, load_balancer_name, backend_address_pool_name)
+    lb_addresses = [addr for addr in address_pool.load_balancer_backend_addresses if addr.name != address_name]
+    address_pool.load_balancer_backend_addresses = lb_addresses
+    return client.create_or_update(resource_group_name, load_balancer_name, backend_address_pool_name, address_pool)
+","def remove_lb_backend_address_pool_address(cmd, resource_group_name, load_balancer_name,
+                                           backend_address_pool_name, address_name):
+    client = network_client_factory(cmd.cli_ctx).load_balancer_backend_address_pools
+    address_pool = client.get(resource_group_name, load_balancer_name, backend_address_pool_name)
+    if address_pool.load_balancer_backend_addresses is None:
+        address_pool.load_balancer_backend_addresses = []
+    lb_addresses = [addr for addr in address_pool.load_balancer_backend_addresses if addr.name != address_name]
+    address_pool.load_balancer_backend_addresses = lb_addresses
+    return client.create_or_update(resource_group_name, load_balancer_name, backend_address_pool_name, address_pool)
+",https://github.com/Azure/azure-cli/issues/14342,CWE-248: Uncaught Exception,Uncaught Exception when adding an address to a load balancer backend pool and that load balancer backend pool is None,src/azure-cli/azure/cli/command_modules/network/custom.py,remove_lb_backend_address_pool_address,[5],"john@Azure:~$ az network lb address-pool address add --lb-name myLB2 --pool-name myLB2bepool --resource-group myResourceGroup -n ""address-name"" --vnet virtualNetwork1 --ip-address 10.0.1.8
+Command group 'network lb address-pool address' is in preview. It may be changed/removed in a future release.
+The command failed with an unexpected error. Here is the traceback:
+
+'NoneType' object has no attribute 'append'
+Traceback (most recent call last):
+File ""/opt/az/lib/python3.6/site-packages/knack/cli.py"", line 215, in invoke
+cmd_result = self.invocation.execute(args)
+File ""/opt/az/lib/python3.6/site-packages/azure/cli/core/commands/__init__.py"", line 654, in execute
+raise ex
+File ""/opt/az/lib/python3.6/site-packages/azure/cli/core/commands/__init__.py"", line 718, in _run_jobs_serially
+results.append(self._run_job(expanded_arg, cmd_copy))
+File ""/opt/az/lib/python3.6/site-packages/azure/cli/core/commands/__init__.py"", line 711, in _run_job
+six.reraise(*sys.exc_info())
+File ""/opt/az/lib/python3.6/site-packages/six.py"", line 703, in reraise
+raise value
+File ""/opt/az/lib/python3.6/site-packages/azure/cli/core/commands/__init__.py"", line 688, in _run_job
+result = cmd_copy(params)
+File ""/opt/az/lib/python3.6/site-packages/azure/cli/core/commands/__init__.py"", line 325, in __call__
+return self.handler(*args, **kwargs)
+File ""/opt/az/lib/python3.6/site-packages/azure/cli/core/__init__.py"", line 545, in default_command_handler
+return op(**command_args)
+File ""/opt/az/lib/python3.6/site-packages/azure/cli/command_modules/network/custom.py"", line 2989, in add_lb_backend_address_pool_address
+address_pool.load_balancer_backend_addresses.append(new_address)
+AttributeError: 'NoneType' object has no attribute 'append'",AttributeError,buggy_snippets_files/3bb7f7f09145626ed3e4ae2d9cd0e7aaf19ece09f8bd1ce16c29558b1c6d5248_before_merge.py,buggy_snippets_files/3bb7f7f09145626ed3e4ae2d9cd0e7aaf19ece09f8bd1ce16c29558b1c6d5248_after_merge.py
+"    def split_action(arguments):
+        class SplitAction(argparse.Action): #pylint: disable=too-few-public-methods
+
+            def __call__(self, parser, namespace, values, option_string=None):
+                ''' The SplitAction will take the given ID parameter and spread the parsed
+                parts of the id into the individual backing fields.
+
+                Since the id value is expected to be of type `IterateValue`, all the backing
+                (dest) fields will also be of type `IterateValue`
+                '''
+                try:
+                    for value in [values] if isinstance(values, str) else values:
+                        parts = parse_resource_id(value)
+                        for arg in [arg for arg in arguments.values() if arg.id_part]:
+                            existing_values = getattr(namespace, arg.name, None)
+                            if existing_values is None:
+                                existing_values = IterateValue()
+                            existing_values.append(parts[arg.id_part])
+                            setattr(namespace, arg.name, existing_values)
+                except Exception as ex:
+                    raise ValueError(ex)
+
+        return SplitAction
+","    def split_action(arguments):
+        class SplitAction(argparse.Action): #pylint: disable=too-few-public-methods
+
+            def __call__(self, parser, namespace, values, option_string=None):
+                ''' The SplitAction will take the given ID parameter and spread the parsed
+                parts of the id into the individual backing fields.
+
+                Since the id value is expected to be of type `IterateValue`, all the backing
+                (dest) fields will also be of type `IterateValue`
+                '''
+                try:
+                    for value in [values] if isinstance(values, str) else values:
+                        parts = parse_resource_id(value)
+                        for arg in [arg for arg in arguments.values() if arg.id_part]:
+                            existing_values = getattr(namespace, arg.name, None)
+                            if existing_values is None:
+                                existing_values = IterateValue()
+                                existing_values.append(parts[arg.id_part])
+                            elif isinstance(existing_values, str):
+                                logger.warning(
+                                    ""Property '%s=%s' being overriden by value '%s' from IDs parameter."", # pylint: disable=line-too-long
+                                    arg.name, existing_values, parts[arg.id_part]
+                                )
+                                existing_values = IterateValue()
+                                existing_values.append(parts[arg.id_part])
+                            setattr(namespace, arg.name, existing_values)
+                except Exception as ex:
+                    raise ValueError(ex)
+
+        return SplitAction
+",https://github.com/Azure/azure-cli/issues/793,CWE-754: Improper Check for Unusual or Exceptional Conditions,"Attribute `arg.name` of `namespace` can be a string, but there is only one check if this attribute is None",src/azure-cli-core/azure/cli/core/commands/arm.py,add_id_parameters.split_action,[16],"'str' object has no attribute 'append'
+Traceback (most recent call last):
+File ""c:\users\trpresco\documents\github\azure-cli\src\azure\cli\commands\arm.py"", line 110, in __call__
+existing_values.append(parts[arg.id_part])
+AttributeError: 'str' object has no attribute 'append'",AttributeError,buggy_snippets_files/25709cdb193f8c883c904614aeeb0bad790585b490a77263c7925d83fdb5ae9c_before_merge.py,buggy_snippets_files/25709cdb193f8c883c904614aeeb0bad790585b490a77263c7925d83fdb5ae9c_after_merge.py
+"    def parse_series(self, data, **kwargs):
+        log.debug('Parsing series: `%s` [options: %s]', data, kwargs)
+        guessit_options = self._guessit_options(kwargs)
+        valid = True
+        if kwargs.get('name'):
+            expected_titles = [kwargs['name']]
+            if kwargs.get('alternate_names'):
+                expected_titles.extend(kwargs['alternate_names'])
+            # apostrophe support
+            expected_titles = [title.replace('\'', '(?:\'|\\\'|\\\\\'|-|)?') for title in expected_titles]
+            guessit_options['expected_title'] = ['re:' + title for title in expected_titles]
+        if kwargs.get('id_regexps'):
+            guessit_options['id_regexps'] = kwargs.get('id_regexps')
+        start = preferred_clock()
+        # If no series name is provided, we don't tell guessit what kind of match we are looking for
+        # This prevents guessit from determining that too general of matches are series
+        parse_type = 'episode' if kwargs.get('name') else None
+        if parse_type:
+            guessit_options['type'] = parse_type
+
+        # NOTE: Guessit expects str on PY3 and unicode on PY2 hence the use of future.utils.native
+        try:
+            guess_result = guessit_api.guessit(native(data), options=guessit_options)
+        except GuessitException:
+            log.warning('Parsing %s with guessit failed. Most likely a unicode error.', data)
+            guess_result = {}
+
+        if guess_result.get('type') != 'episode':
+            valid = False
+
+        name = kwargs.get('name')
+        country = guess_result.get('country')
+        if not name:
+            name = guess_result.get('title')
+            if country and hasattr(country, 'alpha2'):
+                name += ' (%s)' % country.alpha2
+        elif guess_result.matches['title']:
+            # Make sure the name match is up to FlexGet standards
+            # Check there is no unmatched cruft before the matched name
+            title_start = guess_result.matches['title'][0].start
+            title_end = guess_result.matches['title'][0].end
+            if title_start != 0:
+                try:
+                    pre_title = max((match[0].end for match in guess_result.matches.values() if
+                                     match[0].end <= title_start))
+                except ValueError:
+                    pre_title = 0
+                for char in reversed(data[pre_title:title_start]):
+                    if char.isalnum() or char.isdigit():
+                        return SeriesParseResult(data=data, valid=False)
+                    if char.isspace() or char in '._':
+                        continue
+                    else:
+                        break
+            # Check the name doesn't end mid-word (guessit might put the border before or after the space after title)
+            if data[title_end - 1].isalnum() and len(data) <= title_end or \
+                    not self._is_valid_name(data, guessit_options=guessit_options):
+                valid = False
+            # If we are in exact mode, make sure there is nothing after the title
+            if kwargs.get('strict_name'):
+                post_title = sys.maxsize
+                for match_type, matches in guess_result.matches.items():
+                    if match_type in ['season', 'episode', 'date', 'regexpId']:
+                        if matches[0].start < title_end:
+                            continue
+                        post_title = min(post_title, matches[0].start)
+                        if matches[0].parent:
+                            post_title = min(post_title, matches[0].parent.start)
+                for char in data[title_end:post_title]:
+                    if char.isalnum() or char.isdigit():
+                        valid = False
+        else:
+            valid = False
+        season = guess_result.get('season')
+        episode = guess_result.get('episode')
+        if episode is None and 'part' in guess_result:
+            episode = guess_result['part']
+        if isinstance(episode, list):
+            # guessit >=2.1.4 returns a list for multi-packs, but we just want the first one and the number of eps
+            episode = episode[0]
+        date = guess_result.get('date')
+        quality = self._quality(guess_result)
+        proper_count = self._proper_count(guess_result)
+        group = guess_result.get('release_group')
+        # Validate group with from_group
+        if not self._is_valid_groups(group, guessit_options.get('allow_groups', [])):
+            valid = False
+        # Validate country, TODO: LEGACY
+        if country and name.endswith(')'):
+            p_start = name.rfind('(')
+            if p_start != -1:
+                parenthetical = re.escape(name[p_start + 1:-1])
+                if parenthetical and parenthetical.lower() != str(country).lower():
+                    valid = False
+        special = guess_result.get('episode_details', '').lower() == 'special'
+        if 'episode' not in guess_result.values_list:
+            episodes = len(guess_result.values_list.get('part', []))
+        else:
+            episodes = len(guess_result.values_list['episode'])
+        if episodes > 3:
+            valid = False
+        identified_by = kwargs.get('identified_by', 'auto')
+        identifier_type, identifier = None, None
+        if identified_by in ['date', 'auto']:
+            if date:
+                identifier_type = 'date'
+                identifier = date
+        if not identifier_type and identified_by in ['ep', 'auto']:
+            if episode is not None:
+                if season is None and kwargs.get('allow_seasonless', True):
+                    if 'part' in guess_result:
+                        season = 1
+                    else:
+                        episode_raw = guess_result.matches['episode'][0].initiator.raw
+                        if episode_raw and any(c.isalpha() and c.lower() != 'v' for c in episode_raw):
+                            season = 1
+                if season is not None:
+                    identifier_type = 'ep'
+                    identifier = (season, episode)
+
+        if not identifier_type and identified_by in ['id', 'auto']:
+            if guess_result.matches['regexpId']:
+                identifier_type = 'id'
+                identifier = '-'.join(match.value for match in guess_result.matches['regexpId'])
+        if not identifier_type and identified_by in ['sequence', 'auto']:
+            if episode is not None:
+                identifier_type = 'sequence'
+                identifier = episode
+        if (not identifier_type or guessit_options.get('prefer_specials')) and (special or
+                                                                        guessit_options.get('assume_special')):
+            identifier_type = 'special'
+            identifier = guess_result.get('episode_title', 'special')
+        if not identifier_type:
+            valid = False
+        # TODO: Legacy - Complete == invalid
+        if 'complete' in normalize_component(guess_result.get('other')):
+            valid = False
+
+        parsed = SeriesParseResult(
+            data=data,
+            name=name,
+            episodes=episodes,
+            identified_by=identified_by,
+            id=identifier,
+            id_type=identifier_type,
+            quality=quality,
+            proper_count=proper_count,
+            special=special,
+            group=group,
+            valid=valid
+        )
+
+        log.debug('Parsing result: %s (in %s ms)', parsed, (preferred_clock() - start) * 1000)
+        return parsed
+","    def parse_series(self, data, **kwargs):
+        log.debug('Parsing series: `%s` [options: %s]', data, kwargs)
+        guessit_options = self._guessit_options(kwargs)
+        valid = True
+        if kwargs.get('name'):
+            expected_titles = [kwargs['name']]
+            if kwargs.get('alternate_names'):
+                expected_titles.extend(kwargs['alternate_names'])
+            # apostrophe support
+            expected_titles = [title.replace('\'', '(?:\'|\\\'|\\\\\'|-|)?') for title in expected_titles]
+            guessit_options['expected_title'] = ['re:' + title for title in expected_titles]
+        if kwargs.get('id_regexps'):
+            guessit_options['id_regexps'] = kwargs.get('id_regexps')
+        start = preferred_clock()
+        # If no series name is provided, we don't tell guessit what kind of match we are looking for
+        # This prevents guessit from determining that too general of matches are series
+        parse_type = 'episode' if kwargs.get('name') else None
+        if parse_type:
+            guessit_options['type'] = parse_type
+
+        # NOTE: Guessit expects str on PY3 and unicode on PY2 hence the use of future.utils.native
+        try:
+            guess_result = guessit_api.guessit(native(data), options=guessit_options)
+        except GuessitException:
+            log.warning('Parsing %s with guessit failed. Most likely a unicode error.', data)
+            guess_result = {}
+
+        if guess_result.get('type') != 'episode':
+            valid = False
+
+        name = kwargs.get('name')
+        country = guess_result.get('country')
+        if not name:
+            name = guess_result.get('title')
+            if not name:
+                valid = False
+            elif country and hasattr(country, 'alpha2'):
+                name += ' (%s)' % country.alpha2
+        elif guess_result.matches['title']:
+            # Make sure the name match is up to FlexGet standards
+            # Check there is no unmatched cruft before the matched name
+            title_start = guess_result.matches['title'][0].start
+            title_end = guess_result.matches['title'][0].end
+            if title_start != 0:
+                try:
+                    pre_title = max((match[0].end for match in guess_result.matches.values() if
+                                     match[0].end <= title_start))
+                except ValueError:
+                    pre_title = 0
+                for char in reversed(data[pre_title:title_start]):
+                    if char.isalnum() or char.isdigit():
+                        return SeriesParseResult(data=data, valid=False)
+                    if char.isspace() or char in '._':
+                        continue
+                    else:
+                        break
+            # Check the name doesn't end mid-word (guessit might put the border before or after the space after title)
+            if data[title_end - 1].isalnum() and len(data) <= title_end or \
+                    not self._is_valid_name(data, guessit_options=guessit_options):
+                valid = False
+            # If we are in exact mode, make sure there is nothing after the title
+            if kwargs.get('strict_name'):
+                post_title = sys.maxsize
+                for match_type, matches in guess_result.matches.items():
+                    if match_type in ['season', 'episode', 'date', 'regexpId']:
+                        if matches[0].start < title_end:
+                            continue
+                        post_title = min(post_title, matches[0].start)
+                        if matches[0].parent:
+                            post_title = min(post_title, matches[0].parent.start)
+                for char in data[title_end:post_title]:
+                    if char.isalnum() or char.isdigit():
+                        valid = False
+        else:
+            valid = False
+        season = guess_result.get('season')
+        episode = guess_result.get('episode')
+        if episode is None and 'part' in guess_result:
+            episode = guess_result['part']
+        if isinstance(episode, list):
+            # guessit >=2.1.4 returns a list for multi-packs, but we just want the first one and the number of eps
+            episode = episode[0]
+        date = guess_result.get('date')
+        quality = self._quality(guess_result)
+        proper_count = self._proper_count(guess_result)
+        group = guess_result.get('release_group')
+        # Validate group with from_group
+        if not self._is_valid_groups(group, guessit_options.get('allow_groups', [])):
+            valid = False
+        # Validate country, TODO: LEGACY
+        if country and name.endswith(')'):
+            p_start = name.rfind('(')
+            if p_start != -1:
+                parenthetical = re.escape(name[p_start + 1:-1])
+                if parenthetical and parenthetical.lower() != str(country).lower():
+                    valid = False
+        special = guess_result.get('episode_details', '').lower() == 'special'
+        if 'episode' not in guess_result.values_list:
+            episodes = len(guess_result.values_list.get('part', []))
+        else:
+            episodes = len(guess_result.values_list['episode'])
+        if episodes > 3:
+            valid = False
+        identified_by = kwargs.get('identified_by', 'auto')
+        identifier_type, identifier = None, None
+        if identified_by in ['date', 'auto']:
+            if date:
+                identifier_type = 'date'
+                identifier = date
+        if not identifier_type and identified_by in ['ep', 'auto']:
+            if episode is not None:
+                if season is None and kwargs.get('allow_seasonless', True):
+                    if 'part' in guess_result:
+                        season = 1
+                    else:
+                        episode_raw = guess_result.matches['episode'][0].initiator.raw
+                        if episode_raw and any(c.isalpha() and c.lower() != 'v' for c in episode_raw):
+                            season = 1
+                if season is not None:
+                    identifier_type = 'ep'
+                    identifier = (season, episode)
+
+        if not identifier_type and identified_by in ['id', 'auto']:
+            if guess_result.matches['regexpId']:
+                identifier_type = 'id'
+                identifier = '-'.join(match.value for match in guess_result.matches['regexpId'])
+        if not identifier_type and identified_by in ['sequence', 'auto']:
+            if episode is not None:
+                identifier_type = 'sequence'
+                identifier = episode
+        if (not identifier_type or guessit_options.get('prefer_specials')) and (special or
+                                                                        guessit_options.get('assume_special')):
+            identifier_type = 'special'
+            identifier = guess_result.get('episode_title', 'special')
+        if not identifier_type:
+            valid = False
+        # TODO: Legacy - Complete == invalid
+        if 'complete' in normalize_component(guess_result.get('other')):
+            valid = False
+
+        parsed = SeriesParseResult(
+            data=data,
+            name=name,
+            episodes=episodes,
+            identified_by=identified_by,
+            id=identifier,
+            id_type=identifier_type,
+            quality=quality,
+            proper_count=proper_count,
+            special=special,
+            group=group,
+            valid=valid
+        )
+
+        log.debug('Parsing result: %s (in %s ms)', parsed, (preferred_clock() - start) * 1000)
+        return parsed
+",https://github.com/Flexget/Flexget/issues/2276,CWE-754: Improper Check for Unusual or Exceptional Conditions,"`guess_result.get('title')` can return None, then `valid` must be `False`",flexget/plugins/parsers/parser_guessit.py,ParserGuessit.parse_series,,"2018-12-10 19:39 DEBUG    parser_guessit moving_anime    Parsing series: `Ep 02` [options: {'name': None, 'identified_by': 'auto', 'allow_seasonless': False}]
+2018-12-10 19:39 DEBUG    parser_guessit moving_anime    Parsing result: <SeriesParseResult(data=Ep 02,name=None,id=2,season=0,season_pack=False,episode=2,quality=unknown,pro
+per=0,special=False,status=OK)> (in 31.31600000006074 ms)
+2018-12-10 19:39 CRITICAL task          moving_anime    BUG: Unhandled error in plugin metainfo_series: 'NoneType' object has no attribute 'split'
+2018-12-10 19:39 CRITICAL manager       moving_anime    An unexpected crash has occurred. Writing crash report to /config/crash_report.2018.12.10.193956695553.log. Please ver
+ify you are running the latest version of flexget by using ""flexget -V"" from CLI or by using version_checker plugin at http://flexget.com/wiki/Plugins/version_checker. You ar
+e currently using version 2.17.18
+2018-12-10 19:39 DEBUG    manager       moving_anime    Traceback:
+Traceback (most recent call last):
+File ""/usr/lib/python3.6/site-packages/flexget/task.py"", line 486, in __run_plugin
+return method(*args, **kwargs)
+File ""/usr/lib/python3.6/site-packages/flexget/event.py"", line 23, in __call__
+return self.func(*args, **kwargs)
+File ""/usr/lib/python3.6/site-packages/flexget/plugins/metainfo/series.py"", line 32, in on_task_metainfo
+self.guess_entry(entry)
+File ""/usr/lib/python3.6/site-packages/flexget/plugins/metainfo/series.py"", line 49, in guess_entry
+parsed.name = normalize_name(remove_dirt(parsed.name))
+File ""/usr/lib/python3.6/site-packages/flexget/plugins/parsers/parser_common.py"", line 103, in normalize_name
+name = capwords(name)
+File ""/usr/lib/python3.6/string.py"", line 48, in capwords
+return (sep or ' ').join(x.capitalize() for x in s.split(sep))
+AttributeError: 'NoneType' object has no attribute 'split'
+2018-12-10 19:39 WARNING  task          moving_anime    Aborting task (plugin: metainfo_series)",AttributeError,buggy_snippets_files/f652403f87adbfe2ca2690e2d0db03e6edbb70094bb3bc2d900b9f74bb3b22d6_before_merge.py,buggy_snippets_files/f652403f87adbfe2ca2690e2d0db03e6edbb70094bb3bc2d900b9f74bb3b22d6_after_merge.py
+"    def __init__(self, **kwargs):
+        # Save values so that we can revert to their initial values
+        self.old_defaults = {}
+        with Session() as lib:
+            for key in kwargs:
+                self.old_defaults[key] = lib.get_default(key)
+
+        # call gmt set to change GMT defaults
+        arg_str = "" "".join(
+            [""{}={}"".format(key, value) for key, value in kwargs.items()]
+        )
+        with Session() as lib:
+            lib.call_module(""set"", arg_str)
+","    def __init__(self, **kwargs):
+        # Save values so that we can revert to their initial values
+        self.old_defaults = {}
+        self.special_params = {
+            ""FONT"": [
+                ""FONT_ANNOT_PRIMARY"",
+                ""FONT_ANNOT_SECONDARY"",
+                ""FONT_HEADING"",
+                ""FONT_LABEL"",
+                ""FONT_TAG"",
+                ""FONT_TITLE"",
+            ],
+            ""FONT_ANNOT"": [""FONT_ANNOT_PRIMARY"", ""FONT_ANNOT_SECONDARY""],
+            ""FORMAT_TIME_MAP"": [""FORMAT_TIME_PRIMARY_MAP"", ""FORMAT_TIME_SECONDARY_MAP""],
+            ""MAP_ANNOT_OFFSET"": [
+                ""MAP_ANNOT_OFFSET_PRIMARY"",
+                ""MAP_ANNOT_OFFSET_SECONDARY"",
+            ],
+            ""MAP_GRID_CROSS_SIZE"": [
+                ""MAP_GRID_CROSS_SIZE_PRIMARY"",
+                ""MAP_GRID_CROSS_SIZE_SECONDARY"",
+            ],
+            ""MAP_GRID_PEN"": [""MAP_GRID_PEN_PRIMARY"", ""MAP_GRID_PEN_SECONDARY""],
+            ""MAP_TICK_LENGTH"": [""MAP_TICK_LENGTH_PRIMARY"", ""MAP_TICK_LENGTH_SECONDARY""],
+            ""MAP_TICK_PEN"": [""MAP_TICK_PEN_PRIMARY"", ""MAP_TICK_PEN_SECONDARY""],
+        }
+        with Session() as lib:
+            for key in kwargs:
+                if key in self.special_params:
+                    for k in self.special_params[key]:
+                        self.old_defaults[k] = lib.get_default(k)
+                else:
+                    self.old_defaults[key] = lib.get_default(key)
+
+        # call gmt set to change GMT defaults
+        arg_str = "" "".join(
+            [""{}={}"".format(key, value) for key, value in kwargs.items()]
+        )
+        with Session() as lib:
+            lib.call_module(""set"", arg_str)
+",https://github.com/GenericMappingTools/pygmt/issues/409,CWE-754: Improper Check for Unusual or Exceptional Conditions,There can be no value for key in default. No check for it,pygmt/modules.py,config.__init__,[6],"pygmt-session [ERROR]: Syntax error: Unrecognized keyword FONT
+Traceback (most recent call last):
+File ""/opt/miniconda3/envs/liam/lib/python3.7/site-packages/IPython/core/interactiveshell.py"", line 3326, in run_code
+exec(code_obj, self.user_global_ns, self.user_ns)
+File ""<ipython-input-19-8e431d18430a>"", line 1, in <module>
+pygmt.config(FONT='8p')
+File ""/opt/miniconda3/envs/liam/lib/python3.7/site-packages/pygmt/modules.py"", line 168, in __init__
+self.old_defaults[key] = lib.get_default(key)
+File ""/opt/miniconda3/envs/liam/lib/python3.7/site-packages/pygmt/clib/session.py"", line 458, in get_default
+name, status
+pygmt.exceptions.GMTCLibError: Error getting default value for 'FONT' (error code 67).",pygmt.exceptions.GMTCLibError,buggy_snippets_files/db65c0082d70560caaba4022d944a79a61c6b46392261d530a8290c3da9acf3b_before_merge.py,buggy_snippets_files/db65c0082d70560caaba4022d944a79a61c6b46392261d530a8290c3da9acf3b_after_merge.py

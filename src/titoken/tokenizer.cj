@@ -13,7 +13,7 @@ public class Tokenizer {
     static var tokensSize:Int32 = 0 
     // 后期改为单例
     //默认路径
-    public init(tokensFilePath!:String = getcwd()+"/resource/tokenizer.json"){
+    public init(tokensFilePath!:String = getcwd()+"/src/titoken/tokenizer.json"){
          tokensJsonPath = tokensFilePath
         if(tokensSize == 0){
             let tokenallBytes: Array<Byte> = File.readFrom(tokensJsonPath)
@@ -91,7 +91,7 @@ public class Tokenizer {
                 encodedData.append(102)
                 encodedDataArr.append(encodedData.clone())
                 //循环前10个token
-                for(x in i..i-10 -1){
+                for(_ in i..i-10 -1){
                     var sentenceTokens = sentence[i].toString().toLower()
                     var token:Int64 = getToken(sentenceTokens)
                     encodedData.append(token)

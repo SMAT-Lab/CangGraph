@@ -1,0 +1,2390 @@
+after_merge,before_merge,filename,full_file_code_after_merge,full_file_code_before_merge,function_name,url,source code and errors,full_traceback,traceback_type,before_merge_without_docstrings,after_merge_without_docstrings,before_merge_docstrings,after_merge_docstrings,path_to_snippet_before_merge,path_to_snippet_after_merge
+"def plot(result_pickle_file_path, show, plot_save_file):
+    """"""
+    [sys_analyser] draw result DataFrame
+    """"""
+    import pandas as pd
+    from .plot import plot_result
+
+    result_dict = pd.read_pickle(result_pickle_file_path)
+    plot_result(result_dict, show, plot_save_file)","def plot(result_dict_file, show, plot_save_file):
+    """"""
+    [sys_analyser] draw result DataFrame
+    """"""
+    import pandas as pd
+    from .plot import plot_result
+
+    result_dict = pd.read_pickle(result_dict_file)
+    plot_result(result_dict, show, plot_save_file)",rqalpha/mod/rqalpha_mod_sys_analyser/__init__.py,"# -*- coding: utf-8 -*-
+#
+# Copyright 2017 Ricequant, Inc
+#
+# Licensed under the Apache License, Version 2.0 (the ""License"");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an ""AS IS"" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import click
+from rqalpha.__main__ import cli
+
+__config__ = {
+    # 当不输出csv/pickle/plot 等内容时，可以通过 record 来决定是否执行该 Mod 的计算逻辑
+    ""record"": True,
+    # 如果指定路径，则输出计算后的 pickle 文件
+    ""output_file"": None,
+    # 如果指定路径，则输出 report csv 文件
+    ""report_save_path"": None,
+    # 画图
+    'plot': False,
+    # 如果指定路径，则输出 plot 对应的图片文件
+    'plot_save_file': None,
+}
+
+
+def load_mod():
+    from .mod import AnalyserMod
+    return AnalyserMod()
+
+
+""""""
+--report
+--output-file
+
+""""""
+cli.commands['run'].params.append(
+    click.Option(
+        ('--report', 'mod__sys_analyser__report_save_path'),
+        type=click.Path(writable=True),
+        help=""[sys_analyser] save report""
+    )
+)
+cli.commands['run'].params.append(
+    click.Option(
+        ('-o', '--output-file', 'mod__sys_analyser__output_file'),
+        type=click.Path(writable=True),
+        help=""[sys_analyser] output result pickle file""
+    )
+)
+cli.commands['run'].params.append(
+    click.Option(
+        ('-p', '--plot/--no-plot', 'mod__sys_analyser__plot'),
+        default=None,
+        help=""[sys_analyser] plot result""
+    )
+)
+cli.commands['run'].params.append(
+    click.Option(
+        ('--plot-save', 'mod__sys_analyser__plot_save_file'),
+        default=None,
+        help=""[sys_analyser] save plot to file""
+    )
+)
+
+
+@cli.command()
+@click.argument('result_pickle_file_path', type=click.Path(exists=True), required=True)
+@click.option('--show/--hide', 'show', default=True)
+@click.option('--plot-save', 'plot_save_file', default=None, type=click.Path(), help=""save plot result to file"")
+def plot(result_pickle_file_path, show, plot_save_file):
+    """"""
+    [sys_analyser] draw result DataFrame
+    """"""
+    import pandas as pd
+    from .plot import plot_result
+
+    result_dict = pd.read_pickle(result_pickle_file_path)
+    plot_result(result_dict, show, plot_save_file)
+
+
+@cli.command()
+@click.argument('result_pickle_file_path', type=click.Path(exists=True), required=True)
+@click.argument('target_report_csv_path', type=click.Path(exists=True, writable=True), required=True)
+def report(result_pickle_file_path, target_report_csv_path):
+    """"""
+    [sys_analyser] Generate report from backtest output file
+    """"""
+    import pandas as pd
+    result_dict = pd.read_pickle(result_pickle_file_path)
+
+    from .report import generate_report
+    generate_report(result_dict, target_report_csv_path)
+","# -*- coding: utf-8 -*-
+#
+# Copyright 2017 Ricequant, Inc
+#
+# Licensed under the Apache License, Version 2.0 (the ""License"");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an ""AS IS"" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import click
+from rqalpha.__main__ import cli
+
+__config__ = {
+    # 当不输出csv/pickle/plot 等内容时，可以通过 record 来决定是否执行该 Mod 的计算逻辑
+    ""record"": True,
+    # 如果指定路径，则输出计算后的 pickle 文件
+    ""output_file"": None,
+    # 如果指定路径，则输出 report csv 文件
+    ""report_save_path"": None,
+    # 画图
+    'plot': False,
+    # 如果指定路径，则输出 plot 对应的图片文件
+    'plot_save_file': None,
+}
+
+
+def load_mod():
+    from .mod import AnalyserMod
+    return AnalyserMod()
+
+
+""""""
+--report
+--output-file
+
+""""""
+cli.commands['run'].params.append(
+    click.Option(
+        ('--report', 'mod__sys_analyser__report_save_path'),
+        type=click.Path(writable=True),
+        help=""[sys_analyser] save report""
+    )
+)
+cli.commands['run'].params.append(
+    click.Option(
+        ('-o', '--output-file', 'mod__sys_analyser__output_file'),
+        type=click.Path(writable=True),
+        help=""[sys_analyser] output result pickle file""
+    )
+)
+cli.commands['run'].params.append(
+    click.Option(
+        ('-p', '--plot/--no-plot', 'mod__sys_analyser__plot'),
+        default=None,
+        help=""[sys_analyser] plot result""
+    )
+)
+cli.commands['run'].params.append(
+    click.Option(
+        ('--plot-save', 'mod__sys_analyser__plot_save_file'),
+        default=None,
+        help=""[sys_analyser] save plot to file""
+    )
+)
+
+
+@cli.command()
+@click.argument('result_pickle_file_path', type=click.Path(exists=True), required=True)
+@click.option('--show/--hide', 'show', default=True)
+@click.option('--plot-save', 'plot_save_file', default=None, type=click.Path(), help=""save plot result to file"")
+def plot(result_dict_file, show, plot_save_file):
+    """"""
+    [sys_analyser] draw result DataFrame
+    """"""
+    import pandas as pd
+    from .plot import plot_result
+
+    result_dict = pd.read_pickle(result_dict_file)
+    plot_result(result_dict, show, plot_save_file)
+
+
+@cli.command()
+@click.argument('result_pickle_file_path', type=click.Path(exists=True), required=True)
+@click.argument('target_report_csv_path', type=click.Path(exists=True, writable=True), required=True)
+def report(result_pickle_file_path, target_report_csv_path):
+    """"""
+    [sys_analyser] Generate report from backtest output file
+    """"""
+    import pandas as pd
+    result_dict = pd.read_pickle(result_pickle_file_path)
+
+    from .report import generate_report
+    generate_report(result_dict, target_report_csv_path)
+",plot,https://github.com/ricequant/rqalpha/issues/109,"[{'piece_type': 'other', 'piece_content': 'rqalpha plot ./1.pkl --show'}, {'piece_type': 'error message', 'piece_content': 'Traceback (most recent call last):\nFile ""c:\\programdata\\anaconda2\\lib\\runpy.py"", line 174, in _run_module_as_main\n""__main__"", fname, loader, pkg_name)\nFile ""c:\\programdata\\anaconda2\\lib\\runpy.py"", line 72, in _run_code\nexec code in run_globals\n│       └ {\'__builtins__\': <module \'__builtin__\' (built-in)>, \'__file__\': \'C:\\ProgramData\\Anaconda2\\Scripts\\rqalpha.exe\\__main__.py\',...\nqalpha.exe\\__main__.py"", line 2>> at 0256EA40, file ""C:\\ProgramData\\Anaconda2\\Scripts\nFile ""C:\\ProgramData\\Anaconda2\\Scripts\\rqalpha.exe\\__main__.py"", line 9, in <module>\nsys.exit(entry_point())\n│        └ <function entry_point at 0x047D1CF0>\n└ <module \'sys\' (built-in)>\nFile ""c:\\programdata\\anaconda2\\lib\\site-packages\\rqalpha\\__main__.py"", line 66, in entry_point\ncli(obj={})\n└ <click.core.Group object at 0x047CFE90>\nFile ""c:\\programdata\\anaconda2\\lib\\site-packages\\click\\core.py"", line 722, in __call__\nreturn self.main(*args, **kwargs)\n│          │       └ {\'obj\': {\'VERBOSE\': 0}}\n│          └ ()\n└ <click.core.Group object at 0x047CFE90>\nFile ""c:\\programdata\\anaconda2\\lib\\site-packages\\click\\core.py"", line 697, in main\nrv = self.invoke(ctx)\n│           └ <click.core.Context object at 0x0482CC10>\n└ <click.core.Group object at 0x047CFE90>\nFile ""c:\\programdata\\anaconda2\\lib\\site-packages\\click\\core.py"", line 1066, in invoke\nreturn _process_result(sub_ctx.command.invoke(sub_ctx))\n│               │                      └ <click.core.Context object at 0x0482CE50>\n│               └ <click.core.Context object at 0x0482CE50>\n└ <function _process_result at 0x0482D5B0>\nFile ""c:\\programdata\\anaconda2\\lib\\site-packages\\click\\core.py"", line 895, in invoke\nreturn ctx.invoke(self.callback, **ctx.params)\n│          │                └ <click.core.Context object at 0x0482CE50>\n│          └ <click.core.Command object at 0x0482CF50>\n└ <click.core.Context object at 0x0482CE50>\nFile ""c:\\programdata\\anaconda2\\lib\\site-packages\\click\\core.py"", line 535, in invoke\nreturn callback(*args, **kwargs)\n│         │       └ {\'result_pickle_file_path\': u\'./1.pkl\', \'plot_save_file\': None, \'show\': True}\n│         └ ()\n└ <function plot at 0x0482D830>\nTypeError: plot() got an unexpected keyword argument \'result_pickle_file_path\''}]","Traceback (most recent call last):
+File ""c:\programdata\anaconda2\lib\runpy.py"", line 174, in _run_module_as_main
+""__main__"", fname, loader, pkg_name)
+File ""c:\programdata\anaconda2\lib\runpy.py"", line 72, in _run_code
+exec code in run_globals
+│       └ {'__builtins__': <module '__builtin__' (built-in)>, '__file__': 'C:\ProgramData\Anaconda2\Scripts\rqalpha.exe\__main__.py',...
+qalpha.exe\__main__.py"", line 2>> at 0256EA40, file ""C:\ProgramData\Anaconda2\Scripts
+File ""C:\ProgramData\Anaconda2\Scripts\rqalpha.exe\__main__.py"", line 9, in <module>
+sys.exit(entry_point())
+│        └ <function entry_point at 0x047D1CF0>
+└ <module 'sys' (built-in)>
+File ""c:\programdata\anaconda2\lib\site-packages\rqalpha\__main__.py"", line 66, in entry_point
+cli(obj={})
+└ <click.core.Group object at 0x047CFE90>
+File ""c:\programdata\anaconda2\lib\site-packages\click\core.py"", line 722, in __call__
+return self.main(*args, **kwargs)
+│          │       └ {'obj': {'VERBOSE': 0}}
+│          └ ()
+└ <click.core.Group object at 0x047CFE90>
+File ""c:\programdata\anaconda2\lib\site-packages\click\core.py"", line 697, in main
+rv = self.invoke(ctx)
+│           └ <click.core.Context object at 0x0482CC10>
+└ <click.core.Group object at 0x047CFE90>
+File ""c:\programdata\anaconda2\lib\site-packages\click\core.py"", line 1066, in invoke
+return _process_result(sub_ctx.command.invoke(sub_ctx))
+│               │                      └ <click.core.Context object at 0x0482CE50>
+│               └ <click.core.Context object at 0x0482CE50>
+└ <function _process_result at 0x0482D5B0>
+File ""c:\programdata\anaconda2\lib\site-packages\click\core.py"", line 895, in invoke
+return ctx.invoke(self.callback, **ctx.params)
+│          │                └ <click.core.Context object at 0x0482CE50>
+│          └ <click.core.Command object at 0x0482CF50>
+└ <click.core.Context object at 0x0482CE50>
+File ""c:\programdata\anaconda2\lib\site-packages\click\core.py"", line 535, in invoke
+return callback(*args, **kwargs)
+│         │       └ {'result_pickle_file_path': u'./1.pkl', 'plot_save_file': None, 'show': True}
+│         └ ()
+└ <function plot at 0x0482D830>
+TypeError: plot() got an unexpected keyword argument 'result_pickle_file_path'",TypeError,"def plot(result_dict_file, show, plot_save_file):
+    
+    import pandas as pd
+    from .plot import plot_result
+
+    result_dict = pd.read_pickle(result_dict_file)
+    plot_result(result_dict, show, plot_save_file)","def plot(result_pickle_file_path, show, plot_save_file):
+    
+    import pandas as pd
+    from .plot import plot_result
+
+    result_dict = pd.read_pickle(result_pickle_file_path)
+    plot_result(result_dict, show, plot_save_file)",['[sys_analyser] draw result DataFrame'],['[sys_analyser] draw result DataFrame'],buggy_snippets_files/e93817735d3042d739fe86677bf0a5e504909d0001570544368d640ee352b7d4_before_merge.py,buggy_snippets_files/e93817735d3042d739fe86677bf0a5e504909d0001570544368d640ee352b7d4_after_merge.py
+"    def stream_logs(self):
+        """"""Stream a pod's log.""""""
+        for line in self.api.read_namespaced_pod_log(
+                self.name,
+                self.namespace,
+                follow=True,
+                _preload_content=False):
+            # verify that the line is JSON
+            line = line.decode('utf-8')
+            try:
+                json.loads(line)
+            except ValueError:
+                # log event wasn't JSON.
+                # use the line itself as the message with unknown phase.
+                # We don't know what the right phase is, use 'unknown'.
+                # If it was a fatal error, presumably a 'failure'
+                # message will arrive shortly.
+                app_log.error(""log event not json: %r"", line)
+                line = json.dumps({
+                    'phase': 'unknown',
+                    'message': line,
+                })
+
+            self.progress('log', line)","    def stream_logs(self):
+        """"""Stream a pod's log.""""""
+        for line in self.api.read_namespaced_pod_log(
+                self.name,
+                self.namespace,
+                follow=True,
+                _preload_content=False):
+
+            self.progress('log', line.decode('utf-8'))",binderhub/build.py,"""""""
+Contains build of a docker image from a git repository.
+""""""
+
+import json
+
+from kubernetes import client, watch
+from tornado.ioloop import IOLoop
+from tornado.log import app_log
+
+
+class Build:
+    """"""Represents a build of a git repository into a docker image.
+
+    This ultimately maps to a single pod on a kubernetes cluster. Many
+    different build objects can point to this single pod and perform
+    operations on the pod. The code in this class needs to be careful and take
+    this into account.
+
+    For example, operations a Build object tries might not succeed because
+    another Build object pointing to the same pod might have done something
+    else. This should be handled gracefully, and the build object should
+    reflect the state of the pod as quickly as possible.
+
+    ``name``
+        The ``name`` should be unique and immutable since it is used to
+        sync to the pod. The ``name`` should be unique for a
+        ``(git_url, ref)`` tuple, and the same tuple should correspond
+        to the same ``name``. This allows use of the locking provided by k8s
+        API instead of having to invent our own locking code.
+
+    """"""
+    def __init__(self, q, api, name, namespace, git_url, ref, builder_image,
+                 image_name, push_secret):
+        self.q = q
+        self.api = api
+        self.git_url = git_url
+        self.ref = ref
+        self.name = name
+        self.namespace = namespace
+        self.image_name = image_name
+        self.push_secret = push_secret
+        self.builder_image = builder_image
+
+    def get_cmd(self):
+        """"""Get the cmd to run to build the image""""""
+        cmd = [
+            'jupyter-repo2docker',
+            self.git_url,
+            '--ref', self.ref,
+            '--image', self.image_name,
+            '--no-clean', '--no-run', '--json-logs',
+        ]
+
+        if self.push_secret:
+            cmd.append('--push')
+
+        return cmd
+
+    def progress(self, kind, obj):
+        """"""Put the current action item into the queue for execution.""""""
+        IOLoop.instance().add_callback(self.q.put, {'kind': kind, 'payload': obj})
+
+    def submit(self):
+        """"""Submit a image spec to openshift's s2i and wait for completion """"""
+        volume_mounts = [
+            client.V1VolumeMount(mount_path=""/var/run/docker.sock"", name=""docker-socket"")
+        ]
+        volumes = [client.V1Volume(
+            name=""docker-socket"",
+            host_path=client.V1HostPathVolumeSource(path=""/var/run/docker.sock"")
+        )]
+
+        if self.push_secret:
+            volume_mounts.append(client.V1VolumeMount(mount_path=""/root/.docker"", name='docker-push-secret'))
+            volumes.append(client.V1Volume(
+                name='docker-push-secret',
+                secret=client.V1SecretVolumeSource(secret_name=self.push_secret)
+            ))
+
+        self.pod = client.V1Pod(
+            metadata=client.V1ObjectMeta(
+                name=self.name,
+                labels={""name"": self.name}
+            ),
+            spec=client.V1PodSpec(
+                containers=[
+                    client.V1Container(
+                        image=self.builder_image,
+                        name=""builder"",
+                        args=self.get_cmd(),
+                        image_pull_policy='Always',
+                        volume_mounts=volume_mounts,
+                    )
+                ],
+                volumes=volumes,
+                restart_policy=""Never""
+            )
+        )
+
+        try:
+            ret = self.api.create_namespaced_pod(self.namespace, self.pod)
+        except client.rest.ApiException as e:
+            if e.status == 409:
+                # Someone else created it!
+                pass
+            else:
+                raise
+
+        w = watch.Watch()
+        try:
+            for f in w.stream(
+                    self.api.list_namespaced_pod,
+                    self.namespace,
+                    label_selector=""name={}"".format(self.name)):
+                if f['type'] == 'DELETED':
+                    self.progress('pod.phasechange', 'Deleted')
+                    return
+                self.pod = f['object']
+                self.progress('pod.phasechange', self.pod.status.phase)
+                if self.pod.status.phase == 'Succeeded':
+                    self.cleanup()
+                elif self.pod.status.phase == 'Failed':
+                    self.cleanup()
+        finally:
+            w.stop()
+
+    def stream_logs(self):
+        """"""Stream a pod's log.""""""
+        for line in self.api.read_namespaced_pod_log(
+                self.name,
+                self.namespace,
+                follow=True,
+                _preload_content=False):
+            # verify that the line is JSON
+            line = line.decode('utf-8')
+            try:
+                json.loads(line)
+            except ValueError:
+                # log event wasn't JSON.
+                # use the line itself as the message with unknown phase.
+                # We don't know what the right phase is, use 'unknown'.
+                # If it was a fatal error, presumably a 'failure'
+                # message will arrive shortly.
+                app_log.error(""log event not json: %r"", line)
+                line = json.dumps({
+                    'phase': 'unknown',
+                    'message': line,
+                })
+
+            self.progress('log', line)
+
+    def cleanup(self):
+        """"""Delete a kubernetes pod.""""""
+        try:
+            self.api.delete_namespaced_pod(
+                name=self.name,
+                namespace=self.namespace,
+                body=client.V1DeleteOptions(grace_period_seconds=0))
+        except client.rest.ApiException as e:
+            if e.status == 404:
+                # Is ok, someone else has already deleted it
+                pass
+            else:
+                raise
+","""""""
+Contains build of a docker image from a git repository.
+""""""
+
+from kubernetes import client, watch
+from tornado.ioloop import IOLoop
+
+class Build:
+    """"""Represents a build of a git repository into a docker image.
+
+    This ultimately maps to a single pod on a kubernetes cluster. Many
+    different build objects can point to this single pod and perform
+    operations on the pod. The code in this class needs to be careful and take
+    this into account.
+
+    For example, operations a Build object tries might not succeed because
+    another Build object pointing to the same pod might have done something
+    else. This should be handled gracefully, and the build object should
+    reflect the state of the pod as quickly as possible.
+
+    ``name``
+        The ``name`` should be unique and immutable since it is used to
+        sync to the pod. The ``name`` should be unique for a
+        ``(git_url, ref)`` tuple, and the same tuple should correspond
+        to the same ``name``. This allows use of the locking provided by k8s
+        API instead of having to invent our own locking code.
+
+    """"""
+    def __init__(self, q, api, name, namespace, git_url, ref, builder_image,
+                 image_name, push_secret):
+        self.q = q
+        self.api = api
+        self.git_url = git_url
+        self.ref = ref
+        self.name = name
+        self.namespace = namespace
+        self.image_name = image_name
+        self.push_secret = push_secret
+        self.builder_image = builder_image
+
+    def get_cmd(self):
+        """"""Get the cmd to run to build the image""""""
+        cmd = [
+            'jupyter-repo2docker',
+            self.git_url,
+            '--ref', self.ref,
+            '--image', self.image_name,
+            '--no-clean', '--no-run', '--json-logs',
+        ]
+
+        if self.push_secret:
+            cmd.append('--push')
+
+        return cmd
+
+    def progress(self, kind, obj):
+        """"""Put the current action item into the queue for execution.""""""
+        IOLoop.instance().add_callback(self.q.put, {'kind': kind, 'payload': obj})
+
+    def submit(self):
+        """"""Submit a image spec to openshift's s2i and wait for completion """"""
+        volume_mounts = [
+            client.V1VolumeMount(mount_path=""/var/run/docker.sock"", name=""docker-socket"")
+        ]
+        volumes = [client.V1Volume(
+            name=""docker-socket"",
+            host_path=client.V1HostPathVolumeSource(path=""/var/run/docker.sock"")
+        )]
+
+        if self.push_secret:
+            volume_mounts.append(client.V1VolumeMount(mount_path=""/root/.docker"", name='docker-push-secret'))
+            volumes.append(client.V1Volume(
+                name='docker-push-secret',
+                secret=client.V1SecretVolumeSource(secret_name=self.push_secret)
+            ))
+
+        self.pod = client.V1Pod(
+            metadata=client.V1ObjectMeta(
+                name=self.name,
+                labels={""name"": self.name}
+            ),
+            spec=client.V1PodSpec(
+                containers=[
+                    client.V1Container(
+                        image=self.builder_image,
+                        name=""builder"",
+                        args=self.get_cmd(),
+                        image_pull_policy='Always',
+                        volume_mounts=volume_mounts,
+                    )
+                ],
+                volumes=volumes,
+                restart_policy=""Never""
+            )
+        )
+
+        try:
+            ret = self.api.create_namespaced_pod(self.namespace, self.pod)
+        except client.rest.ApiException as e:
+            if e.status == 409:
+                # Someone else created it!
+                pass
+            else:
+                raise
+
+        w = watch.Watch()
+        try:
+            for f in w.stream(
+                    self.api.list_namespaced_pod,
+                    self.namespace,
+                    label_selector=""name={}"".format(self.name)):
+                if f['type'] == 'DELETED':
+                    self.progress('pod.phasechange', 'Deleted')
+                    return
+                self.pod = f['object']
+                self.progress('pod.phasechange', self.pod.status.phase)
+                if self.pod.status.phase == 'Succeeded':
+                    self.cleanup()
+                elif self.pod.status.phase == 'Failed':
+                    self.cleanup()
+        finally:
+            w.stop()
+
+    def stream_logs(self):
+        """"""Stream a pod's log.""""""
+        for line in self.api.read_namespaced_pod_log(
+                self.name,
+                self.namespace,
+                follow=True,
+                _preload_content=False):
+
+            self.progress('log', line.decode('utf-8'))
+
+    def cleanup(self):
+        """"""Delete a kubernetes pod.""""""
+        try:
+            self.api.delete_namespaced_pod(
+                name=self.name,
+                namespace=self.namespace,
+                body=client.V1DeleteOptions(grace_period_seconds=0))
+        except client.rest.ApiException as e:
+            if e.status == 404:
+                # Is ok, someone else has already deleted it
+                pass
+            else:
+                raise
+",Build.stream_logs,https://github.com/jupyterhub/binderhub/issues/164,"[{'piece_type': 'error message', 'piece_content': '/ # jupyter-repo2docker https://github.com/yuvipanda/example-requirements --json-logs\nTraceback (most recent call last):\nFile ""/usr/local/bin/jupyter-repo2docker"", line 11, in <module>\nload_entry_point(\'jupyter-repo2docker==0.4.1\', \'console_scripts\', \'jupyter-repo2docker\')()\nFile ""/usr/local/lib/python3.6/site-packages/repo2docker/__main__.py"", line 6, in main\nf.start()\nFile ""/usr/local/lib/python3.6/site-packages/repo2docker/app.py"", line 309, in start\ncheckout_path\nFile ""/usr/local/lib/python3.6/site-packages/repo2docker/app.py"", line 95, in fetch\ncapture=self.json_logs):\nFile ""/usr/local/lib/python3.6/site-packages/repo2docker/utils.py"", line 12, in execute_cmd\nproc = subprocess.Popen(cmd, **kwargs)\nFile ""/usr/local/lib/python3.6/subprocess.py"", line 709, in __init__\nrestore_signals, start_new_session)\nFile ""/usr/local/lib/python3.6/subprocess.py"", line 1344, in _execute_child\nraise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: \'git\': \'git\''}]","/ # jupyter-repo2docker https://github.com/yuvipanda/example-requirements --json-logs
+Traceback (most recent call last):
+File ""/usr/local/bin/jupyter-repo2docker"", line 11, in <module>
+load_entry_point('jupyter-repo2docker==0.4.1', 'console_scripts', 'jupyter-repo2docker')()
+File ""/usr/local/lib/python3.6/site-packages/repo2docker/__main__.py"", line 6, in main
+f.start()
+File ""/usr/local/lib/python3.6/site-packages/repo2docker/app.py"", line 309, in start
+checkout_path
+File ""/usr/local/lib/python3.6/site-packages/repo2docker/app.py"", line 95, in fetch
+capture=self.json_logs):
+File ""/usr/local/lib/python3.6/site-packages/repo2docker/utils.py"", line 12, in execute_cmd
+proc = subprocess.Popen(cmd, **kwargs)
+File ""/usr/local/lib/python3.6/subprocess.py"", line 709, in __init__
+restore_signals, start_new_session)
+File ""/usr/local/lib/python3.6/subprocess.py"", line 1344, in _execute_child
+raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'git': 'git'",FileNotFoundError,"    def stream_logs(self):
+        
+        for line in self.api.read_namespaced_pod_log(
+                self.name,
+                self.namespace,
+                follow=True,
+                _preload_content=False):
+
+            self.progress('log', line.decode('utf-8'))","    def stream_logs(self):
+        
+        for line in self.api.read_namespaced_pod_log(
+                self.name,
+                self.namespace,
+                follow=True,
+                _preload_content=False):
+            
+            line = line.decode('utf-8')
+            try:
+                json.loads(line)
+            except ValueError:
+                
+                
+                
+                
+                
+                app_log.error(""log event not json: %r"", line)
+                line = json.dumps({
+                    'phase': 'unknown',
+                    'message': line,
+                })
+
+            self.progress('log', line)",[],[],buggy_snippets_files/8241189c4267b81254c9ed07a3c93d023527169e60eaa0df03b88951d9dd5d29_before_merge.py,buggy_snippets_files/8241189c4267b81254c9ed07a3c93d023527169e60eaa0df03b88951d9dd5d29_after_merge.py
+"    def addRecentProjectFile(self, projectFile):
+        projectFile = QUrl(projectFile).toLocalFile()
+        projects = self._recentProjectFiles()
+
+        # remove duplicates while preserving order
+        from collections import OrderedDict
+        uniqueProjects = OrderedDict.fromkeys(projects)
+        projects = list(uniqueProjects)
+        # remove previous usage of the value
+        if projectFile in uniqueProjects:
+            projects.remove(projectFile)
+        # add the new value in the first place
+        projects.insert(0, projectFile)
+
+        # keep only the 10 first elements
+        projects = projects[0:20]
+
+        settings = QSettings()
+        settings.beginGroup(""RecentFiles"")
+        size = settings.beginWriteArray(""Projects"")
+        for i, p in enumerate(projects):
+            settings.setArrayIndex(i)
+            settings.setValue(""filepath"", p)
+        settings.endArray()
+        settings.sync()
+
+        self.recentProjectFilesChanged.emit()","    def addRecentProjectFile(self, projectFile):
+        projectFile = QUrl(projectFile).path()
+        projects = self._recentProjectFiles()
+
+        # remove duplicates while preserving order
+        from collections import OrderedDict
+        uniqueProjects = OrderedDict.fromkeys(projects)
+        projects = list(uniqueProjects)
+        # remove previous usage of the value
+        if projectFile in uniqueProjects:
+            projects.remove(projectFile)
+        # add the new value in the first place
+        projects.insert(0, projectFile)
+
+        # keep only the 10 first elements
+        projects = projects[0:20]
+
+        settings = QSettings()
+        settings.beginGroup(""RecentFiles"")
+        size = settings.beginWriteArray(""Projects"")
+        for i, p in enumerate(projects):
+            settings.setArrayIndex(i)
+            settings.setValue(""filepath"", p)
+        settings.endArray()
+        settings.sync()
+
+        self.recentProjectFilesChanged.emit()",meshroom/ui/app.py,"import logging
+import os
+import argparse
+
+from PySide2.QtCore import Qt, QUrl, Slot, QJsonValue, Property, Signal, qInstallMessageHandler, QtMsgType, QSettings
+from PySide2.QtGui import QIcon
+from PySide2.QtWidgets import QApplication
+
+import meshroom
+from meshroom.core import nodesDesc
+from meshroom.ui import components
+from meshroom.ui.components.clipboard import ClipboardHelper
+from meshroom.ui.components.filepath import FilepathHelper
+from meshroom.ui.components.scene3D import Scene3DHelper
+from meshroom.ui.palette import PaletteManager
+from meshroom.ui.reconstruction import Reconstruction
+from meshroom.ui.utils import QmlInstantEngine
+
+
+class MessageHandler(object):
+    """"""
+    MessageHandler that translates Qt logs to Python logging system.
+    Also contains and filters a list of blacklisted QML warnings that end up in the
+    standard error even when setOutputWarningsToStandardError is set to false on the engine.
+    """"""
+
+    outputQmlWarnings = bool(os.environ.get(""MESHROOM_OUTPUT_QML_WARNINGS"", False))
+
+    logFunctions = {
+        QtMsgType.QtDebugMsg: logging.debug,
+        QtMsgType.QtWarningMsg: logging.warning,
+        QtMsgType.QtInfoMsg: logging.info,
+        QtMsgType.QtFatalMsg: logging.fatal,
+        QtMsgType.QtCriticalMsg: logging.critical,
+        QtMsgType.QtSystemMsg: logging.critical
+    }
+
+    # Warnings known to be inoffensive and related to QML but not silenced
+    # even when 'MESHROOM_OUTPUT_QML_WARNINGS' is set to False
+    qmlWarningsBlacklist = (
+        'Failed to download scene at QUrl("""")',
+        'QVariant(Invalid) Please check your QParameters',
+        'Texture will be invalid for this frame',
+    )
+
+    @classmethod
+    def handler(cls, messageType, context, message):
+        """""" Message handler remapping Qt logs to Python logging system. """"""
+        # discard blacklisted Qt messages related to QML when 'output qml warnings' is set to false
+        if not cls.outputQmlWarnings and any(w in message for w in cls.qmlWarningsBlacklist):
+            return
+        MessageHandler.logFunctions[messageType](message)
+
+
+class MeshroomApp(QApplication):
+    """""" Meshroom UI Application. """"""
+    def __init__(self, args):
+        QtArgs = [args[0], '-style', 'fusion'] + args[1:]  # force Fusion style by default
+
+        parser = argparse.ArgumentParser(prog=args[0], description='Launch Meshroom UI.', add_help=True)
+
+        parser.add_argument('project', metavar='PROJECT', type=str, nargs='?',
+                            help='Meshroom project file (e.g. myProject.mg) or folder with images to reconstruct.')
+        parser.add_argument('-i', '--import', metavar='IMAGES/FOLDERS', type=str, nargs='*',
+                            help='Import images or folder with images to reconstruct.')
+        parser.add_argument('-I', '--importRecursive', metavar='FOLDERS', type=str, nargs='*',
+                            help='Import images to reconstruct from specified folder and sub-folders.')
+        parser.add_argument('-s', '--save', metavar='PROJECT.mg', type=str, default='',
+                            help='Save the created scene.')
+        parser.add_argument('-p', '--pipeline', metavar='MESHROOM_FILE/photogrammetry/hdri', type=str, default=os.environ.get(""MESHROOM_DEFAULT_PIPELINE"", ""photogrammetry""),
+                            help='Override the default Meshroom pipeline with this external graph.')
+        parser.add_argument(""--verbose"", help=""Verbosity level"", default='warning',
+                            choices=['fatal', 'error', 'warning', 'info', 'debug', 'trace'],)
+
+        args = parser.parse_args(args[1:])
+
+        logStringToPython = {
+            'fatal': logging.FATAL,
+            'error': logging.ERROR,
+            'warning': logging.WARNING,
+            'info': logging.INFO,
+            'debug': logging.DEBUG,
+            'trace': logging.DEBUG,
+        }
+        logging.getLogger().setLevel(logStringToPython[args.verbose])
+
+        QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
+
+        super(MeshroomApp, self).__init__(QtArgs)
+
+        self.setOrganizationName('AliceVision')
+        self.setApplicationName('Meshroom')
+        self.setApplicationVersion(meshroom.__version_name__)
+
+        font = self.font()
+        font.setPointSize(9)
+        self.setFont(font)
+
+        pwd = os.path.dirname(__file__)
+        self.setWindowIcon(QIcon(os.path.join(pwd, ""img/meshroom.svg"")))
+
+        # QML engine setup
+        qmlDir = os.path.join(pwd, ""qml"")
+        url = os.path.join(qmlDir, ""main.qml"")
+        self.engine = QmlInstantEngine()
+        self.engine.addFilesFromDirectory(qmlDir, recursive=True)
+        self.engine.setWatching(os.environ.get(""MESHROOM_INSTANT_CODING"", False))
+        # whether to output qml warnings to stderr (disable by default)
+        self.engine.setOutputWarningsToStandardError(MessageHandler.outputQmlWarnings)
+        qInstallMessageHandler(MessageHandler.handler)
+
+        self.engine.addImportPath(qmlDir)
+        components.registerTypes()
+
+        # expose available node types that can be instantiated
+        self.engine.rootContext().setContextProperty(""_nodeTypes"", sorted(nodesDesc.keys()))
+
+        # instantiate Reconstruction object
+        r = Reconstruction(defaultPipeline=args.pipeline, parent=self)
+        self.engine.rootContext().setContextProperty(""_reconstruction"", r)
+
+        # those helpers should be available from QML Utils module as singletons, but:
+        #  - qmlRegisterUncreatableType is not yet available in PySide2
+        #  - declaring them as singleton in qmldir file causes random crash at exit
+        # => expose them as context properties instead
+        self.engine.rootContext().setContextProperty(""Filepath"", FilepathHelper(parent=self))
+        self.engine.rootContext().setContextProperty(""Scene3DHelper"", Scene3DHelper(parent=self))
+        self.engine.rootContext().setContextProperty(""Clipboard"", ClipboardHelper(parent=self))
+
+        # additional context properties
+        self.engine.rootContext().setContextProperty(""_PaletteManager"", PaletteManager(self.engine, parent=self))
+        self.engine.rootContext().setContextProperty(""MeshroomApp"", self)
+
+        # request any potential computation to stop on exit
+        self.aboutToQuit.connect(r.stopChildThreads)
+
+        if args.project and not os.path.isfile(args.project):
+            raise RuntimeError(
+                ""Meshroom Command Line Error: 'PROJECT' argument should be a Meshroom project file (.mg).\n""
+                ""Invalid value: '{}'"".format(args.project))
+
+        if args.project:
+            r.load(args.project)
+            self.addRecentProjectFile(args.project)
+        else:
+            r.new()
+
+        # import is a python keyword, so we have to access the attribute by a string
+        if getattr(args, ""import"", None):
+            r.importImagesFromFolder(getattr(args, ""import""), recursive=False)
+
+        if args.importRecursive:
+            r.importImagesFromFolder(args.importRecursive, recursive=True)
+
+        if args.save:
+            if os.path.isfile(args.save):
+                raise RuntimeError(
+                    ""Meshroom Command Line Error: Cannot save the new Meshroom project as the file (.mg) already exists.\n""
+                    ""Invalid value: '{}'"".format(args.save))
+            projectFolder = os.path.dirname(args.save)
+            if not os.path.isdir(projectFolder):
+                if not os.path.isdir(os.path.dirname(projectFolder)):
+                    raise RuntimeError(
+                        ""Meshroom Command Line Error: Cannot save the new Meshroom project file (.mg) as the parent of the folder does not exists.\n""
+                        ""Invalid value: '{}'"".format(args.save))
+                os.mkdir(projectFolder)
+            r.saveAs(args.save)
+            self.addRecentProjectFile(args.save)
+
+        self.engine.load(os.path.normpath(url))
+
+    def _recentProjectFiles(self):
+        projects = []
+        settings = QSettings()
+        settings.beginGroup(""RecentFiles"")
+        size = settings.beginReadArray(""Projects"")
+        for i in range(size):
+            settings.setArrayIndex(i)
+            p = settings.value(""filepath"")
+            if p:
+                projects.append(p)
+        settings.endArray()
+        return projects
+
+    @Slot(str)
+    def addRecentProjectFile(self, projectFile):
+        projectFile = QUrl(projectFile).toLocalFile()
+        projects = self._recentProjectFiles()
+
+        # remove duplicates while preserving order
+        from collections import OrderedDict
+        uniqueProjects = OrderedDict.fromkeys(projects)
+        projects = list(uniqueProjects)
+        # remove previous usage of the value
+        if projectFile in uniqueProjects:
+            projects.remove(projectFile)
+        # add the new value in the first place
+        projects.insert(0, projectFile)
+
+        # keep only the 10 first elements
+        projects = projects[0:20]
+
+        settings = QSettings()
+        settings.beginGroup(""RecentFiles"")
+        size = settings.beginWriteArray(""Projects"")
+        for i, p in enumerate(projects):
+            settings.setArrayIndex(i)
+            settings.setValue(""filepath"", p)
+        settings.endArray()
+        settings.sync()
+
+        self.recentProjectFilesChanged.emit()
+
+    @Slot(str, result=str)
+    def markdownToHtml(self, md):
+        """"""
+        Convert markdown to HTML.
+
+        Args:
+            md (str): the markdown text to convert
+
+        Returns:
+            str: the resulting HTML string
+        """"""
+        try:
+            from markdown import markdown
+        except ImportError:
+            logging.warning(""Can't import markdown module, returning source markdown text."")
+            return md
+        return markdown(md)
+
+    @Property(QJsonValue, constant=True)
+    def systemInfo(self):
+        import platform
+        import sys
+        return {
+            'platform': '{} {}'.format(platform.system(), platform.release()),
+            'python': 'Python {}'.format(sys.version.split("" "")[0])
+        }
+
+    @Property(""QVariantList"", constant=True)
+    def licensesModel(self):
+        """"""
+        Get info about open-source licenses for the application.
+        Model provides:
+            title: the name of the project
+            localUrl: the local path to COPYING.md
+            onlineUrl: the remote path to COPYING.md
+        """"""
+        rootDir = os.environ.get(""MESHROOM_INSTALL_DIR"", os.getcwd())
+        return [
+            {
+                ""title"": ""Meshroom"",
+                ""localUrl"": os.path.join(rootDir, ""COPYING.md""),
+                ""onlineUrl"": ""https://raw.githubusercontent.com/alicevision/meshroom/develop/COPYING.md""
+            },
+            {
+                ""title"": ""AliceVision"",
+                ""localUrl"": os.path.join(rootDir, ""aliceVision"", ""share"", ""aliceVision"", ""COPYING.md""),
+                ""onlineUrl"": ""https://raw.githubusercontent.com/alicevision/AliceVision/develop/COPYING.md""
+            }
+        ]
+
+    recentProjectFilesChanged = Signal()
+    recentProjectFiles = Property(""QVariantList"", _recentProjectFiles, notify=recentProjectFilesChanged)
+
+","import logging
+import os
+import argparse
+
+from PySide2.QtCore import Qt, QUrl, Slot, QJsonValue, Property, Signal, qInstallMessageHandler, QtMsgType, QSettings
+from PySide2.QtGui import QIcon
+from PySide2.QtWidgets import QApplication
+
+import meshroom
+from meshroom.core import nodesDesc
+from meshroom.ui import components
+from meshroom.ui.components.clipboard import ClipboardHelper
+from meshroom.ui.components.filepath import FilepathHelper
+from meshroom.ui.components.scene3D import Scene3DHelper
+from meshroom.ui.palette import PaletteManager
+from meshroom.ui.reconstruction import Reconstruction
+from meshroom.ui.utils import QmlInstantEngine
+
+
+class MessageHandler(object):
+    """"""
+    MessageHandler that translates Qt logs to Python logging system.
+    Also contains and filters a list of blacklisted QML warnings that end up in the
+    standard error even when setOutputWarningsToStandardError is set to false on the engine.
+    """"""
+
+    outputQmlWarnings = bool(os.environ.get(""MESHROOM_OUTPUT_QML_WARNINGS"", False))
+
+    logFunctions = {
+        QtMsgType.QtDebugMsg: logging.debug,
+        QtMsgType.QtWarningMsg: logging.warning,
+        QtMsgType.QtInfoMsg: logging.info,
+        QtMsgType.QtFatalMsg: logging.fatal,
+        QtMsgType.QtCriticalMsg: logging.critical,
+        QtMsgType.QtSystemMsg: logging.critical
+    }
+
+    # Warnings known to be inoffensive and related to QML but not silenced
+    # even when 'MESHROOM_OUTPUT_QML_WARNINGS' is set to False
+    qmlWarningsBlacklist = (
+        'Failed to download scene at QUrl("""")',
+        'QVariant(Invalid) Please check your QParameters',
+        'Texture will be invalid for this frame',
+    )
+
+    @classmethod
+    def handler(cls, messageType, context, message):
+        """""" Message handler remapping Qt logs to Python logging system. """"""
+        # discard blacklisted Qt messages related to QML when 'output qml warnings' is set to false
+        if not cls.outputQmlWarnings and any(w in message for w in cls.qmlWarningsBlacklist):
+            return
+        MessageHandler.logFunctions[messageType](message)
+
+
+class MeshroomApp(QApplication):
+    """""" Meshroom UI Application. """"""
+    def __init__(self, args):
+        QtArgs = [args[0], '-style', 'fusion'] + args[1:]  # force Fusion style by default
+
+        parser = argparse.ArgumentParser(prog=args[0], description='Launch Meshroom UI.', add_help=True)
+
+        parser.add_argument('project', metavar='PROJECT', type=str, nargs='?',
+                            help='Meshroom project file (e.g. myProject.mg) or folder with images to reconstruct.')
+        parser.add_argument('-i', '--import', metavar='IMAGES/FOLDERS', type=str, nargs='*',
+                            help='Import images or folder with images to reconstruct.')
+        parser.add_argument('-I', '--importRecursive', metavar='FOLDERS', type=str, nargs='*',
+                            help='Import images to reconstruct from specified folder and sub-folders.')
+        parser.add_argument('-s', '--save', metavar='PROJECT.mg', type=str, default='',
+                            help='Save the created scene.')
+        parser.add_argument('-p', '--pipeline', metavar='MESHROOM_FILE/photogrammetry/hdri', type=str, default=os.environ.get(""MESHROOM_DEFAULT_PIPELINE"", ""photogrammetry""),
+                            help='Override the default Meshroom pipeline with this external graph.')
+        parser.add_argument(""--verbose"", help=""Verbosity level"", default='warning',
+                            choices=['fatal', 'error', 'warning', 'info', 'debug', 'trace'],)
+
+        args = parser.parse_args(args[1:])
+
+        logStringToPython = {
+            'fatal': logging.FATAL,
+            'error': logging.ERROR,
+            'warning': logging.WARNING,
+            'info': logging.INFO,
+            'debug': logging.DEBUG,
+            'trace': logging.DEBUG,
+        }
+        logging.getLogger().setLevel(logStringToPython[args.verbose])
+
+        QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
+
+        super(MeshroomApp, self).__init__(QtArgs)
+
+        self.setOrganizationName('AliceVision')
+        self.setApplicationName('Meshroom')
+        self.setApplicationVersion(meshroom.__version_name__)
+
+        font = self.font()
+        font.setPointSize(9)
+        self.setFont(font)
+
+        pwd = os.path.dirname(__file__)
+        self.setWindowIcon(QIcon(os.path.join(pwd, ""img/meshroom.svg"")))
+
+        # QML engine setup
+        qmlDir = os.path.join(pwd, ""qml"")
+        url = os.path.join(qmlDir, ""main.qml"")
+        self.engine = QmlInstantEngine()
+        self.engine.addFilesFromDirectory(qmlDir, recursive=True)
+        self.engine.setWatching(os.environ.get(""MESHROOM_INSTANT_CODING"", False))
+        # whether to output qml warnings to stderr (disable by default)
+        self.engine.setOutputWarningsToStandardError(MessageHandler.outputQmlWarnings)
+        qInstallMessageHandler(MessageHandler.handler)
+
+        self.engine.addImportPath(qmlDir)
+        components.registerTypes()
+
+        # expose available node types that can be instantiated
+        self.engine.rootContext().setContextProperty(""_nodeTypes"", sorted(nodesDesc.keys()))
+
+        # instantiate Reconstruction object
+        r = Reconstruction(defaultPipeline=args.pipeline, parent=self)
+        self.engine.rootContext().setContextProperty(""_reconstruction"", r)
+
+        # those helpers should be available from QML Utils module as singletons, but:
+        #  - qmlRegisterUncreatableType is not yet available in PySide2
+        #  - declaring them as singleton in qmldir file causes random crash at exit
+        # => expose them as context properties instead
+        self.engine.rootContext().setContextProperty(""Filepath"", FilepathHelper(parent=self))
+        self.engine.rootContext().setContextProperty(""Scene3DHelper"", Scene3DHelper(parent=self))
+        self.engine.rootContext().setContextProperty(""Clipboard"", ClipboardHelper(parent=self))
+
+        # additional context properties
+        self.engine.rootContext().setContextProperty(""_PaletteManager"", PaletteManager(self.engine, parent=self))
+        self.engine.rootContext().setContextProperty(""MeshroomApp"", self)
+
+        # request any potential computation to stop on exit
+        self.aboutToQuit.connect(r.stopChildThreads)
+
+        if args.project and not os.path.isfile(args.project):
+            raise RuntimeError(
+                ""Meshroom Command Line Error: 'PROJECT' argument should be a Meshroom project file (.mg).\n""
+                ""Invalid value: '{}'"".format(args.project))
+
+        if args.project:
+            r.load(args.project)
+            self.addRecentProjectFile(args.project)
+        else:
+            r.new()
+
+        # import is a python keyword, so we have to access the attribute by a string
+        if getattr(args, ""import"", None):
+            r.importImagesFromFolder(getattr(args, ""import""), recursive=False)
+
+        if args.importRecursive:
+            r.importImagesFromFolder(args.importRecursive, recursive=True)
+
+        if args.save:
+            if os.path.isfile(args.save):
+                raise RuntimeError(
+                    ""Meshroom Command Line Error: Cannot save the new Meshroom project as the file (.mg) already exists.\n""
+                    ""Invalid value: '{}'"".format(args.save))
+            projectFolder = os.path.dirname(args.save)
+            if not os.path.isdir(projectFolder):
+                if not os.path.isdir(os.path.dirname(projectFolder)):
+                    raise RuntimeError(
+                        ""Meshroom Command Line Error: Cannot save the new Meshroom project file (.mg) as the parent of the folder does not exists.\n""
+                        ""Invalid value: '{}'"".format(args.save))
+                os.mkdir(projectFolder)
+            r.saveAs(args.save)
+            self.addRecentProjectFile(args.save)
+
+        self.engine.load(os.path.normpath(url))
+
+    def _recentProjectFiles(self):
+        projects = []
+        settings = QSettings()
+        settings.beginGroup(""RecentFiles"")
+        size = settings.beginReadArray(""Projects"")
+        for i in range(size):
+            settings.setArrayIndex(i)
+            p = settings.value(""filepath"")
+            if p:
+                projects.append(p)
+        settings.endArray()
+        return projects
+
+    @Slot(str)
+    def addRecentProjectFile(self, projectFile):
+        projectFile = QUrl(projectFile).path()
+        projects = self._recentProjectFiles()
+
+        # remove duplicates while preserving order
+        from collections import OrderedDict
+        uniqueProjects = OrderedDict.fromkeys(projects)
+        projects = list(uniqueProjects)
+        # remove previous usage of the value
+        if projectFile in uniqueProjects:
+            projects.remove(projectFile)
+        # add the new value in the first place
+        projects.insert(0, projectFile)
+
+        # keep only the 10 first elements
+        projects = projects[0:20]
+
+        settings = QSettings()
+        settings.beginGroup(""RecentFiles"")
+        size = settings.beginWriteArray(""Projects"")
+        for i, p in enumerate(projects):
+            settings.setArrayIndex(i)
+            settings.setValue(""filepath"", p)
+        settings.endArray()
+        settings.sync()
+
+        self.recentProjectFilesChanged.emit()
+
+    @Slot(str, result=str)
+    def markdownToHtml(self, md):
+        """"""
+        Convert markdown to HTML.
+
+        Args:
+            md (str): the markdown text to convert
+
+        Returns:
+            str: the resulting HTML string
+        """"""
+        try:
+            from markdown import markdown
+        except ImportError:
+            logging.warning(""Can't import markdown module, returning source markdown text."")
+            return md
+        return markdown(md)
+
+    @Property(QJsonValue, constant=True)
+    def systemInfo(self):
+        import platform
+        import sys
+        return {
+            'platform': '{} {}'.format(platform.system(), platform.release()),
+            'python': 'Python {}'.format(sys.version.split("" "")[0])
+        }
+
+    @Property(""QVariantList"", constant=True)
+    def licensesModel(self):
+        """"""
+        Get info about open-source licenses for the application.
+        Model provides:
+            title: the name of the project
+            localUrl: the local path to COPYING.md
+            onlineUrl: the remote path to COPYING.md
+        """"""
+        rootDir = os.environ.get(""MESHROOM_INSTALL_DIR"", os.getcwd())
+        return [
+            {
+                ""title"": ""Meshroom"",
+                ""localUrl"": os.path.join(rootDir, ""COPYING.md""),
+                ""onlineUrl"": ""https://raw.githubusercontent.com/alicevision/meshroom/develop/COPYING.md""
+            },
+            {
+                ""title"": ""AliceVision"",
+                ""localUrl"": os.path.join(rootDir, ""aliceVision"", ""share"", ""aliceVision"", ""COPYING.md""),
+                ""onlineUrl"": ""https://raw.githubusercontent.com/alicevision/AliceVision/develop/COPYING.md""
+            }
+        ]
+
+    recentProjectFilesChanged = Signal()
+    recentProjectFiles = Property(""QVariantList"", _recentProjectFiles, notify=recentProjectFilesChanged)
+
+",MeshroomApp.addRecentProjectFile,https://github.com/alicevision/meshroom/issues/912,"[{'piece_type': 'error message', 'piece_content': '[2020-05-23 16:12:48,660][ERROR] Traceback (most recent call last):\nFile ""D:\\Meshroom_Src\\meshroom\\meshroom\\ui\\reconstruction.py"", line 432, in load\nsuper(Reconstruction, self).load(filepath, setupProjectFile)\nFile ""D:\\Meshroom_Src\\meshroom\\meshroom\\ui\\graph.py"", line 314, in load\ng.load(filepath, setupProjectFile)\nFile ""D:\\Meshroom_Src\\meshroom\\meshroom\\core\\graph.py"", line 247, in load\nwith open(filepath) as jsonFile:\nOSError: [Errno 22] Invalid argument: \'/D:/Meshroom_Dev/test-project/mostree.mg\''}]","[2020-05-23 16:12:48,660][ERROR] Traceback (most recent call last):
+File ""D:\Meshroom_Src\meshroom\meshroom\ui\reconstruction.py"", line 432, in load
+super(Reconstruction, self).load(filepath, setupProjectFile)
+File ""D:\Meshroom_Src\meshroom\meshroom\ui\graph.py"", line 314, in load
+g.load(filepath, setupProjectFile)
+File ""D:\Meshroom_Src\meshroom\meshroom\core\graph.py"", line 247, in load
+with open(filepath) as jsonFile:
+OSError: [Errno 22] Invalid argument: '/D:/Meshroom_Dev/test-project/mostree.mg'",OSError,"    def addRecentProjectFile(self, projectFile):
+        projectFile = QUrl(projectFile).path()
+        projects = self._recentProjectFiles()
+
+        
+        from collections import OrderedDict
+        uniqueProjects = OrderedDict.fromkeys(projects)
+        projects = list(uniqueProjects)
+        
+        if projectFile in uniqueProjects:
+            projects.remove(projectFile)
+        
+        projects.insert(0, projectFile)
+
+        
+        projects = projects[0:20]
+
+        settings = QSettings()
+        settings.beginGroup(""RecentFiles"")
+        size = settings.beginWriteArray(""Projects"")
+        for i, p in enumerate(projects):
+            settings.setArrayIndex(i)
+            settings.setValue(""filepath"", p)
+        settings.endArray()
+        settings.sync()
+
+        self.recentProjectFilesChanged.emit()","    def addRecentProjectFile(self, projectFile):
+        projectFile = QUrl(projectFile).toLocalFile()
+        projects = self._recentProjectFiles()
+
+        
+        from collections import OrderedDict
+        uniqueProjects = OrderedDict.fromkeys(projects)
+        projects = list(uniqueProjects)
+        
+        if projectFile in uniqueProjects:
+            projects.remove(projectFile)
+        
+        projects.insert(0, projectFile)
+
+        
+        projects = projects[0:20]
+
+        settings = QSettings()
+        settings.beginGroup(""RecentFiles"")
+        size = settings.beginWriteArray(""Projects"")
+        for i, p in enumerate(projects):
+            settings.setArrayIndex(i)
+            settings.setValue(""filepath"", p)
+        settings.endArray()
+        settings.sync()
+
+        self.recentProjectFilesChanged.emit()",[],[],buggy_snippets_files/faddf4c059bd32cc1cad1a1ea75ad1064590bd2f86388f8bcf51c39463cd99a7_before_merge.py,buggy_snippets_files/faddf4c059bd32cc1cad1a1ea75ad1064590bd2f86388f8bcf51c39463cd99a7_after_merge.py
+"    def addSfmAugmentation(self, withMVS=False):
+        """"""
+        Create a new augmentation step connected to the last SfM node of this Reconstruction and
+        return the created CameraInit and SfM nodes.
+
+        If the Reconstruction is not initialized (empty initial CameraInit), this method won't
+        create anything and return initial CameraInit and SfM nodes.
+
+        Args:
+            withMVS (bool): whether to create the MVS pipeline after the augmentation
+
+        Returns:
+            Node, Node: CameraInit, StructureFromMotion
+        """"""
+        sfm = self.lastSfmNode()
+        if not sfm:
+            return None, None
+
+        if len(self._cameraInits) == 1:
+            assert self._cameraInit == self._cameraInits[0]
+            # Initial CameraInit is empty, use this one
+            if len(self._cameraInits[0].viewpoints) == 0:
+                return self._cameraInit, sfm
+
+        with self.groupedGraphModification(""SfM Augmentation""):
+            sfm, mvs = multiview.sfmAugmentation(self, self.lastSfmNode(), withMVS=withMVS)
+
+        self.sfmAugmented.emit(sfm[0], mvs[-1] if mvs else sfm[-1])
+        return sfm[0], sfm[-1]","    def addSfmAugmentation(self, withMVS=False):
+        """"""
+        Create a new augmentation step connected to the last SfM node of this Reconstruction and
+        return the created CameraInit and SfM nodes.
+
+        If the Reconstruction is not initialized (empty initial CameraInit), this method won't
+        create anything and return initial CameraInit and SfM nodes.
+
+        Args:
+            withMVS (bool): whether to create the MVS pipeline after the augmentation
+
+        Returns:
+            Node, Node: CameraInit, StructureFromMotion
+        """"""
+        sfm = self.lastSfmNode()
+        if not sfm:
+            return None, None
+
+        if len(self._cameraInits) == 1:
+            assert self._cameraInit == self._cameraInits[0]
+            # Initial CameraInit is empty, use this one
+            if len(self._cameraInits[0].viewpoints) == 0:
+                return self._cameraInit, sfm
+
+        with self.groupedGraphModification(""SfM Augmentation""):
+            sfm, mvs = multiview.sfmAugmentation(self, self.lastSfmNode(), withMVS=withMVS)
+
+        self.sfmAugmented.emit(sfm[0], mvs[-1])
+        return sfm[0], sfm[-1]",meshroom/ui/reconstruction.py,"import logging
+import os
+from threading import Thread
+
+from PySide2.QtCore import QObject, Slot, Property, Signal
+
+from meshroom import multiview
+from meshroom.common.qt import QObjectListModel
+from meshroom.core.node import Node, node_factory, Status
+from meshroom.ui.graph import UIGraph
+
+
+class Message(QObject):
+    """""" Simple structure wrapping a high-level message. """"""
+
+    def __init__(self, title, text, detailedText="""", parent=None):
+        super(Message, self).__init__(parent)
+        self._title = title
+        self._text = text
+        self._detailedText = detailedText
+
+    title = Property(str, lambda self: self._title, constant=True)
+    text = Property(str, lambda self: self._text, constant=True)
+    detailedText = Property(str, lambda self: self._detailedText, constant=True)
+
+
+class LiveSfmManager(QObject):
+    """"""
+    Manage a live SfM reconstruction by creating augmentation steps in the graph over time,
+    based on images progressively added to a watched folder.
+
+    File watching is based on regular polling and not filesystem events to work on network mounts.
+    """"""
+    def __init__(self, reconstruction):
+        super(LiveSfmManager, self).__init__(reconstruction)
+        self.reconstruction = reconstruction
+        self._folder = ''
+        self.timerId = -1
+        self.minImagesPerStep = 4
+        self.watchTimerInterval = 1000
+        self.allImages = []
+        self.cameraInit = None
+        self.sfm = None
+        self._running = False
+
+    def reset(self):
+        self.stop(False)
+        self.sfm = None
+        self.cameraInit = None
+
+    def setRunning(self, value):
+        if self._running == value:
+            return
+        if self._running:
+            self.killTimer(self.timerId)
+        else:
+            self.timerId = self.startTimer(self.watchTimerInterval)
+        self._running = value
+        self.runningChanged.emit()
+
+    @Slot(str, int)
+    def start(self, folder, minImagesPerStep):
+        """"""
+        Start live SfM augmentation.
+
+        Args:
+            folder (str): the folder to watch in which images are added over time
+            minImagesPerStep (int): minimum number of images in an augmentation step
+        """"""
+        # print('[LiveSfmManager] Watching {} for images'.format(folder))
+        if not os.path.isdir(folder):
+            raise RuntimeError(""Invalid folder provided: {}"".format(folder))
+        self._folder = folder
+        self.folderChanged.emit()
+        self.cameraInit = self.sfm = None
+        self.allImages = self.reconstruction.allImagePaths()
+        self.minImagesPerStep = minImagesPerStep
+        self.setRunning(True)
+        self.update()  # trigger initial update
+
+    @Slot()
+    def stop(self, requestCompute=True):
+        """""" Stop the live SfM reconstruction.
+
+        Request the computation of the last augmentation step if any.
+        """"""
+        self.setRunning(False)
+        if requestCompute:
+            self.computeStep()
+
+    def timerEvent(self, evt):
+        self.update()
+
+    def update(self):
+        """"""
+        Look for new images in the watched folder and create SfM augmentation step (or modify existing one)
+        to include those images to the reconstruction.
+        """"""
+        # Get all new images in the watched folder
+        filesInFolder = [os.path.join(self._folder, f) for f in os.listdir(self._folder)]
+        imagesInFolder = [f for f in filesInFolder if Reconstruction.isImageFile(f)]
+        newImages = set(imagesInFolder).difference(self.allImages)
+        for imagePath in newImages:
+            # print('[LiveSfmManager] New image file : {}'.format(imagePath))
+            if not self.cameraInit:
+                # Start graph modification: until 'computeAugmentation' is called, every commands
+                # used will be part of this macro
+                self.reconstruction.beginModification(""SfM Augmentation"")
+                # Add SfM augmentation step in the graph
+                self.cameraInit, self.sfm = self.reconstruction.addSfmAugmentation()
+            self.addImageToStep(imagePath)
+
+        # If we have enough images and the graph is not being computed, compute augmentation step
+        if len(self.imagesInStep()) >= self.minImagesPerStep and not self.reconstruction.computing:
+            self.computeStep()
+
+    def addImageToStep(self, path):
+        """""" Add an image to the current augmentation step. """"""
+        self.reconstruction.appendAttribute(self.cameraInit.viewpoints, {'path': path})
+        self.allImages.append(path)
+
+    def imagePathsInCameraInit(self, node):
+        """""" Get images in the given CameraInit node. """"""
+        assert node.nodeType == 'CameraInit'
+        return [vp.path.value for vp in node.viewpoints.value]
+
+    def imagesInStep(self):
+        """""" Get images in the current augmentation step. """"""
+        return self.imagePathsInCameraInit(self.cameraInit) if self.cameraInit else []
+
+
+    @Slot()
+    def computeStep(self):
+        """""" Freeze the current augmentation step and request its computation.
+        A new step will be created once another image is added to the watched folder during 'update'.
+        """"""
+        if not self.cameraInit:
+            return
+
+        # print('[LiveSfmManager] Compute SfM augmentation')
+        # Build intrinsics in the main thread
+        self.reconstruction.buildIntrinsics(self.cameraInit, [])
+        self.cameraInit = None
+        sfm = self.sfm
+        self.sfm = None
+        # Stop graph modification and start sfm computation
+        self.reconstruction.endModification()
+        self.reconstruction.execute(sfm)
+
+    runningChanged = Signal()
+    running = Property(bool, lambda self: self._running, notify=runningChanged)
+    folderChanged = Signal()
+    folder = Property(str, lambda self: self._folder, notify=folderChanged)
+
+
+class Reconstruction(UIGraph):
+    """"""
+    Specialization of a UIGraph designed to manage a 3D reconstruction.
+    """"""
+
+    imageExtensions = ('.jpg', '.jpeg', '.tif', '.tiff', '.png', '.exr', '.rw2', '.cr2', '.nef')
+
+    def __init__(self, graphFilepath='', parent=None):
+        super(Reconstruction, self).__init__(graphFilepath, parent)
+        self._buildingIntrinsics = False
+        self._cameraInit = None
+        self._cameraInits = QObjectListModel(parent=self)
+        self._endChunk = None
+        self._meshFile = ''
+        self.intrinsicsBuilt.connect(self.onIntrinsicsAvailable)
+        self.graphChanged.connect(self.onGraphChanged)
+        self._liveSfmManager = LiveSfmManager(self)
+
+        # SfM result
+        self._sfm = None
+        self._views = None
+        self._poses = None
+        self._selectedViewId = None
+
+        if graphFilepath:
+            self.onGraphChanged()
+        else:
+            self.new()
+
+    @Slot()
+    def new(self):
+        """""" Create a new photogrammetry pipeline. """"""
+        self.setGraph(multiview.photogrammetry())
+
+    def load(self, filepath):
+        try:
+            super(Reconstruction, self).load(filepath)
+        except Exception as e:
+            self.error.emit(
+                Message(
+                    ""Error while loading {}"".format(os.path.basename(filepath)),
+                    ""An unexpected error has occurred"",
+                    str(e)
+                )
+            )
+
+    def onGraphChanged(self):
+        """""" React to the change of the internal graph. """"""
+        self._liveSfmManager.reset()
+        self.sfm = None
+        self._endChunk = None
+        self.setMeshFile('')
+        self.updateCameraInits()
+        if not self._graph:
+            return
+
+        self.setSfm(self.lastSfmNode())
+        try:
+            endNode = self._graph.findNode(""Texturing"")
+            self._endChunk = endNode.getChunks()[0]  # type: graph.NodeChunk
+            endNode.outputMesh.valueChanged.connect(self.updateMeshFile)
+            self._endChunk.statusChanged.connect(self.updateMeshFile)
+            self.updateMeshFile()
+        except KeyError:
+            self._endChunk = None
+        # TODO: listen specifically for cameraInit creation/deletion
+        self._graph.nodes.countChanged.connect(self.updateCameraInits)
+
+    @staticmethod
+    def runAsync(func, args=(), kwargs=None):
+        thread = Thread(target=func, args=args, kwargs=kwargs)
+        thread.start()
+        return thread
+
+    def getViewpoints(self):
+        """""" Return the Viewpoints model. """"""
+        # TODO: handle multiple Viewpoints models
+        return self._cameraInit.viewpoints.value if self._cameraInit else None
+
+    def updateCameraInits(self):
+        cameraInits = self._graph.nodesByType(""CameraInit"", sortedByIndex=True)
+        if set(self._cameraInits.objectList()) == set(cameraInits):
+            return
+        self._cameraInits.setObjectList(cameraInits)
+        self.setCameraInit(cameraInits[0] if cameraInits else None)
+
+    def setCameraInit(self, cameraInit):
+        """""" Set the internal CameraInit node. """"""
+        # TODO: handle multiple CameraInit nodes
+        if self._cameraInit == cameraInit:
+            return
+        self._cameraInit = cameraInit
+        self.cameraInitChanged.emit()
+
+    def getCameraInitIndex(self):
+        if not self._cameraInit:
+            return -1
+        return self._cameraInits.indexOf(self._cameraInit)
+
+    def setCameraInitIndex(self, idx):
+        self.setCameraInit(self._cameraInits[idx])
+
+    def updateMeshFile(self):
+        if self._endChunk and self._endChunk.status.status == Status.SUCCESS:
+            self.setMeshFile(self._endChunk.node.outputMesh.value)
+        else:
+            self.setMeshFile('')
+
+    def setMeshFile(self, mf):
+        if self._meshFile == mf:
+            return
+        self._meshFile = mf
+        self.meshFileChanged.emit()
+
+    def lastSfmNode(self):
+        """""" Retrieve the last SfM node from the initial CameraInit node. """"""
+        sfmNodes = self._graph.nodesFromNode(self._cameraInits[0], 'StructureFromMotion')[0]
+        return sfmNodes[-1] if sfmNodes else None
+
+    def addSfmAugmentation(self, withMVS=False):
+        """"""
+        Create a new augmentation step connected to the last SfM node of this Reconstruction and
+        return the created CameraInit and SfM nodes.
+
+        If the Reconstruction is not initialized (empty initial CameraInit), this method won't
+        create anything and return initial CameraInit and SfM nodes.
+
+        Args:
+            withMVS (bool): whether to create the MVS pipeline after the augmentation
+
+        Returns:
+            Node, Node: CameraInit, StructureFromMotion
+        """"""
+        sfm = self.lastSfmNode()
+        if not sfm:
+            return None, None
+
+        if len(self._cameraInits) == 1:
+            assert self._cameraInit == self._cameraInits[0]
+            # Initial CameraInit is empty, use this one
+            if len(self._cameraInits[0].viewpoints) == 0:
+                return self._cameraInit, sfm
+
+        with self.groupedGraphModification(""SfM Augmentation""):
+            sfm, mvs = multiview.sfmAugmentation(self, self.lastSfmNode(), withMVS=withMVS)
+
+        self.sfmAugmented.emit(sfm[0], mvs[-1] if mvs else sfm[-1])
+        return sfm[0], sfm[-1]
+
+    def allImagePaths(self):
+        """""" Get all image paths in the reconstruction. """"""
+        return [vp.path.value for node in self._cameraInits for vp in node.viewpoints.value]
+
+    def allViewIds(self):
+        """""" Get all view Ids involved in the reconstruction. """"""
+        return [vp.viewId.value for node in self._cameraInits for vp in node.viewpoints.value]
+
+    @Slot(QObject, Node)
+    def handleFilesDrop(self, drop, cameraInit):
+        """""" Handle drop events aiming to add images to the Reconstruction.
+        Fetching urls from dropEvent is generally expensive in QML/JS (bug ?).
+        This method allows to reduce process time by doing it on Python side.
+        """"""
+        self.importImages(self.getImageFilesFromDrop(drop), cameraInit)
+
+    @staticmethod
+    def isImageFile(filepath):
+        """""" Return whether filepath is a path to an image file supported by Meshroom. """"""
+        return os.path.splitext(filepath)[1].lower() in Reconstruction.imageExtensions
+
+    @staticmethod
+    def getImageFilesFromDrop(drop):
+        urls = drop.property(""urls"")
+        # Build the list of images paths
+        images = []
+        for url in urls:
+            localFile = url.toLocalFile()
+            if os.path.isdir(localFile):  # get folder content
+                files = [os.path.join(localFile, f) for f in os.listdir(localFile)]
+            else:
+                files = [localFile]
+            images.extend([f for f in files if Reconstruction.isImageFile(f)])
+        return images
+
+    def importImages(self, images, cameraInit):
+        """""" Add the given list of images to the Reconstruction. """"""
+        # Start the process of updating views and intrinsics
+        self.runAsync(self.buildIntrinsics, args=(cameraInit, images,))
+
+    def buildIntrinsics(self, cameraInit, additionalViews):
+        """"""
+        Build up-to-date intrinsics and views based on already loaded + additional images.
+        Does not modify the graph, can be called outside the main thread.
+        Emits intrinsicBuilt(views, intrinsics) when done.
+        """"""
+        views = []
+        intrinsics = []
+
+        # Duplicate 'cameraInit' outside the graph.
+        #   => allows to compute intrinsics without modifying the node or the graph
+        # If cameraInit is None (i.e: SfM augmentation):
+        #   * create an uninitialized node
+        #   * wait for the result before actually creating new nodes in the graph (see onIntrinsicsAvailable)
+        attributes = cameraInit.toDict()[""attributes""] if cameraInit else {}
+        cameraInitCopy = node_factory(""CameraInit"", **attributes)
+
+        try:
+            self.setBuildingIntrinsics(True)
+            # Retrieve the list of updated viewpoints and intrinsics
+            views, intrinsics = cameraInitCopy.nodeDesc.buildIntrinsics(cameraInitCopy, additionalViews)
+        except Exception:
+            import traceback
+            logging.error(""Error while building intrinsics : {}"".format(traceback.format_exc()))
+
+        # Delete the duplicate
+        cameraInitCopy.deleteLater()
+
+        self.setBuildingIntrinsics(False)
+        # always emit intrinsicsBuilt signal to inform listeners
+        # in other threads that computation is over
+        self.intrinsicsBuilt.emit(cameraInit, views, intrinsics)
+
+    def onIntrinsicsAvailable(self, cameraInit, views, intrinsics):
+        """""" Update CameraInit with given views and intrinsics. """"""
+        augmentSfM = cameraInit is None
+        commandTitle = ""Add {} Images""
+
+        # SfM augmentation
+        if augmentSfM:
+            # filter out views already involved in the reconstruction
+            allViewIds = self.allViewIds()
+            views = [view for view in views if int(view[""viewId""]) not in allViewIds]
+            commandTitle = ""Augment Reconstruction ({} Images)""
+
+        # No additional views: early return
+        if not views:
+            return
+
+        commandTitle = commandTitle.format(len(views))
+        # allow updates between commands so that node depths
+        # are updated after ""addSfmAugmentation"" (useful for auto layout)
+        with self.groupedGraphModification(commandTitle, disableUpdates=False):
+            if augmentSfM:
+                cameraInit, self.sfm = self.addSfmAugmentation(withMVS=True)
+            with self.groupedGraphModification(""Set Views and Intrinsics""):
+                self.setAttribute(cameraInit.viewpoints, views)
+                self.setAttribute(cameraInit.intrinsics, intrinsics)
+        self.setCameraInit(cameraInit)
+
+    def setBuildingIntrinsics(self, value):
+        if self._buildingIntrinsics == value:
+            return
+        self._buildingIntrinsics = value
+        self.buildingIntrinsicsChanged.emit()
+
+    cameraInitChanged = Signal()
+    cameraInit = Property(QObject, lambda self: self._cameraInit, notify=cameraInitChanged)
+    cameraInitIndex = Property(int, getCameraInitIndex, setCameraInitIndex, notify=cameraInitChanged)
+    viewpoints = Property(QObject, getViewpoints, notify=cameraInitChanged)
+    cameraInits = Property(QObject, lambda self: self._cameraInits, constant=True)
+    intrinsicsBuilt = Signal(QObject, list, list)
+    buildingIntrinsicsChanged = Signal()
+    buildingIntrinsics = Property(bool, lambda self: self._buildingIntrinsics, notify=buildingIntrinsicsChanged)
+    meshFileChanged = Signal()
+    meshFile = Property(str, lambda self: self._meshFile, notify=meshFileChanged)
+    liveSfmManager = Property(QObject, lambda self: self._liveSfmManager, constant=True)
+
+    def updateViewsAndPoses(self):
+        """"""
+        Update internal views and poses based on the current SfM node.
+        """"""
+        if not self._sfm:
+            self._views = []
+            self._poses = []
+        else:
+            self._views, self._poses = self._sfm.nodeDesc.getViewsAndPoses(self._sfm)
+        self.sfmReportChanged.emit()
+
+    def getSfm(self):
+        """""" Returns the current SfM node. """"""
+        return self._sfm
+
+    def _unsetSfm(self):
+        """""" Unset current SfM node. This is shortcut equivalent to _setSfm(None). """"""
+        self._setSfm(None)
+
+    def _setSfm(self, node):
+        """""" Set current SfM node to 'node' and update views and poses.
+        Notes: this should not be called directly, use setSfm instead.
+        See Also: setSfm
+        """"""
+        self._sfm = node
+        # Update views and poses and do so each time
+        # the status of the SfM node's only chunk changes
+        self.updateViewsAndPoses()
+        if self._sfm:
+            # when destroyed, directly use '_setSfm' to bypass
+            # disconnection step in 'setSfm' (at this point, 'self._sfm' underlying object
+            # has been destroyed and can't be evaluated anymore)
+            self._sfm.destroyed.connect(self._unsetSfm)
+            self._sfm.chunks[0].statusChanged.connect(self.updateViewsAndPoses)
+        self.sfmChanged.emit()
+
+    def setSfm(self, node):
+        """""" Set the current SfM node.
+        This node will be used to retrieve sparse reconstruction result like camera poses.
+        """"""
+        # disconnect from previous SfM node if any
+        if self._sfm:
+            self._sfm.chunks[0].statusChanged.disconnect(self.updateViewsAndPoses)
+            self._sfm.destroyed.disconnect(self._unsetSfm)
+        self._setSfm(node)
+
+    @Slot(QObject, result=bool)
+    def isInViews(self, viewpoint):
+        # keys are strings (faster lookup)
+        return str(viewpoint.viewId.value) in self._views
+
+    @Slot(QObject, result=bool)
+    def isReconstructed(self, viewpoint):
+        # keys are strings (faster lookup)
+        return str(viewpoint.poseId.value) in self._poses
+
+    def setSelectedViewId(self, viewId):
+        if viewId == self._selectedViewId:
+            return
+        self._selectedViewId = viewId
+        self.selectedViewIdChanged.emit()
+
+    selectedViewIdChanged = Signal()
+    selectedViewId = Property(str, lambda self: self._selectedViewId, setSelectedViewId, notify=selectedViewIdChanged)
+
+    sfmChanged = Signal()
+    sfm = Property(QObject, getSfm, setSfm, notify=sfmChanged)
+    sfmReportChanged = Signal()
+    # convenient property for QML binding re-evaluation when sfm report changes
+    sfmReport = Property(bool, lambda self: len(self._poses) > 0, notify=sfmReportChanged)
+    sfmAugmented = Signal(Node, Node)
+
+    # Signals to propagate high-level messages
+    error = Signal(Message)
+    warning = Signal(Message)
+    info = Signal(Message)
+","import logging
+import os
+from threading import Thread
+
+from PySide2.QtCore import QObject, Slot, Property, Signal
+
+from meshroom import multiview
+from meshroom.common.qt import QObjectListModel
+from meshroom.core.node import Node, node_factory, Status
+from meshroom.ui.graph import UIGraph
+
+
+class Message(QObject):
+    """""" Simple structure wrapping a high-level message. """"""
+
+    def __init__(self, title, text, detailedText="""", parent=None):
+        super(Message, self).__init__(parent)
+        self._title = title
+        self._text = text
+        self._detailedText = detailedText
+
+    title = Property(str, lambda self: self._title, constant=True)
+    text = Property(str, lambda self: self._text, constant=True)
+    detailedText = Property(str, lambda self: self._detailedText, constant=True)
+
+
+class LiveSfmManager(QObject):
+    """"""
+    Manage a live SfM reconstruction by creating augmentation steps in the graph over time,
+    based on images progressively added to a watched folder.
+
+    File watching is based on regular polling and not filesystem events to work on network mounts.
+    """"""
+    def __init__(self, reconstruction):
+        super(LiveSfmManager, self).__init__(reconstruction)
+        self.reconstruction = reconstruction
+        self._folder = ''
+        self.timerId = -1
+        self.minImagesPerStep = 4
+        self.watchTimerInterval = 1000
+        self.allImages = []
+        self.cameraInit = None
+        self.sfm = None
+        self._running = False
+
+    def reset(self):
+        self.stop(False)
+        self.sfm = None
+        self.cameraInit = None
+
+    def setRunning(self, value):
+        if self._running == value:
+            return
+        if self._running:
+            self.killTimer(self.timerId)
+        else:
+            self.timerId = self.startTimer(self.watchTimerInterval)
+        self._running = value
+        self.runningChanged.emit()
+
+    @Slot(str, int)
+    def start(self, folder, minImagesPerStep):
+        """"""
+        Start live SfM augmentation.
+
+        Args:
+            folder (str): the folder to watch in which images are added over time
+            minImagesPerStep (int): minimum number of images in an augmentation step
+        """"""
+        # print('[LiveSfmManager] Watching {} for images'.format(folder))
+        if not os.path.isdir(folder):
+            raise RuntimeError(""Invalid folder provided: {}"".format(folder))
+        self._folder = folder
+        self.folderChanged.emit()
+        self.cameraInit = self.sfm = None
+        self.allImages = self.reconstruction.allImagePaths()
+        self.minImagesPerStep = minImagesPerStep
+        self.setRunning(True)
+        self.update()  # trigger initial update
+
+    @Slot()
+    def stop(self, requestCompute=True):
+        """""" Stop the live SfM reconstruction.
+
+        Request the computation of the last augmentation step if any.
+        """"""
+        self.setRunning(False)
+        if requestCompute:
+            self.computeStep()
+
+    def timerEvent(self, evt):
+        self.update()
+
+    def update(self):
+        """"""
+        Look for new images in the watched folder and create SfM augmentation step (or modify existing one)
+        to include those images to the reconstruction.
+        """"""
+        # Get all new images in the watched folder
+        filesInFolder = [os.path.join(self._folder, f) for f in os.listdir(self._folder)]
+        imagesInFolder = [f for f in filesInFolder if Reconstruction.isImageFile(f)]
+        newImages = set(imagesInFolder).difference(self.allImages)
+        for imagePath in newImages:
+            # print('[LiveSfmManager] New image file : {}'.format(imagePath))
+            if not self.cameraInit:
+                # Start graph modification: until 'computeAugmentation' is called, every commands
+                # used will be part of this macro
+                self.reconstruction.beginModification(""SfM Augmentation"")
+                # Add SfM augmentation step in the graph
+                self.cameraInit, self.sfm = self.reconstruction.addSfmAugmentation()
+            self.addImageToStep(imagePath)
+
+        # If we have enough images and the graph is not being computed, compute augmentation step
+        if len(self.imagesInStep()) >= self.minImagesPerStep and not self.reconstruction.computing:
+            self.computeStep()
+
+    def addImageToStep(self, path):
+        """""" Add an image to the current augmentation step. """"""
+        self.reconstruction.appendAttribute(self.cameraInit.viewpoints, {'path': path})
+        self.allImages.append(path)
+
+    def imagePathsInCameraInit(self, node):
+        """""" Get images in the given CameraInit node. """"""
+        assert node.nodeType == 'CameraInit'
+        return [vp.path.value for vp in node.viewpoints.value]
+
+    def imagesInStep(self):
+        """""" Get images in the current augmentation step. """"""
+        return self.imagePathsInCameraInit(self.cameraInit) if self.cameraInit else []
+
+
+    @Slot()
+    def computeStep(self):
+        """""" Freeze the current augmentation step and request its computation.
+        A new step will be created once another image is added to the watched folder during 'update'.
+        """"""
+        if not self.cameraInit:
+            return
+
+        # print('[LiveSfmManager] Compute SfM augmentation')
+        # Build intrinsics in the main thread
+        self.reconstruction.buildIntrinsics(self.cameraInit, [])
+        self.cameraInit = None
+        sfm = self.sfm
+        self.sfm = None
+        # Stop graph modification and start sfm computation
+        self.reconstruction.endModification()
+        self.reconstruction.execute(sfm)
+
+    runningChanged = Signal()
+    running = Property(bool, lambda self: self._running, notify=runningChanged)
+    folderChanged = Signal()
+    folder = Property(str, lambda self: self._folder, notify=folderChanged)
+
+
+class Reconstruction(UIGraph):
+    """"""
+    Specialization of a UIGraph designed to manage a 3D reconstruction.
+    """"""
+
+    imageExtensions = ('.jpg', '.jpeg', '.tif', '.tiff', '.png', '.exr', '.rw2', '.cr2', '.nef')
+
+    def __init__(self, graphFilepath='', parent=None):
+        super(Reconstruction, self).__init__(graphFilepath, parent)
+        self._buildingIntrinsics = False
+        self._cameraInit = None
+        self._cameraInits = QObjectListModel(parent=self)
+        self._endChunk = None
+        self._meshFile = ''
+        self.intrinsicsBuilt.connect(self.onIntrinsicsAvailable)
+        self.graphChanged.connect(self.onGraphChanged)
+        self._liveSfmManager = LiveSfmManager(self)
+
+        # SfM result
+        self._sfm = None
+        self._views = None
+        self._poses = None
+        self._selectedViewId = None
+
+        if graphFilepath:
+            self.onGraphChanged()
+        else:
+            self.new()
+
+    @Slot()
+    def new(self):
+        """""" Create a new photogrammetry pipeline. """"""
+        self.setGraph(multiview.photogrammetry())
+
+    def load(self, filepath):
+        try:
+            super(Reconstruction, self).load(filepath)
+        except Exception as e:
+            self.error.emit(
+                Message(
+                    ""Error while loading {}"".format(os.path.basename(filepath)),
+                    ""An unexpected error has occurred"",
+                    str(e)
+                )
+            )
+
+    def onGraphChanged(self):
+        """""" React to the change of the internal graph. """"""
+        self._liveSfmManager.reset()
+        self.sfm = None
+        self._endChunk = None
+        self.setMeshFile('')
+        self.updateCameraInits()
+        if not self._graph:
+            return
+
+        self.setSfm(self.lastSfmNode())
+        try:
+            endNode = self._graph.findNode(""Texturing"")
+            self._endChunk = endNode.getChunks()[0]  # type: graph.NodeChunk
+            endNode.outputMesh.valueChanged.connect(self.updateMeshFile)
+            self._endChunk.statusChanged.connect(self.updateMeshFile)
+            self.updateMeshFile()
+        except KeyError:
+            self._endChunk = None
+        # TODO: listen specifically for cameraInit creation/deletion
+        self._graph.nodes.countChanged.connect(self.updateCameraInits)
+
+    @staticmethod
+    def runAsync(func, args=(), kwargs=None):
+        thread = Thread(target=func, args=args, kwargs=kwargs)
+        thread.start()
+        return thread
+
+    def getViewpoints(self):
+        """""" Return the Viewpoints model. """"""
+        # TODO: handle multiple Viewpoints models
+        return self._cameraInit.viewpoints.value if self._cameraInit else None
+
+    def updateCameraInits(self):
+        cameraInits = self._graph.nodesByType(""CameraInit"", sortedByIndex=True)
+        if set(self._cameraInits.objectList()) == set(cameraInits):
+            return
+        self._cameraInits.setObjectList(cameraInits)
+        self.setCameraInit(cameraInits[0] if cameraInits else None)
+
+    def setCameraInit(self, cameraInit):
+        """""" Set the internal CameraInit node. """"""
+        # TODO: handle multiple CameraInit nodes
+        if self._cameraInit == cameraInit:
+            return
+        self._cameraInit = cameraInit
+        self.cameraInitChanged.emit()
+
+    def getCameraInitIndex(self):
+        if not self._cameraInit:
+            return -1
+        return self._cameraInits.indexOf(self._cameraInit)
+
+    def setCameraInitIndex(self, idx):
+        self.setCameraInit(self._cameraInits[idx])
+
+    def updateMeshFile(self):
+        if self._endChunk and self._endChunk.status.status == Status.SUCCESS:
+            self.setMeshFile(self._endChunk.node.outputMesh.value)
+        else:
+            self.setMeshFile('')
+
+    def setMeshFile(self, mf):
+        if self._meshFile == mf:
+            return
+        self._meshFile = mf
+        self.meshFileChanged.emit()
+
+    def lastSfmNode(self):
+        """""" Retrieve the last SfM node from the initial CameraInit node. """"""
+        sfmNodes = self._graph.nodesFromNode(self._cameraInits[0], 'StructureFromMotion')[0]
+        return sfmNodes[-1] if sfmNodes else None
+
+    def addSfmAugmentation(self, withMVS=False):
+        """"""
+        Create a new augmentation step connected to the last SfM node of this Reconstruction and
+        return the created CameraInit and SfM nodes.
+
+        If the Reconstruction is not initialized (empty initial CameraInit), this method won't
+        create anything and return initial CameraInit and SfM nodes.
+
+        Args:
+            withMVS (bool): whether to create the MVS pipeline after the augmentation
+
+        Returns:
+            Node, Node: CameraInit, StructureFromMotion
+        """"""
+        sfm = self.lastSfmNode()
+        if not sfm:
+            return None, None
+
+        if len(self._cameraInits) == 1:
+            assert self._cameraInit == self._cameraInits[0]
+            # Initial CameraInit is empty, use this one
+            if len(self._cameraInits[0].viewpoints) == 0:
+                return self._cameraInit, sfm
+
+        with self.groupedGraphModification(""SfM Augmentation""):
+            sfm, mvs = multiview.sfmAugmentation(self, self.lastSfmNode(), withMVS=withMVS)
+
+        self.sfmAugmented.emit(sfm[0], mvs[-1])
+        return sfm[0], sfm[-1]
+
+    def allImagePaths(self):
+        """""" Get all image paths in the reconstruction. """"""
+        return [vp.path.value for node in self._cameraInits for vp in node.viewpoints.value]
+
+    def allViewIds(self):
+        """""" Get all view Ids involved in the reconstruction. """"""
+        return [vp.viewId.value for node in self._cameraInits for vp in node.viewpoints.value]
+
+    @Slot(QObject, Node)
+    def handleFilesDrop(self, drop, cameraInit):
+        """""" Handle drop events aiming to add images to the Reconstruction.
+        Fetching urls from dropEvent is generally expensive in QML/JS (bug ?).
+        This method allows to reduce process time by doing it on Python side.
+        """"""
+        self.importImages(self.getImageFilesFromDrop(drop), cameraInit)
+
+    @staticmethod
+    def isImageFile(filepath):
+        """""" Return whether filepath is a path to an image file supported by Meshroom. """"""
+        return os.path.splitext(filepath)[1].lower() in Reconstruction.imageExtensions
+
+    @staticmethod
+    def getImageFilesFromDrop(drop):
+        urls = drop.property(""urls"")
+        # Build the list of images paths
+        images = []
+        for url in urls:
+            localFile = url.toLocalFile()
+            if os.path.isdir(localFile):  # get folder content
+                files = [os.path.join(localFile, f) for f in os.listdir(localFile)]
+            else:
+                files = [localFile]
+            images.extend([f for f in files if Reconstruction.isImageFile(f)])
+        return images
+
+    def importImages(self, images, cameraInit):
+        """""" Add the given list of images to the Reconstruction. """"""
+        # Start the process of updating views and intrinsics
+        self.runAsync(self.buildIntrinsics, args=(cameraInit, images,))
+
+    def buildIntrinsics(self, cameraInit, additionalViews):
+        """"""
+        Build up-to-date intrinsics and views based on already loaded + additional images.
+        Does not modify the graph, can be called outside the main thread.
+        Emits intrinsicBuilt(views, intrinsics) when done.
+        """"""
+        views = []
+        intrinsics = []
+
+        # Duplicate 'cameraInit' outside the graph.
+        #   => allows to compute intrinsics without modifying the node or the graph
+        # If cameraInit is None (i.e: SfM augmentation):
+        #   * create an uninitialized node
+        #   * wait for the result before actually creating new nodes in the graph (see onIntrinsicsAvailable)
+        attributes = cameraInit.toDict()[""attributes""] if cameraInit else {}
+        cameraInitCopy = node_factory(""CameraInit"", **attributes)
+
+        try:
+            self.setBuildingIntrinsics(True)
+            # Retrieve the list of updated viewpoints and intrinsics
+            views, intrinsics = cameraInitCopy.nodeDesc.buildIntrinsics(cameraInitCopy, additionalViews)
+        except Exception:
+            import traceback
+            logging.error(""Error while building intrinsics : {}"".format(traceback.format_exc()))
+
+        # Delete the duplicate
+        cameraInitCopy.deleteLater()
+
+        self.setBuildingIntrinsics(False)
+        # always emit intrinsicsBuilt signal to inform listeners
+        # in other threads that computation is over
+        self.intrinsicsBuilt.emit(cameraInit, views, intrinsics)
+
+    def onIntrinsicsAvailable(self, cameraInit, views, intrinsics):
+        """""" Update CameraInit with given views and intrinsics. """"""
+        augmentSfM = cameraInit is None
+        commandTitle = ""Add {} Images""
+
+        # SfM augmentation
+        if augmentSfM:
+            # filter out views already involved in the reconstruction
+            allViewIds = self.allViewIds()
+            views = [view for view in views if int(view[""viewId""]) not in allViewIds]
+            commandTitle = ""Augment Reconstruction ({} Images)""
+
+        # No additional views: early return
+        if not views:
+            return
+
+        commandTitle = commandTitle.format(len(views))
+        # allow updates between commands so that node depths
+        # are updated after ""addSfmAugmentation"" (useful for auto layout)
+        with self.groupedGraphModification(commandTitle, disableUpdates=False):
+            if augmentSfM:
+                cameraInit, self.sfm = self.addSfmAugmentation(withMVS=True)
+            with self.groupedGraphModification(""Set Views and Intrinsics""):
+                self.setAttribute(cameraInit.viewpoints, views)
+                self.setAttribute(cameraInit.intrinsics, intrinsics)
+        self.setCameraInit(cameraInit)
+
+    def setBuildingIntrinsics(self, value):
+        if self._buildingIntrinsics == value:
+            return
+        self._buildingIntrinsics = value
+        self.buildingIntrinsicsChanged.emit()
+
+    cameraInitChanged = Signal()
+    cameraInit = Property(QObject, lambda self: self._cameraInit, notify=cameraInitChanged)
+    cameraInitIndex = Property(int, getCameraInitIndex, setCameraInitIndex, notify=cameraInitChanged)
+    viewpoints = Property(QObject, getViewpoints, notify=cameraInitChanged)
+    cameraInits = Property(QObject, lambda self: self._cameraInits, constant=True)
+    intrinsicsBuilt = Signal(QObject, list, list)
+    buildingIntrinsicsChanged = Signal()
+    buildingIntrinsics = Property(bool, lambda self: self._buildingIntrinsics, notify=buildingIntrinsicsChanged)
+    meshFileChanged = Signal()
+    meshFile = Property(str, lambda self: self._meshFile, notify=meshFileChanged)
+    liveSfmManager = Property(QObject, lambda self: self._liveSfmManager, constant=True)
+
+    def updateViewsAndPoses(self):
+        """"""
+        Update internal views and poses based on the current SfM node.
+        """"""
+        if not self._sfm:
+            self._views = []
+            self._poses = []
+        else:
+            self._views, self._poses = self._sfm.nodeDesc.getViewsAndPoses(self._sfm)
+        self.sfmReportChanged.emit()
+
+    def getSfm(self):
+        """""" Returns the current SfM node. """"""
+        return self._sfm
+
+    def _unsetSfm(self):
+        """""" Unset current SfM node. This is shortcut equivalent to _setSfm(None). """"""
+        self._setSfm(None)
+
+    def _setSfm(self, node):
+        """""" Set current SfM node to 'node' and update views and poses.
+        Notes: this should not be called directly, use setSfm instead.
+        See Also: setSfm
+        """"""
+        self._sfm = node
+        # Update views and poses and do so each time
+        # the status of the SfM node's only chunk changes
+        self.updateViewsAndPoses()
+        if self._sfm:
+            # when destroyed, directly use '_setSfm' to bypass
+            # disconnection step in 'setSfm' (at this point, 'self._sfm' underlying object
+            # has been destroyed and can't be evaluated anymore)
+            self._sfm.destroyed.connect(self._unsetSfm)
+            self._sfm.chunks[0].statusChanged.connect(self.updateViewsAndPoses)
+        self.sfmChanged.emit()
+
+    def setSfm(self, node):
+        """""" Set the current SfM node.
+        This node will be used to retrieve sparse reconstruction result like camera poses.
+        """"""
+        # disconnect from previous SfM node if any
+        if self._sfm:
+            self._sfm.chunks[0].statusChanged.disconnect(self.updateViewsAndPoses)
+            self._sfm.destroyed.disconnect(self._unsetSfm)
+        self._setSfm(node)
+
+    @Slot(QObject, result=bool)
+    def isInViews(self, viewpoint):
+        # keys are strings (faster lookup)
+        return str(viewpoint.viewId.value) in self._views
+
+    @Slot(QObject, result=bool)
+    def isReconstructed(self, viewpoint):
+        # keys are strings (faster lookup)
+        return str(viewpoint.poseId.value) in self._poses
+
+    def setSelectedViewId(self, viewId):
+        if viewId == self._selectedViewId:
+            return
+        self._selectedViewId = viewId
+        self.selectedViewIdChanged.emit()
+
+    selectedViewIdChanged = Signal()
+    selectedViewId = Property(str, lambda self: self._selectedViewId, setSelectedViewId, notify=selectedViewIdChanged)
+
+    sfmChanged = Signal()
+    sfm = Property(QObject, getSfm, setSfm, notify=sfmChanged)
+    sfmReportChanged = Signal()
+    # convenient property for QML binding re-evaluation when sfm report changes
+    sfmReport = Property(bool, lambda self: len(self._poses) > 0, notify=sfmReportChanged)
+    sfmAugmented = Signal(Node, Node)
+
+    # Signals to propagate high-level messages
+    error = Signal(Message)
+    warning = Signal(Message)
+    info = Signal(Message)
+",Reconstruction.addSfmAugmentation,https://github.com/alicevision/meshroom/issues/127,"[{'piece_type': 'error message', 'piece_content': 'Traceback (most recent call last):\nFile ""C:\\Users\\andre\\work\\meshroom\\meshroom\\ui\\reconstruction.py"", line 72, in start\nraise RuntimeError(""Invalid folder provided: {}"".format(folder))\nRuntimeError: Invalid folder provided: /F:/ai-ml-models/images/live'}]","Traceback (most recent call last):
+File ""C:\Users\andre\work\meshroom\meshroom\ui\reconstruction.py"", line 72, in start
+raise RuntimeError(""Invalid folder provided: {}"".format(folder))
+RuntimeError: Invalid folder provided: /F:/ai-ml-models/images/live",RuntimeError,"    def addSfmAugmentation(self, withMVS=False):
+        
+        sfm = self.lastSfmNode()
+        if not sfm:
+            return None, None
+
+        if len(self._cameraInits) == 1:
+            assert self._cameraInit == self._cameraInits[0]
+            
+            if len(self._cameraInits[0].viewpoints) == 0:
+                return self._cameraInit, sfm
+
+        with self.groupedGraphModification(""SfM Augmentation""):
+            sfm, mvs = multiview.sfmAugmentation(self, self.lastSfmNode(), withMVS=withMVS)
+
+        self.sfmAugmented.emit(sfm[0], mvs[-1])
+        return sfm[0], sfm[-1]","    def addSfmAugmentation(self, withMVS=False):
+        
+        sfm = self.lastSfmNode()
+        if not sfm:
+            return None, None
+
+        if len(self._cameraInits) == 1:
+            assert self._cameraInit == self._cameraInits[0]
+            
+            if len(self._cameraInits[0].viewpoints) == 0:
+                return self._cameraInit, sfm
+
+        with self.groupedGraphModification(""SfM Augmentation""):
+            sfm, mvs = multiview.sfmAugmentation(self, self.lastSfmNode(), withMVS=withMVS)
+
+        self.sfmAugmented.emit(sfm[0], mvs[-1] if mvs else sfm[-1])
+        return sfm[0], sfm[-1]",[],[],buggy_snippets_files/dffb9602005cbea45f7d0c6d2f7f7a475f84d5df43256ef336fea453a6155d5e_before_merge.py,buggy_snippets_files/dffb9602005cbea45f7d0c6d2f7f7a475f84d5df43256ef336fea453a6155d5e_after_merge.py

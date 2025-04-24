@@ -68,7 +68,7 @@ public class ONNXModel <: ToString {
     var output_types: CPointer<PStrsWithSize>
     var output_shapes: CPointer<PPInt64WithSize>
 
-    public init(path!: String = getcwd()+"/resource/privacy/privacy_model.onnx",option!:OnnxDeviceOption = CPU) {
+    public init(path!: String = getcwd()+"/src/titoken/model.onnx",option!:OnnxDeviceOption = CPU) {
         model_path = path 
         var p = unsafe { LibC.mallocCString(path) }
         println("tensor.device: ${OnnxDevice(option)}")

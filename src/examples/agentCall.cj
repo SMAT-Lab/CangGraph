@@ -17,7 +17,7 @@ public func agentCall() {
                 """
     let messages = ArrayList<Message>()
     messages.append(Message("system", prompt))
-    messages.append(Message("user", "Here is the formula: `x / 2 - 3x + 2 = 0`"))
+    messages.append(Message("user", "Here is the formula: `3x + 2 = 0`"))
 
     println(llm.query(messages.toArray()).getContent())
 }
