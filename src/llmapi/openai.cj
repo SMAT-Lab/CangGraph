@@ -37,7 +37,7 @@ public class OpenAI <: LargeModel {
         
         println("request body: ${body.toJson()}")
         let response = client.post(url, header: header, body: body.toJson().toJsonString())
-        println("response: ${response}")
+        // println("response: ${response}")
         let obj: JsonObject = string2JsonObject(response)
         // println("obj: ${obj}")
         let msg = obj["choices"].asArray()[0].asObject()["message"].asObject()

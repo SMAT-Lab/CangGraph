@@ -19,11 +19,8 @@ main() {
     // agentCallWithTool()
 
     // genCode("我想要写一个归并排序。")
-    println(llmPlusRAG())
-    var sentences:Array<String> =  ["a = b ++ 1"]
-    let embedder = Embedder()
-    let sentence_embeddings = embedder(sentences)
-    println("embedding: ${sentence_embeddings}")
+    llmPlusRAG()
+    // embeddingWords()
     
     return 0
 }

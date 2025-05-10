@@ -1,0 +1,3 @@
+def get_average(tot, num):
+    average = tot % num
+    return average

@@ -47,6 +47,8 @@ public class Requests {
                     .addHeaders(header)
                     .body(body)
                     .build()
+        requestBuilder.readTimeout(Duration.minute * 3)
+        requestBuilder.writeTimeout(Duration.minute * 3)
         let rsp: HttpResponse = client.send(req)
         let buf = Array<UInt8>(10000000, item: 0)
         let len = rsp.body.read(buf)

@@ -6,56 +6,34 @@ import canggraph.titoken.*
 import canggraph.tool.*
 import canggraph.util.*
 
-import std.{collection.*, os.*, os.posix.*}
+import std.{collection.*, os.*, os.posix.*, fs.*}
 import encoding.json.*
 import serialization.serialization.*
 
 public func llmPlusRAG() {
-    let pineCone = PineCone()
-    // let path: String = getcwd()
-    // let objs = read_from_csv("${path}/data/bugfixes_test_top5.csv")
-    // for (i in 0..5) {
-    //     println("${i}: ${objs[i]}")
-    // }
-    // return 0
-
-    var sentences:Array<String> =  ["a = b ++ 1"]
+    // let vector: ArrayList<Float32> = ArrayList<Float32>([0.036658, 0.066523, -0.043125, 0.065767, -0.027580, -0.024566, -0.032932, 0.081962, -0.057161, -0.014540, 0.012860, -0.055498, 0.107927, 0.048236, -0.078770, 0.046291, -0.046121, 0.011003, 0.001768, 0.101362, -0.155859, 0.028129, -0.068288, -0.013990, -0.052721, 0.046659, 0.029174, -0.042202, -0.004147, -0.049072, 0.053178, -0.017642, -0.049476, 0.055977, 0.050445, 0.031486, -0.047303, -0.031436, -0.022422, -0.045862, -0.034348, -0.045970, -0.008500, 0.050410, -0.056457, -0.010930, 0.020238, -0.034898, 0.026734, -0.024365, 0.012721, 0.014253, -0.013871, 0.111444, -0.081788, -0.034724, 0.022551, -0.010870, -0.050771, 0.112810, 0.073946, -0.060979, -0.022676, 0.023807, 0.016995, 0.061945, 0.048156, 0.018616, 0.025055, 0.005829, 0.007296, 0.028814, -0.057685, -0.056333, 0.017981, 0.061795, 0.003866, -0.001687, 0.119803, 0.001112, 0.004230, -0.068169, -0.021024, -0.062327, 0.037032, 0.017358, -0.011026, -0.003843, 0.065951, 0.060967, -0.005583, 0.006995, 0.024351, 0.028765, -0.075570, 0.012540, 0.002731, -0.019022, -0.046511, 0.041041, -0.030585, -0.028495, -0.015018, 0.095605, -0.034275, -0.104307, 0.032031, -0.030836, -0.060653, -0.065911, 0.065115, 0.074993, -0.003820, -0.038389, 0.052409, -0.046387, -0.020188, -0.011756, -0.063817, -0.003726, 0.080929, 0.003433, 0.011243, 0.014796, -0.017217, -0.089016, -0.010562, 0.000000, 0.059855, 0.027788, -0.010618, -0.002956, -0.002988, 0.002104, -0.022280, -0.047880, -0.003605, -0.019850, -0.011845, 0.093734, 0.022005, 0.006731, -0.008591, 0.046207, -0.045959, 0.098913, -0.057433, 0.021646, 0.004992, -0.009174, 0.025134, -0.038937, 0.062182, 0.070939, -0.005448, 0.009479, -0.024028, 0.024706, -0.037936, 0.056409, 0.037759, 0.062569, 0.002950, 0.041327, 0.044409, -0.027902, 0.023251, 0.048028, 0.054614, 0.053931, 0.083326, 0.059237, 0.094819, -0.107870, 0.021516, -0.042214, -0.005786, -0.059736, -0.059065, -0.030982, -0.123257, -0.033975, 0.010404, -0.058148, -0.007455, 0.037661, 0.018157, 0.104080, -0.040897, 0.020074, 0.019433, -0.017986, -0.023258, -0.058665, -0.052592, -0.124347, -0.022978, 0.089466, -0.061348, 0.024140, 0.042942, -0.042777, -0.045293, -0.044641, 0.008745, 0.067575, 0.008614, -0.002135, -0.065144, -0.079273, 0.019810, 0.082860, -0.032738, 0.037460, -0.012712, -0.042672, -0.115068, 0.039974, 0.070256, -0.016214, 0.112286, -0.045802, -0.003126, -0.000000, -0.081203, -0.102022, -0.041434, 0.055454, 0.008152, -0.020645, -0.041617, 0.063511, -0.034346, -0.048978, -0.020540, 0.038351, -0.048450, -0.014363, 0.013022, 0.021098, 0.091426, -0.105857, 0.007013, -0.016624, 0.052868, 0.067449, -0.028715, 0.076960, -0.026835, 0.019993, 0.041204, -0.119011, 0.083196, -0.000791, -0.107393, -0.020071, -0.012319, 0.084543, 0.073255, -0.071678, 0.086639, -0.063744, -0.007962, -0.048001, 0.074112, 0.060031, -0.067274, 0.002616, 0.005694, 0.048135, -0.057440, 0.018909, 0.084597, 0.010127, 0.027634, -0.057073, -0.064309, 0.044848, -0.081563, -0.084027, 0.005265, -0.014572, 0.065539, 0.014885, 0.022293, -0.005043, 0.077097, -0.081764, -0.061950, 0.048511, -0.064793, 0.082731, -0.143037, 0.035169, 0.013551, -0.101756, 0.000578, -0.087526, 0.036815, 0.011186, -0.039172, 0.009546, 0.028196, 0.047192, -0.050216, 0.041636, -0.084927, 0.010125, 0.128631, 0.022758, 0.012845, -0.011652, -0.059321, -0.052275, -0.035337, 0.027268, -0.066232, -0.035549, 0.019242, -0.000000, -0.002325, 0.000296, -0.016697, -0.012102, 0.063781, 0.013210, -0.035188, -0.009314, 0.070546, 0.037102, 0.012793, 0.007248, 0.016400, -0.007181, 0.007122, 0.079351, -0.078253, -0.040681, -0.052661, 0.015468, -0.027948, -0.003240, 0.038774, -0.001837, 0.014260, 0.075978, 0.079175, 0.042196, 0.091735, 0.000558, 0.014645, -0.072896, 0.022453, 0.054177, 0.015964, 0.046905, 0.033172, -0.027340, 0.043067, 0.078219, 0.001087, -0.015152, 0.052375, 0.041640, -0.053988, 0.004293, -0.027678, 0.050159, 0.004560, 0.038422, -0.050715, -0.050963, -0.003456, -0.008752, -0.011393, 0.013141, 0.109213, -0.048349, 0.034355, 0.008431, 0.064852, -0.075995, -0.033881, 0.033588])
+    let code = String.fromUtf8(File.readFrom("/home/CangGraph/src/examples/RAGcode.txt"))
+    var codes:Array<String> =  [code]
     let embedder = Embedder()
-    // let sentence_embeddings = embedder(sentences)
-    // println("embedding: ${sentence_embeddings}")
-    
-    // let row = objs[4].asObject().get("values").getOrThrow().asArray()
-    // let query_rule: String = row[0].asString().getValue()
-    // println(query_rule)
-    // let query_description = row[1].asString().getValue()
-    // let query_buggy_code = row[2].asString().getValue()
-    // println(query_buggy_code)
-    let res = pineCone.query(sentences[0])
-    return res
-    // let similars = res["matches"].asArray()
-    // var prompt = "我将给出你若干个与问题代码类型相同，问题代码类似的例子，包括缺陷规则、缺陷描述、缺陷代码、缺陷解释以及修复代码\n"
-    // for (index in 0..similars.size()) {
-    //     let item = similars[index].asObject()["metadata"].asObject()
-    //     let rule = item["rule"].asString().getValue()
-    //     let description = item["description"].asString().getValue()
-    //     let buggy_code = item["buggy_code"].asString().getValue()
-    //     let buggy_explanation = item["buggy_explanation"].asString().getValue()
-    //     let fixed_code = item["fixed_code"].asString().getValue()
+    let code_embeddings = embedder(codes)
+    let result = vectorSearch(code_embeddings[0])
 
-    //     prompt = prompt + "Demo: ${index}\nRule: ${rule}\nDescription: ${description}\nBuggy Code: \n${buggy_code}\nBuggy Explanation: ${buggy_explanation}\nFixed Code:\n${fixed_code}\n"
-    // }
-    // prompt = prompt + "现在，请根据上面的例子，来修复我的问题代码:\n${query_buggy_code}\n\n对应的问题类型是: ${query_rule}\n该问题类型的描述如下:${query_description}\n请您帮我修复一下: \n```arkts\n"
-    // //prompt =  "请修复我的问题代码:\n```arkts\n${query_buggy_code}\n```\n\n请您帮我修复一下: \n```arkts\n"
-    // println(prompt)
-    // let llm = getLLMInstance(LLMType.DeepSeek, model: "arktsLLM")
-    // let msgs: ArrayList<Message> = ArrayList<Message>()
-    // let sys_msg = Message("system", "You are a helpful assistant!")
-    // let msg = Message("user", prompt)
-    // msgs.append(sys_msg)
-    // msgs.append(msg)
+    let matches = result["data"].asObject()["matches"].asArray()
+    let metadata = matches[0].asObject()["metadata"]
 
-    // let response = llm.query(msgs.toArray()).getContent()
-    // println(response)
+    println(metadata)
 
-    // return 0
+    let llm = getLLMInstance(LLMType.DeepSeek, model: "deepseek-chat")
+
+    let prompt = """
+                You're a code-defect detector.
+                I'll give you a piece of code with possible bugs and some similar buggy codes.
+                Tell me whether the code is correct. If not, point bugs.
+                """
+    let messages = ArrayList<Message>()
+    messages.append(Message("system", prompt))
+    messages.append(Message("user", "Code piece: ${codes[0]}\nSimilar buggy codes: ${metadata.toString()}"))
+
+    println(llm.query(messages.toArray()).getContent())
+    return 0
 }

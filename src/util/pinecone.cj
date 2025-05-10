@@ -7,6 +7,7 @@ import net.{http.*, tls.*}
 import std.{collection.*, os.*, os.posix.*}
 import serialization.serialization.*
 import encoding.json.*
+import std.ffi.python.*
 
 public class Vector <: Serializable<Vector> {
     var id: String
@@ -141,7 +142,7 @@ public class PineCone {
 
         let vector: ArrayList<Float32> = embedder(query)[0]
         body.add(field<ArrayList<Float32>>("vector", vector))
-        body.add(field<Int64>("top_k", 1))
+        body.add(field<Int64>("top_k", top_k))
         body.add(field<String>("namespace", namespace))
         body.add(field<Bool>("includeMetadata", true))
 
@@ -208,4 +209,19 @@ public class PineCone {
         }
         return vectors
     }
+}
+
+public func vectorSearch(vector: ArrayList<Float32>, top_k!: Int64 = 3) {
+    let client: Requests = Requests()
+    let url = "http://localhost:5001/v2/search"
+    let body: DataModelStruct = DataModelStruct()
+
+    body.add(field<ArrayList<Float32>>("vector", vector))
+    body.add(field<Int64>("top_k", top_k))
+
+    let response = client.post(url, body: body.toJson().toJsonString())
+
+    // println(response)
+
+    return string2JsonObject(response.toString())
 }
