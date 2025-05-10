@@ -3,4 +3,12 @@ target/
 .vscode/
 resource/
 lib/libonnxruntime_providers_cuda.so
-data/
+
+# 忽略data目录下的所有文件
+/data/*
+/data/**/*.csv
+/data/**/*.json
+/data/**/*.txt
+
+# 但是保留data目录本身（可选）
+!/data/.gitkeep
