@@ -23,6 +23,7 @@ public class Requests {
    
     public init() {
         tlsConfig.verifyMode = CertificateVerifyMode.TrustAll
+        // requestBuilder.readTimeout(Duration.minute * 5)
         client = ClientBuilder().tlsConfig(tlsConfig).build()
     }
 
@@ -36,6 +37,7 @@ public class Requests {
         let rsp = client.send(req)
         let buf = Array<UInt8>(max_length, item: 0)
         let len = rsp.body.read(buf)
+        client.close()
         return String.fromUtf8(buf.slice(0, len))
     }
 

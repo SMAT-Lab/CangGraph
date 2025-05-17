@@ -7,7 +7,7 @@ import net.{http.*, tls.*}
 import std.{collection.*, os.*, os.posix.*}
 import serialization.serialization.*
 import encoding.json.*
-import std.ffi.python.*
+// import std.ffi.python.*
 
 public class Vector <: Serializable<Vector> {
     var id: String

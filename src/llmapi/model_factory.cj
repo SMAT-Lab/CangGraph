@@ -33,6 +33,12 @@ public func getLLMInstance(modelType: LLMType, model !: String = "deepseek-chat"
 }
 
 public abstract class LargeModel {
+    var jsonOutPut: Bool = false
+    
+    public func chainLLM() {
+        this.jsonOutPut = true
+    }
+
     public func query(content: String, tools: Array<Tool>): ResponseMessage
     public func query(messages: Array<Message>, tools: Array<Tool>): ResponseMessage
 

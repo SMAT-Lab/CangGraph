@@ -1,3 +1,1 @@
-def get_average(tot, num):
-    average = tot % num
-    return average
+def get_first_element(lst):\n    return lst[0]\n\nempty_list = []\nprint(get_first_element(empty_list))

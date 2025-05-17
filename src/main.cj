@@ -1,9 +1,11 @@
 package canggraph
 
 import canggraph.agent.*
+import canggraph.chain.*
 import canggraph.llmapi.*
 import canggraph.multi.*
 import canggraph.examples.*
+import canggraph.schema.*
 import canggraph.titoken.*
 import canggraph.tool.*
 import canggraph.util.*
@@ -17,10 +19,11 @@ main() {
     // toolCall()
     // agentCall()
     // agentCallWithTool()
+    // embeddingWords()
+    // llmPlusRAG()
+    chainCall()
 
     // genCode("我想要写一个归并排序。")
-    llmPlusRAG()
-    // embeddingWords()
     
     return 0
 }

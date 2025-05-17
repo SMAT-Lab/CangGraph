@@ -73,8 +73,8 @@ public class OpenAI <: LargeModel {
             return response
         }
         else {
-            let content = msg["content"].asString()
-            return ResponseMessage("assistant", content.getValue(), false, Array<ToolCall>())
+            // let content = msg["content"].asString()
+            return ResponseMessage("assistant", msg["content"].asString().getValue(), false, Array<ToolCall>())
         }
     }
 
@@ -140,11 +140,11 @@ public class OpenAI <: LargeModel {
         body.add(field<Array<Message>>("messages", messages))
         body.add(field<Float64>("temperature", temperature))
         // body.add(field<Array<Tool>>("tools", tools))
-/*
-        if (jsonOutPut) {
+
+        if (this.jsonOutPut) {
             body.add(field<HashMap<String, String>>("response_format", HashMap<String, String>([("type","json_object")])))
         }
-*/
+
         return call_llm(header, body)
     }
 
@@ -157,7 +157,7 @@ public class OpenAI <: LargeModel {
         return query(messages.toArray(), options)
     }
 
-    public func query(messages: Array<Message>/*, jsonOutPut!: Bool = false*/): ResponseMessage {
+    public func query(messages: Array<Message>): ResponseMessage {
         return query(messages, HashMap<String, Any>())
     }
 

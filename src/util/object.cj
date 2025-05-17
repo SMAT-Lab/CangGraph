@@ -1,6 +1,7 @@
 package canggraph.util
 
 import encoding.json.*
+import std.collection.*
 
 public func string2JsonObject(response: String):JsonObject{
     let data: JsonObject
@@ -11,6 +12,14 @@ public func string2JsonObject(response: String):JsonObject{
         throw e
     }
     return data
+}
+
+public func map2JsonObject(map: HashMap<String, String>): JsonObject {
+    let jsonMap: JsonObject = JsonObject()
+    for ((k, v) in map) {
+        jsonMap.put(k, JsonString(v))
+    }
+    return jsonMap
 }
 
 public func parseString(raw_json: String): String {
