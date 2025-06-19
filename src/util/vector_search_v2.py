@@ -157,4 +157,4 @@ def search_v2():
         }), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001)  # 使用不同的端口避免冲突 
+    app.run(host='0.0.0.0', port=5050)  # 使用不同的端口避免冲突 

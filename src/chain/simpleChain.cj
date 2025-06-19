@@ -49,6 +49,7 @@ public class SimpleChain {
         messages.append(Message("user", template.format(inputVars)))
 
         let response =  llm.query(messages.toArray()).getContent()
+        println("##response: ${response}")
         let jsonResponse = string2JsonObject(response)
         var result = Dict()
         for (output in outputVars) {

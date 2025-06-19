@@ -9,27 +9,27 @@ import encoding.json.*
 
 public func toolCall() {
     let toolArgs = ToolArgs(
-        "translater",
-        "Translate Chinese to another language.",
+        "撰写花卉评价",
+        "撰写花卉的评价，用户需要先输入花卉信息",
         ToolParameters(
             "object",
             HashMap<String, ToolProperties>([
-                ("text", ToolProperties("string", "text to translate")),
-                ("target_language", ToolProperties("string", "language translated into"))
+                ("name", ToolProperties("string", "name of the flower")),
+                ("color", ToolProperties("string", "color of the flower"))
             ]),
-            ["text", "target_language"],
+            ["name", "color"],
             false
         )
     )
 
-    let translater: Tool = Tool(
+    let flower_review: Tool = Tool(
         "function",
         toolArgs
     )
 
     let llm = getLLMInstance(LLMType.DeepSeek, model: "deepseek-chat")
 
-    let res = llm.query("Translate `你好，世界。` into English", [translater]).getToolCalls()
+    let res = llm.query("为黑色玫瑰撰写一个评价", [flower_review]).getToolCalls()
     println("tool_call:")
     println("${res}")
     

@@ -8,7 +8,7 @@ import canggraph.util.*
 import std.collection.*
 import encoding.json.*
 
-public func agentCall() {
+public func agentCall(str: String) {
     let llm = getLLMInstance(LLMType.DeepSeek, model: "deepseek-chat")
 
     let prompt = """
@@ -17,7 +17,7 @@ public func agentCall() {
                 """
     let messages = ArrayList<Message>()
     messages.append(Message("system", prompt))
-    messages.append(Message("user", "Here is the formula: `3x + 2 = 0`"))
+    messages.append(Message("user", str))
 
     println(llm.query(messages.toArray()).getContent())
 }
@@ -37,7 +37,7 @@ public func agentCallWithTool() {
         )
     )
 
-    let translater: Tool = Tool(
+    let orderChecher: Tool = Tool(
         "function",
         toolArgs
     )
@@ -51,5 +51,5 @@ public func agentCallWithTool() {
     messages.append(Message("user", "Where is my order `ORD123456`?"))
 
     println("tool call:")
-    println(llm.query(messages.toArray(), [translater]).getToolCalls())
+    println(llm.query(messages.toArray(), [orderChecher]).getToolCalls())
 }

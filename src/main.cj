@@ -15,38 +15,18 @@ import encoding.json.*
 import net.http.*
 
 main() {
-    // llmCall()
-    // toolCall()
-    // agentCall()
-    // agentCallWithTool()
-    // embeddingWords()
-    // llmPlusRAG()
+    println("--------\nLLMCall\n--------")
+    llmCall()
+    println("--------\nAgentCall\n--------")
+    agentCall("Here is the formula: `3x + 2 = 0`")
+    println("--------\nAgentCall--Tool\n--------")
+    agentCallWithTool()
+    println("--------\nChainCall\n--------")
     chainCall()
-
-    // genCode("我想要写一个归并排序。")
+    println("--------\nRAG\n--------")
+    llmPlusRAG()
+    println("--------\nembedding\n--------")
+    embeddingWords()
     
     return 0
-}
-
-func genCode(question: String): String {
-    let llm = getLLMInstance(LLMType.DeepSeek, model: "deepseek-chat")
-
-    let prompt = """
-                You're a code generator.
-                Generate Python code according to question.
-                Parse the "question" and "answer" and output them in JSON format.
-
-EXAMPLE JSON OUTPUT:
-{
-    "question": "Which is the highest mountain in the world?",
-    "answer": "Mount Everest"
-}
-                """
-    let messages = ArrayList<Message>()
-    messages.append(Message("system", prompt))
-    messages.append(Message("user", question))
-
-    let answer: String = llm.query(messages.toArray()).getContent()
-    println(answer)
-    return answer
 }

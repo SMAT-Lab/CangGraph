@@ -1,339 +1,206 @@
-### 基础用法——大模型的交互
-```cj
-import canggraph.llmapi.*
-import canggraph.graph.*
-import canggraph.tool.*
-import canggraph.agent.*
-import canggraph.schema.*
-import canggraph.chain.*
-from std import collection.*
-from encoding import json.*
+# 用户教程
 
-main() {
-  let llm = getLLMInstance(LLMType.OPEN_AI)
+- [调用模型](#调用模型)
+  - [创建模型实例](#创建模型实例)
+  - [调用模型实例](#调用模型实例)
+- [调用工具](#调用工具)
+  - [构造工具](#构造工具)
+  - [使用工具调用](#使用工具调用)
+- [调用Agent](#调用Agent)
+  - [构建Agent](#构建Agent)
+  - [使用Agent交互](#使用Agent交互)
 
-  println(llm.query("who are you?"))
-  println(llm.query("translate what you have said into Chinese"))
-}
+CangChain 是一个用于定义和管理 大模型调用 的专用语言。它允许开发人员通过结构化的系统提示词、工具和各类协作策略来增强大模型的功能。本手册将介绍如何使用 CangChain 的各种功能，并通过实例帮助用户快速上手。
+
+## <a id="调用模型">调用模型</a>
+
+CangChain 支持无提示词模板直接调用模型实例，下面将介绍调用方法。
+
+### <a id="创建模型实例">创建模型实例</a>
+
+目前，我们使用`getLLMInstance()`方法来定义创建一个大模型实例。
+
+```
+getLLMInstance(modelType: LLMType, model: String)
 ```
 
-使用messages进行请求
-```cangjie
-from std import collection.*
-from std import os.*
-from std import os.posix.*
-import canggraph.titoken.*
-from net import http.*
-from net import tls.*
-from serialization import serialization.*
-from encoding import json.*
-import canggraph.requests.*
-import canggraph.llmapi.*
-import canggraph.util.*
-import canggraph.tool.*
+其中
 
-main(): Int64 {
+| 属性名      | 值类型    | 说明                                                         |
+| ----------- | --------- | ------------------------------------------------------------ |
+| `modelType` | `LLMType` | 大模型类型选择；`LLMType`为枚举`enum`类型，可以从`DeepSeek`、`Ollama`、`Open_AI`中选择，也可以根据需要扩充 |
+| `model`     | `String`  | 具体模型类型；根据不同厂商推出的模型，具体选择调用的模型     |
 
-    let model: GPTGod = ((getLLMInstance(LLMType.GPTGod)) as GPTGod).getOrThrow()
-    let msgs = ArrayList<Message>()
-    msgs.append(Message("system", "You are a helpful assistant"))
-    // msgs.append(Message("user", "What is the weather like today in New York?"))
-    msgs.append(Message("user", "Who you are?"))
-    let base_tools = ArrayList<BaseTool>([GetWeather()])
-    let tools = ArrayList<Tool>()
-    for (tool in base_tools) {
-        tools.append(tool.tool)
-    }
+示例：
 
-    let res = model.query(msgs.toArray(), stop: false, tools: tools.toArray() , useTool: false)
-    println(res)
-
-    return 0 
-}
+```
+// 选择使用DeepSeek的deepseek-chat模型创建模型实例
+llm = getLLMInstance(LLMType.DeepSeek, model: "deepseek-chat")
 ```
 
-### ReAct
-```cangjie
-import canggraph.llmapi.*
-import canggraph.graph.*
-import canggraph.tool.*
-import canggraph.agent.*
-import canggraph.schema.*
-import canggraph.chain.*
-from std import collection.*
-from encoding import json.*
-import canggraph.util.*
+### <a id="调用模型实例">调用模型实例</a>
 
-main() {
-    let llm = getLLMInstance(LLMType.OPEN_AI)
-    let agent = ReActAgent(ArrayList<BaseTool>([GetWeather(), FileSaver()]))
-    println(agent.invoke("What is the weather like in New York?").serialize().toJson())
-}
+创建的模型实例可以直接通过`query()`方法调用。
+
+```
+query(content: String)
 ```
 
-## Node
-在canggraph中，每个node都是一个可执行对象，可以是Agent，可以是Chain，可以是Tool
-因此，每个node中都有一个runnable属性，该属性存储的是Runnable对象，agent，chain，tool都是Runnable的子类
-在执行一个node的时候，只需要执行node.runnable.run()即可
+其中
 
-### Tool
-```cj
-import canggraph.llmapi.*
-import canggraph.graph.*
-import canggraph.tool.*
-import canggraph.agent.*
-import canggraph.schema.*
-import canggraph.chain.*
-from std import collection.*
-from encoding import json.*
-import canggraph.util.*
+| 属性名    | 值类型   | 说明           |
+| --------- | -------- | -------------- |
+| `content` | `String` | 请求的问题内容 |
 
-main() {
-    let llm = getLLMInstance(LLMType.OPEN_AI)
+示例：
 
-    let tool = GoogleSearchRun()
-    let input = Dict()
-    input.put("query","Dijkstra algorithm")
-
-    let res: ResponseMessage = tool.invoke(input)
-    println(res.serialize().toJson())
-}
+```
+llm.query("who are you?")
 ```
 
-### 工具执行agent
-```cj
-import canggraph.llmapi.*
-import canggraph.graph.*
-import canggraph.tool.*
-import canggraph.agent.*
-import canggraph.schema.*
-import canggraph.chain.*
-from std import collection.*
-from encoding import json.*
+## <a id="调用工具">调用工具</a>
 
-main() {
-    let llm = (getLLMInstance(LLMType.OPEN_AI) as OpenAI).getOrThrow()
-    let tools = ArrayList<BaseTool>([GetWeather(), GoogleSearchRun()])
+在调用大模型的过程中，仅凭借大模型自身的能力有时很难得到正确的答案。CangChain提供了工具调用接口，允许模型在给定的工具集中选择合适的工具调用来辅助回答问题。
 
-    let agent = create_openai_tools_agent(llm, tools)
-    let input = Dict()
-    input["input"] = "what is the weather like the day after tomorrow in Guangzhou?"
-    let res = agent.invoke(input)
-    println(res.serialize().toJson())
-}
+### <a id="构造工具">构造工具</a>
+
+CangChain的工具在构造过程中应当遵循一定的格式，工具格式参数如下：
+
+```
+Tool(
+	toolType: String,
+	functionArguments: ToolArgs
+)
 ```
 
-### 自定义chain
-```cj
-import canggraph.llmapi.*
-import canggraph.graph.*
-import canggraph.tool.*
-import canggraph.agent.*
-import canggraph.schema.*
-import canggraph.chain.*
-from std import collection.*
-from encoding import json.*
-import canggraph.util.*
+| 属性名              | 值类型     | 说明                                             |
+| ------------------- | ---------- | ------------------------------------------------ |
+| `toolType`          | `String`   | 工具类型，通常来说为`function`                   |
+| `functionArguments` | `ToolArgs` | 工具调用参数，定义工具名称、描述、返回格式等信息 |
 
-main() {
-    let llm = getLLMInstance(LLMType.OPEN_AI)
-    let parameters = HashMap<String, Parameter>()
-    let next: Parameter = Parameter("next", "String", true)
-    parameters["next"] = next
-    let function_def = BaseFunction("route", "Select the next role", parameters)
+其中`function arguments`构造格式如下：
 
-    let tools = ArrayList<BaseTool>([GetWeather()])
+```
+ToolArgs(
+    toolName: String,
+    description: String,
+    parameters: ToolParameters,
+    required: Array<String>,
+    additionalProperties: Bool
+)
+```
 
-    let chain = CoTChain(llm, promptTemplate:SelfDefinePromptTemplate(), tools:tools)
-    chain.bind_function(function_def)
-    let members = ArrayList<String>(["Researcher", "Coder"])
-    let options = members.append("FINISH")
-    chain.add_prompt("system_message", 
-      """
-      You are a supervisor tasked with managing a conversation between the
-      following workers: ${members}. Given the following user request,
-      respond with the worker to act next. Each worker will perform a
-      task and respond with their results and status. When finished,
-      respond with FINISH.
-      Given the conversation above, who should act next?
-      Or should we FINISH? Select one of: ${options}
-      Please call the tool to help you make the decision.
-      """
+| 属性名                 | 值类型           | 说明                                                         |
+| ---------------------- | ---------------- | ------------------------------------------------------------ |
+| `toolName`             | `String`         | 工具名，工具唯一标识                                         |
+| `description`          | `String`         | 工具描述，阐述工具的应用场景                                 |
+| `parameters`           | `ToolParameters` | 工具返回参数，定义工具调用可选返回参数                       |
+| `required`             | `Array<String>`  | 必要工具返回参数列表，定义工具调用必要返回参数，为工具返回参数子集 |
+| `additionalProperties` | `Bool`           | 额外参数，通常为`false`                                      |
+
+工具返回参数`parameters`也有特定构造方式：
+
+```
+ToolParameters(
+	type: String,
+	properties: HashMap<String, {propertyName: String, property: ToolProperty}>
+	/*
+	ToolProperty:
+	propertyType: String
+	description: String
+	*/
+)
+```
+
+| 属性名         | 值类型                          | 说明                                                     |
+| -------------- | ------------------------------- | -------------------------------------------------------- |
+| `type`         | `String`                        | 返回参数类型，定义工具调用返回参数的类型，通常为`object` |
+| `properties`   | `HashMap<String, ToolProperty>` | 返回参数列表，阐述工具的应用场景                         |
+| `propertyName` | `String`                        | 参数名称                                                 |
+| `propertyType` | `String`                        | 参数类型                                                 |
+| `description`  | `String`                        | 参数描述                                                 |
+
+**构造示例**
+
+```
+let toolArgs = ToolArgs(
+    /*toolName: */"translater",
+    /*description: */"Translate Chinese to another language.",
+    /*parameters: */
+    ToolParameters(
+        /*type: */"object",
+        /*properties: */
+        HashMap<String, ToolProperties>([
+            (/*propertyName: */"text", ToolProperties(/*propertyType: */"string", /*description: */"text to translate")),
+            (/*propertyName: */"target_language", ToolProperties(/*propertyType: */"string", /*description: */"language translated into"))
+        ]),
+        /*required: */
+        ["text", "target_language"],
+        /*additionalProperties: */
+        false
     )
-    let input = Dict()
-    input["text"] = "What is the weather like today in Guangzhou?"
-    let res = chain.invoke(input)
-    println(res.serialize().toJson())
-}
+)
+
+let translater: Tool = Tool(
+    /*type:*/"function",
+    /*functionArguments*/toolArgs
+)
 ```
 
-## Graph
-```cangjie
-import canggraph.llmapi.*
-import canggraph.graph.*
-import canggraph.tool.*
-import canggraph.agent.*
-import canggraph.schema.*
-import canggraph.chain.*
-from std import collection.*
-from encoding import json.*
-from std import ffi.python.*
+### <a id="使用工具调用">使用工具调用</a>
 
-main() {
-    // chain
-    let llm = (getLLMInstance(LLMType.OPEN_AI, model: "gpt-4o-mini") as OpenAI).getOrThrow()
-    let parameters = HashMap<String, Parameter>()
-    let next: Parameter = Parameter("Next", "The next role to act", true)
-    parameters["next"] = next
-    let function_def = BaseFunction("RouteDecider", "Select the next role to act", parameters)
+在构造好工具之后，可以直接在请求中添加工具列表，使用方法如下：
 
-    let tools = ArrayList<BaseTool>([GetWeather()])
-
-    let chain = CoTChain(llm, promptTemplate:SelfDefinePromptTemplate(), tools:tools)
-    chain.bind_function(function_def)
-    let members = ArrayList<String>(["Researcher", "Coder", "Weather"])
-    var options = members.clone()
-    options.append("FINISH")
-    chain.add_prompt("system_message", 
-      """
-      You are a supervisor tasked with managing a conversation between the
-      following workers: ${members}. Given the following user request,
-      respond with the worker to act next. Each worker will perform a
-      task and respond with their results and status. When finished,
-      respond with FINISH.
-      Given the conversation above, who should act next?
-      Or should we FINISH? Select one of: ${options}
-      !!!You must call the tool 'RouteDecider' to help you make the decision. 
-      """
-    )
-
-    let supervisor_node = Node("supervisor", "chain", chain)
-    // let input = Dict()
-    // input["text"] = "who should act next?"
-    // let res = supervisor_node.run(input)
-    // println(res)
-
-    // tool
-    let tool = GoogleSearchRun()
-    // let input2 = Dict()
-    // input2.put("query","Dijkstra algorithm")
-    let researcher_node = Node("GoogleSearch", "tool", tool)
-    // let res2 = tool_node.run(input2)
-    // println(res2)
-
-    // agent
-
-    let agent = create_openai_tools_agent(llm, ArrayList<BaseTool>([GetWeather()]))
-    let weather_agent = Node("Weather", "agent", agent)
-
-    let agent3 = create_openai_tools_agent(llm, ArrayList<BaseTool>())
-    let coder_agent = Node("Coder", "agent", agent3)
-
-    
-    // let res3 = weather_agent.run(input3)
-    // println(res3)
-
-    // graph
-    let graph = Graph()
-    graph.addNode(supervisor_node)
-    graph.addNode(weather_agent)
-    graph.addNode(researcher_node)
-    graph.addNode(coder_agent)
-
-    graph.setEntryPoint(supervisor_node)
-
-    graph.addConditionalEdge(supervisor_node, researcher_node)
-    graph.addConditionalEdge(supervisor_node, coder_agent)
-    graph.addConditionalEdge(supervisor_node, weather_agent)
-
-    graph.addEdge(researcher_node, supervisor_node)
-    graph.addEdge(coder_agent, supervisor_node)
-    graph.addEdge(weather_agent, supervisor_node)
-
-    graph.setExitPoint(supervisor_node)
-
-    let input3 = Dict()
-    input3.put("text", "what is the weather like today in Guangzhou?")
-    graph.invoke(input3)
-}
+```
+llm.query("Translate `你好，世界。` into English", [translater， calculator])
 ```
 
-## tokenizer
-```cangjie
-from std import collection.*
-from std import os.*
-from std import os.posix.*
-import canggraph.titoken.*
+## <a id="调用Agent">调用Agent</a>
 
-main(): Int64 {
-    var sentences:Array<String> =  ["苍穹是什么","苍穹"]
-    //分词
-    let tokenizer = Tokenizer(tokensFilePath: getcwd()+"/resource/tokenizer.json")
-    let embedder = Embedder(modelPath: getcwd()+"/resource/embedding_model.onnx", tokensFilePath:getcwd()+"/resource/tokenizer.json")
-    println("tokens: ${tokenizer(sentences)}")
-    //计算词嵌入向量
-    let sentence_embeddings = embedder(sentences)
-    println("embedding: ${sentence_embeddings}")
-    return 0 
-}
+每个 Agent 的核心是系统提示词，它定义了 Agent 的角色信息和执行步骤，使得大语言模型能够更准确和快速地回答问题。在 Agent 定义中，利用`Message`序列编写 Agent 的系统提示词prompt。每个Agent最多只能有1个prompt。
+
+### <a id="构建Agent">构建Agent</a>
+
+CangChain中构建提示词的方式灵活，可以直接构建：
+
+```
+// 直接构建提示词
+prompt = """
+                You're a calculater.
+                Calculate the x in the formula with detailed process.
+                """
 ```
 
-## RAG + arkts代码修复
-```cangjie
-from std import collection.*
-from std import os.*
-from std import os.posix.*
-import canggraph.titoken.*
-from net import http.*
-from net import tls.*
-from serialization import serialization.*
-from encoding import json.*
-import canggraph.requests.*
-import canggraph.llmapi.*
-import canggraph.util.*
+除此之外，也支持从外部文件导入：
 
-main(): Int64 {
-
-    let pineCone = PineCone()
-    // 往向量数据库中添加数据
-    let path: String = getcwd()
-    // let obj = read_from_csv("${path}/data/demo.csv", header: true)
-    // let vectors: ArrayList<Vector> = pineCone.get_vectors(obj)
-    // pineCone.upsertVectors(vectors)
-    // 查询向量数据库
-    let objs = read_from_csv("${path}/data/test.csv", header: true)
-    let row = objs[4].asObject().get("values").getOrThrow().asArray()
-    let query_rule: String = row[0].asString().getValue()
-    println(query_rule)
-    let query_description = row[1].asString().getValue()
-    let query_buggy_code = row[2].asString().getValue()
-    println(query_buggy_code)
-    let res: JsonObject = pineCone.query(query_buggy_code, rule: query_rule, top_k:3)
-    let similars = res["matches"].asArray()
-    var prompt = "我将给出你若干个与问题代码类型相同，问题代码类似的例子，包括缺陷规则、缺陷描述、缺陷代码、缺陷解释以及修复代码\n"
-    for (index in 0..similars.size()) {
-        let item = similars[index].asObject()["metadata"].asObject()
-        let rule = item["rule"].asString().getValue()
-        let description = item["description"].asString().getValue()
-        let buggy_code = item["buggy_code"].asString().getValue()
-        let buggy_explanation = item["buggy_explanation"].asString().getValue()
-        let fixed_code = item["fixed_code"].asString().getValue()
-
-        prompt = prompt + "Demo: ${index}\nRule: ${rule}\nDescription: ${description}\nBuggy Code: \n${buggy_code}\nBuggy Explanation: ${buggy_explanation}\nFixed Code:\n${fixed_code}\n"
-    }
-    prompt = prompt + "现在，请根据上面的例子，来修复我的问题代码:\n${query_buggy_code}\n\n对应的问题类型是: ${query_rule}\n该问题类型的描述如下:${query_description}\n请您帮我修复一下: \n```arkts\n"
-    //prompt =  "请修复我的问题代码:\n```arkts\n${query_buggy_code}\n```\n\n请您帮我修复一下: \n```arkts\n"
-    println(prompt)
-    let llm: Ollama = (getLLMInstance(LLMType.OLLAMA, model: "arktsLLM") as Ollama).getOrThrow()
-    let msgs: ArrayList<Message> = ArrayList<Message>()
-    let sys_msg = Message("system", "You are a helpful assistant!")
-    let msg = Message("user", prompt)
-    msgs.append(sys_msg)
-    msgs.append(msg)
-
-    let response = llm.query(msgs)
-    println(response)
-
-    return 0 
-}
 ```
+// 从文件导入
+prompt = getPromptFromFile("./promptFile.txt")
+```
+
+在构建好提示词之后，我们可以利用消息序列，将提示词与模型绑定构造Agent。
+
+```
+messages = ArrayList<Message>([Message("system", prompt)])
+```
+
+### <a id="使用Agent交互">使用Agent交互</a>
+
+Agent的调用交互依赖于消息序列，调用Agent时的请求问题同样需要加入消息序列。
+
+```
+messages.append(Message("user", "Here is the formula: `x / 2 - 3x + 2 = 0`"))
+```
+
+在使用Agent调用交互时，需要传入包含提示词和请求问题的消息序列。
+
+```
+llm.query(messages.toArray())
+```
+
+此外，Agent的交互也允许添加工具调用。
+
+```
+llm.query(messages.toArray(), tools)
+```
+

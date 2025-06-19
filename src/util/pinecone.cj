@@ -213,7 +213,7 @@ public class PineCone {
 
 public func vectorSearch(vector: ArrayList<Float32>, top_k!: Int64 = 3) {
     let client: Requests = Requests()
-    let url = "http://localhost:5001/v2/search"
+    let url = "http://localhost:5050/v2/search"
     let body: DataModelStruct = DataModelStruct()
 
     body.add(field<ArrayList<Float32>>("vector", vector))
